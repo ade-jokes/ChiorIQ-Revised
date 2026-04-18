@@ -6,6 +6,9 @@ node_modules/
 .env.*
 !.env.example
 backend/.env
+backend/data/choiriq.test.sqlite
+backend/data/choiriq.test.sqlite-shm
+backend/data/choiriq.test.sqlite-wal
 
 # Build outputs
 dist/

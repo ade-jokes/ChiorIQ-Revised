@@ -7,7 +7,23 @@ if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const DB_FILE = process.env.DB_FILE || path.join(DATA_DIR, 'choiriq.sqlite');
+const IS_TEST_ENV = process.env.NODE_ENV === 'test';
+const DEFAULT_DB_FILE = IS_TEST_ENV
+  ? path.join(DATA_DIR, 'choiriq.test.sqlite')
+  : path.join(DATA_DIR, 'choiriq.sqlite');
+
+const configuredDbFile = process.env.DB_FILE;
+const DB_FILE = configuredDbFile
+  ? (path.isAbsolute(configuredDbFile)
+      ? configuredDbFile
+      : path.resolve(__dirname, configuredDbFile))
+  : DEFAULT_DB_FILE;
+
+const dbDir = path.dirname(DB_FILE);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const sqlite = new Database(DB_FILE);
 sqlite.pragma('journal_mode = WAL');
 
@@ -406,6 +422,10 @@ function seedDefaultSessions(choirId, managerId) {
 }
 
 function resetAll() {
+  if (!IS_TEST_ENV && process.env.ALLOW_DB_RESET !== 'true') {
+    throw new Error('Refusing to reset database outside test environment. Set ALLOW_DB_RESET=true only for intentional full wipes.');
+  }
+
   const tx = sqlite.transaction(() => {
     sqlite.prepare('DELETE FROM progress').run();
     sqlite.prepare('DELETE FROM notes').run();
@@ -430,5 +450,6 @@ module.exports = {
   createNote,
   seedDefaultSessions,
   resetAll,
-  randomJoinCode
+  randomJoinCode,
+  DB_FILE
 };
