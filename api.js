@@ -28,10 +28,18 @@ export function createApi(options = {}) {
       headers.Authorization = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${baseUrl}${path}`, {
-      ...config,
-      headers
-    });
+    let response;
+    try {
+      response = await fetch(`${baseUrl}${path}`, {
+        ...config,
+        headers
+      });
+    } catch (networkError) {
+      const message = `Network error contacting ${baseUrl}${path}. Ensure backend is running (npm run dev:backend) and API base URL is correct.`;
+      const error = new Error(message);
+      error.cause = networkError;
+      throw error;
+    }
 
     let body = null;
     try {

@@ -8,7 +8,27 @@ import {
 export default function LeaderPage({ members, stats, joinCode, onPostAnnouncement, onAddNote }) {
   const [announcement, setAnnouncement] = React.useState('');
   const [note, setNote] = React.useState({ memberId: '', text: '' });
-  const mostActive = [...members].sort((a, b) => (b.streak || 0) - (a.streak || 0))[0];
+  const [voiceFilter, setVoiceFilter] = React.useState('all');
+  const [levelFilter, setLevelFilter] = React.useState('all');
+
+  const filteredMembers = React.useMemo(
+    () => members.filter((member) => {
+      const voiceMatch = voiceFilter === 'all' || member.voicePart === voiceFilter;
+      const levelMatch = levelFilter === 'all' || member.level === levelFilter;
+      return voiceMatch && levelMatch;
+    }),
+    [members, voiceFilter, levelFilter]
+  );
+
+  const mostActive = [...filteredMembers].sort((a, b) => (b.streak || 0) - (a.streak || 0))[0];
+  const availableVoices = React.useMemo(
+    () => Array.from(new Set(members.map((member) => member.voicePart).filter(Boolean))),
+    [members]
+  );
+  const availableLevels = React.useMemo(
+    () => Array.from(new Set(members.map((member) => member.level).filter(Boolean))),
+    [members]
+  );
 
   const columns = React.useMemo(
     () => [
@@ -25,7 +45,7 @@ export default function LeaderPage({ members, stats, joinCode, onPostAnnouncemen
   );
 
   const table = useReactTable({
-    data: members,
+    data: filteredMembers,
     columns,
     getCoreRowModel: getCoreRowModel()
   });
@@ -36,14 +56,35 @@ export default function LeaderPage({ members, stats, joinCode, onPostAnnouncemen
         <h2>Leader Command Center</h2>
         <p>Join code: <strong>{joinCode || 'N/A'}</strong></p>
         <div className="statsGrid">
-          <article><h4>Roster Size</h4><strong>{members.length}</strong></article>
+          <article><h4>Roster Size</h4><strong>{filteredMembers.length}</strong></article>
           <article><h4>Most Active</h4><strong>{mostActive ? mostActive.name : 'N/A'}</strong></article>
           <article><h4>Live Completion</h4><strong>{Math.max(0, ...(stats?.sessionStats || []).map((s) => s.completionRate || 0))}%</strong></article>
+        </div>
+        <div className="controlBar">
+          <label className="controlGroup" htmlFor="leader-roster-voice-filter">
+            Voice Part
+            <select id="leader-roster-voice-filter" value={voiceFilter} onChange={(e) => setVoiceFilter(e.target.value)}>
+              <option value="all">All Voices</option>
+              {availableVoices.map((voice) => (
+                <option key={voice} value={voice}>{voice}</option>
+              ))}
+            </select>
+          </label>
+          <label className="controlGroup" htmlFor="leader-roster-level-filter">
+            Level
+            <select id="leader-roster-level-filter" value={levelFilter} onChange={(e) => setLevelFilter(e.target.value)}>
+              <option value="all">All Levels</option>
+              {availableLevels.map((level) => (
+                <option key={level} value={level}>{level}</option>
+              ))}
+            </select>
+          </label>
         </div>
       </section>
 
       <section className="sectionCard">
         <h3>Member Roster</h3>
+        {filteredMembers.length === 0 && <p className="textMuted">No members match the current filters.</p>}
         <table className="table">
           <thead>
             {table.getHeaderGroups().map((group) => (
@@ -71,7 +112,7 @@ export default function LeaderPage({ members, stats, joinCode, onPostAnnouncemen
       <section className="sectionCard">
         <h3>Choir Analytics</h3>
         <div className="statsGrid">
-          <article><h4>Total Members</h4><strong>{stats?.totalMembers || 0}</strong></article>
+          <article><h4>Total Members</h4><strong>{filteredMembers.length}</strong></article>
           <article><h4>Top Completion</h4><strong>{Math.max(0, ...(stats?.sessionStats || []).map((s) => s.completionRate || 0))}%</strong></article>
           <article><h4>Tracked Sessions</h4><strong>{stats?.sessionStats?.length || 0}</strong></article>
         </div>

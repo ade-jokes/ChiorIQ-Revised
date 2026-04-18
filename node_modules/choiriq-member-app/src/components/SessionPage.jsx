@@ -2,56 +2,106 @@ import React, { useMemo, useRef, useState } from 'react';
 import { checklistTemplate, lessonTechniques, quizBank } from '../lib/courseData';
 
 function detectPitch(analyser, sampleRate) {
-  const buffer = new Float32Array(analyser.fftSize);
+  const size = analyser.fftSize;
+  const buffer = new Float32Array(size);
   analyser.getFloatTimeDomainData(buffer);
 
-  let bestOffset = -1;
-  let bestCorrelation = 0;
-  const size = buffer.length;
-
-  for (let offset = 8; offset < 1000; offset += 1) {
-    let corr = 0;
-    for (let i = 0; i < size - offset; i += 1) {
-      corr += Math.abs(buffer[i] - buffer[i + offset]);
-    }
-    corr = 1 - corr / (size - offset);
-    if (corr > bestCorrelation) {
-      bestCorrelation = corr;
-      bestOffset = offset;
-    }
+  let rms = 0;
+  for (let i = 0; i < size; i += 1) {
+    rms += buffer[i] * buffer[i];
   }
+  rms = Math.sqrt(rms / size);
 
-  if (bestOffset === -1 || bestCorrelation < 0.85) {
+  if (rms < 0.01) {
     return null;
   }
 
-  return sampleRate / bestOffset;
+  const minFrequency = 75;
+  const maxFrequency = 1000;
+  const minLag = Math.floor(sampleRate / maxFrequency);
+  const maxLag = Math.floor(sampleRate / minFrequency);
+
+  let bestLag = -1;
+  let bestCorrelation = 0;
+  const correlations = new Float32Array(maxLag + 1);
+
+  for (let lag = minLag; lag <= maxLag; lag += 1) {
+    let correlation = 0;
+    let normA = 0;
+    let normB = 0;
+
+    for (let i = 0; i < size - lag; i += 1) {
+      const a = buffer[i];
+      const b = buffer[i + lag];
+      correlation += a * b;
+      normA += a * a;
+      normB += b * b;
+    }
+
+    if (normA === 0 || normB === 0) {
+      correlations[lag] = 0;
+      continue;
+    }
+
+    const normalized = correlation / Math.sqrt(normA * normB);
+    correlations[lag] = normalized;
+
+    if (normalized > bestCorrelation) {
+      bestCorrelation = normalized;
+      bestLag = lag;
+    }
+  }
+
+  if (bestLag < 0 || bestCorrelation < 0.8) {
+    return null;
+  }
+
+  let refinedLag = bestLag;
+  if (bestLag > minLag && bestLag < maxLag) {
+    const prev = correlations[bestLag - 1];
+    const curr = correlations[bestLag];
+    const next = correlations[bestLag + 1];
+    const denominator = prev - (2 * curr) + next;
+
+    if (Math.abs(denominator) > 1e-9) {
+      const shift = 0.5 * (prev - next) / denominator;
+      refinedLag = bestLag + shift;
+    }
+  }
+
+  return sampleRate / refinedLag;
 }
 
 function frequencyToNote(freq) {
   const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
   const midi = Math.round(12 * (Math.log(freq / 440) / Math.log(2)) + 69);
-  const note = notes[((midi % 12) + 12) % 12];
+  const octave = Math.floor(midi / 12) - 1;
+  const note = `${notes[((midi % 12) + 12) % 12]}${octave}`;
   const target = 440 * (2 ** ((midi - 69) / 12));
   const cents = Math.round(1200 * Math.log2(freq / target));
   return { note, cents };
 }
 
 function Piano() {
-  const keys = [
-    { note: 'C4', black: false, hz: 261.63 },
-    { note: 'C#4', black: true, hz: 277.18 },
-    { note: 'D4', black: false, hz: 293.66 },
-    { note: 'D#4', black: true, hz: 311.13 },
-    { note: 'E4', black: false, hz: 329.63 },
-    { note: 'F4', black: false, hz: 349.23 },
-    { note: 'F#4', black: true, hz: 369.99 },
-    { note: 'G4', black: false, hz: 392.0 },
-    { note: 'G#4', black: true, hz: 415.3 },
-    { note: 'A4', black: false, hz: 440.0 },
-    { note: 'A#4', black: true, hz: 466.16 },
-    { note: 'B4', black: false, hz: 493.88 }
-  ];
+  const keys = useMemo(() => {
+    const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const blackNotes = new Set(['C#', 'D#', 'F#', 'G#', 'A#']);
+    const rangeStart = 48; // C3
+    const rangeEnd = 83; // B5
+
+    const generated = [];
+    for (let midi = rangeStart; midi <= rangeEnd; midi += 1) {
+      const noteName = notes[midi % 12];
+      const octave = Math.floor(midi / 12) - 1;
+      const hz = 440 * (2 ** ((midi - 69) / 12));
+      generated.push({
+        note: `${noteName}${octave}`,
+        black: blackNotes.has(noteName),
+        hz
+      });
+    }
+    return generated;
+  }, []);
 
   function play(freq) {
     const ctx = new window.AudioContext();
@@ -117,13 +167,18 @@ function DrillTimer() {
 function TheoryQuiz() {
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
+  const [attempts, setAttempts] = useState(0);
   const [answered, setAnswered] = useState(false);
+  const [selected, setSelected] = useState('');
 
   const q = quizBank[index % quizBank.length];
+  const percent = attempts === 0 ? 0 : Math.round((score / attempts) * 100);
 
   function pick(option) {
     if (answered) return;
+    setSelected(option);
     setAnswered(true);
+    setAttempts((a) => a + 1);
     if (option === q.answer) {
       setScore((s) => s + 1);
     }
@@ -136,12 +191,36 @@ function TheoryQuiz() {
       <p>{q.question}</p>
       <div className="quizOptions">
         {q.options.map((opt) => (
-          <button key={opt} onClick={() => pick(opt)} type="button">{opt}</button>
+          <button
+            key={opt}
+            className={[
+              answered && opt === q.answer ? 'correct' : '',
+              answered && selected === opt && opt !== q.answer ? 'wrong' : ''
+            ].join(' ').trim()}
+            onClick={() => pick(opt)}
+            type="button"
+          >
+            {opt}
+          </button>
         ))}
       </div>
+      {answered && (
+        <p className={selected === q.answer ? 'successText' : 'errorMsg'}>
+          {selected === q.answer ? 'Correct answer.' : `Incorrect. Correct answer: ${q.answer}`}
+        </p>
+      )}
       <div className="toolActions">
-        <strong>Score: {score}</strong>
-        <button type="button" onClick={() => { setIndex((i) => i + 1); setAnswered(false); }}>Next question</button>
+        <strong>Score: {score}/{attempts} ({percent}%)</strong>
+        <button
+          type="button"
+          onClick={() => {
+            setIndex((i) => i + 1);
+            setAnswered(false);
+            setSelected('');
+          }}
+        >
+          Next question
+        </button>
       </div>
     </div>
   );
@@ -150,31 +229,53 @@ function TheoryQuiz() {
 function PitchChecker() {
   const [running, setRunning] = useState(false);
   const [reading, setReading] = useState({ note: '--', freq: 0, cents: 0 });
+  const [error, setError] = useState('');
   const rafRef = useRef(0);
   const streamRef = useRef(null);
   const audioRef = useRef(null);
+  const smoothRef = useRef([]);
 
   async function start() {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const audioCtx = new window.AudioContext();
-    const analyser = audioCtx.createAnalyser();
-    analyser.fftSize = 2048;
-    audioCtx.createMediaStreamSource(stream).connect(analyser);
+    setError('');
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          noiseSuppression: false,
+          autoGainControl: false,
+          echoCancellation: false
+        }
+      });
+      const audioCtx = new window.AudioContext();
+      const analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 4096;
+      analyser.smoothingTimeConstant = 0;
+      audioCtx.createMediaStreamSource(stream).connect(analyser);
 
-    streamRef.current = stream;
-    audioRef.current = audioCtx;
-    setRunning(true);
+      streamRef.current = stream;
+      audioRef.current = audioCtx;
+      smoothRef.current = [];
+      setRunning(true);
 
-    const loop = () => {
-      const freq = detectPitch(analyser, audioCtx.sampleRate);
-      if (freq) {
-        const parsed = frequencyToNote(freq);
-        setReading({ note: parsed.note, freq: Math.round(freq), cents: parsed.cents });
-      }
-      rafRef.current = requestAnimationFrame(loop);
-    };
+      const loop = () => {
+        const freq = detectPitch(analyser, audioCtx.sampleRate);
+        if (freq) {
+          const history = smoothRef.current;
+          history.push(freq);
+          if (history.length > 5) {
+            history.shift();
+          }
 
-    loop();
+          const avgFreq = history.reduce((sum, value) => sum + value, 0) / history.length;
+          const parsed = frequencyToNote(avgFreq);
+          setReading({ note: parsed.note, freq: Math.round(avgFreq), cents: parsed.cents });
+        }
+        rafRef.current = requestAnimationFrame(loop);
+      };
+
+      loop();
+    } catch (err) {
+      setError(err?.message || 'Microphone access was denied.');
+    }
   }
 
   function stop() {
@@ -186,6 +287,7 @@ function PitchChecker() {
     if (audioRef.current) {
       audioRef.current.close();
     }
+    smoothRef.current = [];
   }
 
   const needle = Math.max(-50, Math.min(50, reading.cents));
@@ -197,6 +299,7 @@ function PitchChecker() {
       <p className="pitchBig">{reading.note}</p>
       <p>{reading.freq} Hz · {status}</p>
       <div className="bar meter"><span style={{ left: `${50 + needle}%` }} /></div>
+      {error && <p className="errorMsg">{error}</p>}
       {running ? (
         <button type="button" onClick={stop}>Stop microphone</button>
       ) : (
@@ -211,22 +314,70 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
   const [checked, setChecked] = useState([]);
   const [aiPrompt, setAiPrompt] = useState('How can I tighten my harmonies this week?');
   const [aiReply, setAiReply] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState('');
+  const [completeLoading, setCompleteLoading] = useState(false);
+  const [completeMessage, setCompleteMessage] = useState('');
+  const [completeError, setCompleteError] = useState('');
 
   const percent = useMemo(() => Math.round((checked.length / checklistTemplate.length) * 100), [checked.length]);
+  const sessionReady = Boolean(session?.id);
+  const sessionModules = Array.isArray(session?.modules) ? session.modules : [];
 
   const blocks = lessonTechniques.map((group) => (
     <article key={group.id} className="lessonBlock">
       <h4>{group.title}</h4>
-      <ul>
-        {group.items.map((item) => <li key={item}>{item}</li>)}
-      </ul>
+      <div className="explainerGrid">
+        {group.items.map((item) => (
+          <article className="explainerCard" key={item.name}>
+            <h5>{item.name}</h5>
+            <p><strong>Meaning:</strong> {item.meaning}</p>
+            <p><strong>Coaching exercise:</strong> {item.exercise}</p>
+            <p><strong>Progress sign:</strong> {item.progressSignal}</p>
+          </article>
+        ))}
+      </div>
     </article>
   ));
 
   async function submitAi() {
-    const messages = [{ role: 'user', content: aiPrompt }];
-    const res = await onAskAi(messages);
-    setAiReply(res.reply || 'No response');
+    setAiError('');
+    setAiReply('');
+    setAiLoading(true);
+    try {
+      const messages = [{ role: 'user', content: aiPrompt }];
+      const res = await onAskAi(messages);
+      setAiReply(res.reply || 'No response');
+    } catch (error) {
+      setAiError(error?.message || 'Maestro is unavailable right now.');
+    } finally {
+      setAiLoading(false);
+    }
+  }
+
+  async function submitCompletion() {
+    setCompleteError('');
+    setCompleteMessage('');
+
+    if (!sessionReady) {
+      setCompleteError('Session data is still loading. Please wait a moment and try again.');
+      return;
+    }
+
+    setCompleteLoading(true);
+    try {
+      await onComplete({
+        checks: checked,
+        theoryScore: 85,
+        durationMin: 55,
+        skillDeltas: { agility: 2, rhythm: 2 }
+      });
+      setCompleteMessage('Great work. Your session progress has been saved successfully.');
+    } catch (error) {
+      setCompleteError(error?.message || 'Could not save completion right now.');
+    } finally {
+      setCompleteLoading(false);
+    }
   }
 
   return (
@@ -234,6 +385,7 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
       <section className="heroCard">
         <h2>{session?.title || 'Session'}</h2>
         <p>{session?.description || 'Session learning experience with tabbed modules and expandable techniques.'}</p>
+        {!sessionReady && <p className="errorMsg">Loading session details... if this persists, return to Dashboard and re-open the session.</p>}
       </section>
 
       <div className="tabs">
@@ -244,10 +396,40 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
         ))}
       </div>
 
-      {tab === 'lesson' && <section className="sectionCard grid2">{blocks}</section>}
+      {tab === 'lesson' && (
+        <section className="sectionCard">
+          <article className="toolCard">
+            <h4>How to read this lesson</h4>
+            <p><strong>Meaning</strong> explains what the technique develops.</p>
+            <p><strong>Coaching exercise</strong> gives a practical rehearsal drill.</p>
+            <p><strong>Progress sign</strong> shows what improvement should sound or feel like.</p>
+          </article>
+          {sessionModules.length > 0 && (
+            <article className="toolCard">
+              <h4>Session Modules</h4>
+              <div className="explainerGrid">
+                {sessionModules.map((module) => (
+                  <article className="explainerCard" key={module.id || module.key || module.title}>
+                    <h5>{module.title || module.label}</h5>
+                    <p>{module.details || module.content || 'Module guidance will appear here.'}</p>
+                  </article>
+                ))}
+              </div>
+            </article>
+          )}
+          <section className="grid2">{blocks}</section>
+        </section>
+      )}
 
       {tab === 'tools' && (
         <section className="sectionCard grid2">
+          <article className="toolCard">
+            <h4>What these coaching tools do</h4>
+            <p><strong>Pitch Checker:</strong> tracks note center and sharp/flat drift in real time.</p>
+            <p><strong>Piano:</strong> gives reference tones for matching and interval drills.</p>
+            <p><strong>Timer:</strong> enforces focused practice blocks with measurable consistency.</p>
+            <p><strong>Theory Quiz:</strong> strengthens literacy for faster rehearsals and cleaner harmonies.</p>
+          </article>
           <PitchChecker />
           <DrillTimer />
           <TheoryQuiz />
@@ -261,6 +443,7 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
       {tab === 'checklist' && (
         <section className="sectionCard">
           <h3>Daily Session Checklist</h3>
+          <p>Each checklist action maps to measurable coaching growth. Complete all tasks before marking the session complete.</p>
           <div className="checkList">
             {checklistTemplate.map((task) => {
               const done = checked.includes(task);
@@ -281,20 +464,26 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
           <p>Completion: {percent}%</p>
           <button
             className="primary"
-            disabled={checked.length < checklistTemplate.length}
-            onClick={() => onComplete({ checks: checked, theoryScore: 85, durationMin: 55, skillDeltas: { agility: 2, rhythm: 2 } })}
+            disabled={checked.length < checklistTemplate.length || completeLoading || !sessionReady}
+            onClick={submitCompletion}
             type="button"
           >
-            Mark Session Complete
+            {completeLoading ? 'Saving...' : 'Mark Session Complete'}
           </button>
+          {completeMessage && <p className="successText">{completeMessage}</p>}
+          {completeError && <p className="errorMsg">{completeError}</p>}
         </section>
       )}
 
       {tab === 'maestro' && (
         <section className="sectionCard">
           <h3>AI Maestro</h3>
+          <p>Ask about technique, breath support, phrasing, or harmony strategy. Maestro responds with coaching-focused guidance.</p>
           <textarea value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} rows={5} />
-          <button className="primary" onClick={submitAi} type="button">Ask Maestro</button>
+          <button className="primary" disabled={aiLoading || !aiPrompt.trim()} onClick={submitAi} type="button">
+            {aiLoading ? 'Maestro is thinking...' : 'Ask Maestro'}
+          </button>
+          {aiError && <p className="errorMsg">{aiError}</p>}
           {aiReply && <article className="aiReply">{aiReply}</article>}
         </section>
       )}

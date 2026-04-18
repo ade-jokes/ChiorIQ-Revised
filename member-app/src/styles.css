@@ -1,19 +1,19 @@
 :root {
-  --bg: #edf2f8;
-  --bg-strong: #d8e3f3;
-  --panel: #ffffff;
-  --panel-soft: #f7fbff;
-  --text: #10223d;
-  --muted: #4d6486;
-  --line: #c9d6ea;
-  --brand: #005f9e;
-  --brand-strong: #004877;
-  --brand-soft: #dff0ff;
-  --accent: #e2762f;
-  --success: #0a9552;
-  --danger: #c22d2d;
-  --shadow-sm: 0 6px 18px rgba(15, 53, 94, 0.08);
-  --shadow-md: 0 14px 36px rgba(15, 53, 94, 0.14);
+  --bg: #0e0e10;
+  --bg-strong: #1a1a1c;
+  --panel: #222327;
+  --panel-soft: #2a2c31;
+  --text: #f2ede1;
+  --muted: #cbbfa3;
+  --line: #4a4335;
+  --brand: #c9a44c;
+  --brand-strong: #e2bf67;
+  --brand-soft: #3a3222;
+  --accent: #8f7a45;
+  --success: #7bc48d;
+  --danger: #d97a7a;
+  --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.44);
+  --shadow-md: 0 22px 56px rgba(0, 0, 0, 0.62);
   --radius-lg: 18px;
   --radius-md: 12px;
   --radius-pill: 999px;
@@ -34,9 +34,135 @@ body {
   font-family: 'Manrope', sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at 15% 12%, #ffffff 0%, rgba(255, 255, 255, 0.75) 26%, transparent 54%),
-    radial-gradient(circle at 90% 0%, rgba(0, 95, 158, 0.14) 0%, transparent 44%),
-    linear-gradient(150deg, var(--bg) 0%, var(--bg-strong) 100%);
+    radial-gradient(circle at 8% 12%, rgba(201, 164, 76, 0.22) 0%, rgba(201, 164, 76, 0) 36%),
+    radial-gradient(circle at 88% 4%, rgba(242, 210, 130, 0.14) 0%, rgba(242, 210, 130, 0) 40%),
+    linear-gradient(152deg, var(--bg) 0%, var(--bg-strong) 100%);
+}
+
+.topnav {
+  background: rgba(10, 18, 34, 0.88);
+  border-bottom: 1px solid rgba(61, 123, 255, 0.35);
+}
+
+.brandMark {
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  box-shadow: inset 0 0 0 1px rgba(12, 22, 38, 0.4), 0 0 18px rgba(43, 228, 255, 0.4);
+}
+
+.topnav nav a {
+  color: #9fb3cf;
+}
+
+.topnav nav a.active,
+.topnav nav a:hover {
+  color: #f1f8ff;
+  background: linear-gradient(120deg, var(--brand-strong), var(--accent));
+}
+
+.userPill,
+.authCard,
+.heroCard,
+.sectionCard,
+.lessonBlock,
+.toolCard,
+.announce,
+.statsGrid article,
+.sessionChip,
+.table th,
+.table td,
+.aiReply,
+.highlightPanel,
+.switcher,
+.switcher .active,
+input,
+select,
+textarea {
+  background: rgba(16, 25, 45, 0.86);
+  color: var(--text);
+  border-color: rgba(61, 123, 255, 0.34);
+}
+
+.authCard,
+.heroCard,
+.sectionCard {
+  box-shadow: var(--shadow-md);
+}
+
+.statsGrid strong,
+.metaPill,
+.announce span,
+.controlGroup select,
+.toolCard h5,
+.lessonBlock h5,
+.explainerCard h5,
+.table th,
+.sessionChip,
+.highlightPanel h3,
+.highlightPanel p {
+  color: #d8e8ff;
+}
+
+.explainerCard {
+  background: rgba(19, 33, 58, 0.9);
+  border-color: rgba(43, 228, 255, 0.24);
+}
+
+.sessionChip.done,
+.checkList .checked,
+.quizOptions button.correct,
+.successText {
+  background: rgba(45, 226, 157, 0.14);
+  border-color: rgba(45, 226, 157, 0.48);
+  color: #a7ffd9;
+}
+
+.sessionChip.locked {
+  opacity: 0.45;
+}
+
+.announce {
+  background: rgba(18, 31, 56, 0.9);
+}
+
+.announce span,
+.metaPill {
+  background: rgba(43, 228, 255, 0.14);
+  border: 1px solid rgba(43, 228, 255, 0.38);
+}
+
+.primary,
+.tabs button.active,
+.tabs button:hover {
+  background: linear-gradient(120deg, var(--brand-strong), var(--accent));
+  color: #f3f9ff;
+}
+
+.ghostButton,
+.tabs button,
+.quizOptions button,
+.toolActions button,
+.checkList button,
+.userPill button {
+  background: rgba(20, 36, 64, 0.9);
+  color: #d8e8ff;
+  border-color: rgba(61, 123, 255, 0.34);
+}
+
+.ghostButton:hover,
+.quizOptions button:hover,
+.toolActions button:hover,
+.checkList button:hover,
+.userPill button:hover {
+  background: rgba(35, 61, 102, 0.92);
+  border-color: rgba(43, 228, 255, 0.5);
+}
+
+.bar {
+  background: rgba(18, 31, 56, 0.95);
+}
+
+.bar span {
+  background: linear-gradient(90deg, var(--brand), var(--accent));
 }
 
 h1,
@@ -363,6 +489,38 @@ textarea {
   font-weight: 600;
 }
 
+.controlBar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.controlGroup {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.controlGroup select {
+  border: 1px solid #cfe0f5;
+  border-radius: 11px;
+  background: #fff;
+  color: var(--brand-strong);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.56rem 0.72rem;
+}
+
+.textMuted {
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
 .ghostButton {
   text-decoration: none;
   border-radius: 10px;
@@ -512,12 +670,41 @@ textarea {
   gap: 0.55rem;
 }
 
-.lessonBlock ul {
+.lessonBlock h5,
+.toolCard h5,
+.explainerCard h5 {
   margin: 0;
-  padding-left: 1rem;
-  color: var(--muted);
+  color: var(--brand-strong);
+  font-size: 0.98rem;
+}
+
+.explainerGrid {
   display: grid;
-  gap: 0.26rem;
+  gap: 0.55rem;
+}
+
+.explainerCard {
+  border: 1px solid #d4e4f8;
+  border-radius: 11px;
+  background: #ffffff;
+  padding: 0.72rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.explainerCard p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.successText {
+  color: var(--success);
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #e8f9f0;
+  border: 1px solid #b8e9cd;
+  padding: 0.55rem 0.62rem;
+  border-radius: 10px;
 }
 
 .pianoRow {
@@ -595,6 +782,18 @@ textarea {
 .checkList button:hover {
   background: #f1f7ff;
   border-color: #b7d0ee;
+}
+
+.quizOptions button.correct {
+  background: #e8f9f0;
+  border-color: #8fd2ad;
+  color: #0a6f40;
+}
+
+.quizOptions button.wrong {
+  background: #ffecec;
+  border-color: #f0a7a7;
+  color: #9f1f1f;
 }
 
 .checkList button {
@@ -692,4 +891,120 @@ textarea {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* Final consistency layer: keep futuristic surfaces and readable text across all pages. */
+.topnav {
+  background: rgba(12, 12, 13, 0.92);
+  border-bottom: 1px solid rgba(201, 164, 76, 0.36);
+}
+
+.topnav nav a {
+  color: var(--muted);
+}
+
+.topnav nav a.active,
+.topnav nav a:hover,
+.tabs button.active,
+.tabs button:hover,
+.primary {
+  color: #f5faff;
+  background: linear-gradient(120deg, var(--brand-strong), var(--accent));
+}
+
+.userPill,
+.authCard,
+.heroCard,
+.sectionCard,
+.lessonBlock,
+.toolCard,
+.announce,
+.statsGrid article,
+.sessionChip,
+.switcher,
+.switcher .active,
+.highlightPanel,
+.explainerCard,
+.key,
+.quizOptions button,
+.toolActions button,
+.checkList button,
+.tabs button,
+.ghostButton,
+input,
+select,
+textarea,
+.table th,
+.table td,
+.aiReply {
+  color: var(--text);
+  background: rgba(28, 28, 31, 0.9);
+  border-color: rgba(201, 164, 76, 0.34);
+}
+
+.heroCard,
+.sectionCard,
+.authCard {
+  box-shadow: var(--shadow-md);
+}
+
+.highlightPanel,
+.announce,
+.aiReply,
+.explainerCard,
+.lessonBlock,
+.toolCard,
+.bar {
+  background: rgba(36, 36, 40, 0.92);
+}
+
+.metaPill,
+.announce span {
+  color: #f7e4b6;
+  background: rgba(201, 164, 76, 0.18);
+  border-color: rgba(201, 164, 76, 0.45);
+}
+
+.textMuted,
+.announceMeta,
+.statsGrid h3,
+.statsGrid h4,
+.authCard label,
+.sectionCard label,
+.controlGroup,
+p {
+  color: var(--muted);
+}
+
+.table th,
+.highlightPanel h3,
+.lessonBlock h5,
+.toolCard h5,
+.explainerCard h5,
+.statsGrid strong {
+  color: #f1dfb3;
+}
+
+.errorMsg,
+.quizOptions button.wrong {
+  color: #ffd9df;
+  background: rgba(255, 91, 119, 0.14);
+  border-color: rgba(255, 91, 119, 0.46);
+}
+
+.successText,
+.checkList .checked,
+.sessionChip.done,
+.quizOptions button.correct {
+  color: #b8ffe2;
+  background: rgba(45, 226, 157, 0.14);
+  border-color: rgba(45, 226, 157, 0.48);
+}
+
+.bar {
+  background: rgba(42, 42, 46, 0.95);
+}
+
+.bar span {
+  background: linear-gradient(90deg, var(--brand), var(--accent));
 }

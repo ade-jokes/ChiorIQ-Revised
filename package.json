@@ -10,10 +10,13 @@
   ],
   "scripts": {
     "dev": "npm run dev:member",
+    "dev:lead":"npm run dev:leader",
     "dev:backend": "npm run dev --workspace backend",
     "dev:frontend": "npm run dev --workspace frontend",
     "dev:member": "npm run dev --workspace member-app",
+    "dev:member-app": "npm run dev --workspace member-app",
     "dev:leader": "npm run dev --workspace leader-app",
+    "dev:leader-app": "npm run dev --workspace leader-app",
     "build:member": "npm run build --workspace member-app",
     "build:leader": "npm run build --workspace leader-app",
     "test": "npm run test --workspace backend",

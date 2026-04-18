@@ -48,6 +48,30 @@
   },
   {
     "id": "usr_mo4ahxzbwztpb6",
+    "streak": 1,
+    "lastActive": "2026-04-18T12:46:30.588Z",
+    "skills": {
+      "agility": 32,
+      "resonance": 20,
+      "solfege": 20,
+      "theory": 20,
+      "phrasing": 20,
+      "rhythm": 32,
+      "vowels": 20,
+      "diction": 20
+    },
+    "createdAt": "2026-04-18T12:04:44.231Z",
+    "name": "omotayo",
+    "email": "aduraayeni5@gmail.com",
+    "passwordHash": "$2a$10$TftFWU3gGS0ODm03Yqg4FeYnlu3/CVVSAbwU7dnBI9IZ.qbnMNgty",
+    "role": "member",
+    "voicePart": "Soprano",
+    "level": "Beginner",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "updatedAt": "2026-04-18T12:46:30.589Z"
+  },
+  {
+    "id": "usr_mo4bnrt2coc12z",
     "streak": 0,
     "lastActive": null,
     "skills": {
@@ -60,13 +84,13 @@
       "vowels": 20,
       "diction": 20
     },
-    "createdAt": "2026-04-18T12:04:44.231Z",
-    "name": "omotayo",
-    "email": "aduraayeni5@gmail.com",
-    "passwordHash": "$2a$10$TftFWU3gGS0ODm03Yqg4FeYnlu3/CVVSAbwU7dnBI9IZ.qbnMNgty",
-    "role": "member",
+    "createdAt": "2026-04-18T12:37:15.782Z",
+    "name": "Leader Test",
+    "email": "leader.test@example.com",
+    "passwordHash": "$2a$10$wxq2YwaLmyDm4CcGeM7BEObUwcOHevjL.Gqcs6lAt6v9LcbdPwQoK",
+    "role": "manager",
     "voicePart": "Soprano",
     "level": "Beginner",
-    "choirId": "choir_mo49hhwt2r3e5w"
+    "choirId": "choir_mo4bnrr69st5r3"
   }
 ]

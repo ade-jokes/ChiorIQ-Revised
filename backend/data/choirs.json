@@ -5,5 +5,12 @@
     "createdAt": "2026-04-18T11:36:23.789Z",
     "name": "Main Choir",
     "createdByRole": "manager"
+  },
+  {
+    "id": "choir_mo4bnrr69st5r3",
+    "joinCode": "92ADLE",
+    "createdAt": "2026-04-18T12:37:15.714Z",
+    "name": "Test Choir",
+    "createdByRole": "manager"
   }
 ]

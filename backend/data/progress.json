@@ -18,5 +18,29 @@
     "notes": "",
     "completed": true,
     "completedAt": "2026-04-18T11:36:24.514Z"
+  },
+  {
+    "id": "prg_mo4awzldxckr7w",
+    "createdAt": "2026-04-18T12:16:26.161Z",
+    "updatedAt": "2026-04-18T12:46:30.698Z",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "userId": "usr_mo4ahxzbwztpb6",
+    "sessionId": "ses_mo49hi6jnw1ywe",
+    "checks": [
+      "10-min diaphragmatic breathing set",
+      "Pitch accuracy drill with piano references",
+      "Run the assigned agility exercise",
+      "Practice one sight-singing excerpt",
+      "Record and review one gospel phrase"
+    ],
+    "theoryScore": 85,
+    "skillDeltas": {
+      "agility": 2,
+      "rhythm": 2
+    },
+    "durationMin": 55,
+    "notes": "",
+    "completed": true,
+    "completedAt": "2026-04-18T12:46:30.588Z"
   }
 ]

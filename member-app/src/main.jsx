@@ -218,7 +218,7 @@ function ProgressRoute() {
   return (
     <RequireAuth user={ctx.user}>
       <RequireMember user={ctx.user}>
-        <ProgressPage progressRows={ctx.progressRows} user={ctx.user} />
+        <ProgressPage progressRows={ctx.progressRows} sessions={ctx.sessions} user={ctx.user} />
       </RequireMember>
     </RequireAuth>
   );

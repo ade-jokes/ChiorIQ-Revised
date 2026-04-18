@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const cors = require('cors');
 
@@ -68,6 +69,9 @@ app.use((err, _req, res, _next) => {
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`ChoirIQ backend listening at http://localhost:${PORT}`); // eslint-disable-line no-console
+    if (!process.env.GEMINI_API_KEY) {
+      console.warn(`GEMINI_API_KEY missing. Configure it in ${path.join(__dirname, '.env')}`); // eslint-disable-line no-console
+    }
   });
 }
 

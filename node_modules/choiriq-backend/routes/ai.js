@@ -78,7 +78,9 @@ router.post('/chat', requireAuth, async (req, res, next) => {
   try {
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      return res.status(500).json({ error: 'GEMINI_API_KEY is not configured.' });
+      return res.status(500).json({
+        error: 'GEMINI_API_KEY is not configured. Add it to backend/.env and restart the backend server.'
+      });
     }
 
     const messages = Array.isArray(req.body.messages) ? req.body.messages : [];
