@@ -1,18 +1,27 @@
 import React from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 
 export default function DashboardPage({ user, sessions, progressRows, choir, announcements }) {
+  const navigate = useNavigate();
   const [sessionView, setSessionView] = React.useState('unlocked');
   const [announcementType, setAnnouncementType] = React.useState('all');
+  const [query, setQuery] = React.useState('');
   const completed = new Set(progressRows.map((row) => row.sessionId));
   const sorted = [...sessions].sort((a, b) => (a.order || 0) - (b.order || 0));
   const unlockedCount = Math.min((progressRows.length || 0) + 1, 8);
   const nextSession = sorted[Math.max(0, unlockedCount - 1)];
+  const nowHour = new Date().getHours();
+  const greeting = nowHour < 12 ? 'Good morning' : nowHour < 18 ? 'Good afternoon' : 'Good evening';
+  const skillEntries = Object.entries(user?.skills || {});
+  const focusSkill = skillEntries.length > 0 ? [...skillEntries].sort((a, b) => a[1] - b[1])[0] : null;
   const filteredSessions = sorted.filter((session, index) => {
     if (sessionView === 'all') return true;
     if (sessionView === 'completed') return completed.has(session.id);
     if (sessionView === 'locked') return index >= unlockedCount;
     return index < unlockedCount;
+  }).filter((session) => {
+    if (!query.trim()) return true;
+    return session.title.toLowerCase().includes(query.trim().toLowerCase());
   });
 
   const filteredAnnouncements = announcements.filter((item) => {
@@ -25,18 +34,33 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
       <section className="heroCard">
         <div className="heroTopRow">
           <div>
-            <h2>Welcome back, {user.name}</h2>
+            <h2>{greeting}, {user.name}</h2>
             <p>
               {choir?.name || 'Your Choir'} · {user.voicePart} · {user.level}
             </p>
           </div>
           <div className="metaPill">Practice Streak: {user.streak || 0} days</div>
         </div>
+        <div className="quickActions">
+          <button className="ghostButton" onClick={() => navigate({ to: '/progress' })} type="button">View Progress</button>
+          <button className="ghostButton" onClick={() => navigate({ to: '/notes' })} type="button">Open Notes</button>
+          {nextSession && (
+            <Link className="ghostButton" params={{ sessionId: nextSession.id }} to="/session/$sessionId">
+              Start Next Session
+            </Link>
+          )}
+        </div>
         <div className="statsGrid">
           <article><h3>Streak</h3><strong>{user.streak || 0} days</strong></article>
           <article><h3>Completed</h3><strong>{progressRows.length} / 8 sessions</strong></article>
           <article><h3>Unlock Status</h3><strong>{unlockedCount} unlocked</strong></article>
         </div>
+        {focusSkill && (
+          <div className="focusCallout">
+            <strong>Today&apos;s focus:</strong> {focusSkill[0]} ({focusSkill[1]}%)
+            <p>Spend 10-15 minutes on this area before your next full run-through.</p>
+          </div>
+        )}
         {nextSession && (
           <div className="highlightPanel">
             <div>
@@ -57,6 +81,15 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
               <option value="locked">Locked Sessions</option>
               <option value="all">All Sessions</option>
             </select>
+          </label>
+          <label className="controlGroup" htmlFor="session-search-filter">
+            Search Sessions
+            <input
+              id="session-search-filter"
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search by title"
+              value={query}
+            />
           </label>
           <label className="controlGroup" htmlFor="announcement-type-filter">
             Announcement Type
@@ -85,7 +118,8 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
                 params={{ sessionId: session.id }}
                 to="/session/$sessionId"
               >
-                {session.order || originalIndex + 1}. {session.title}
+                <span className="chipTitle">{session.order || originalIndex + 1}. {session.title}</span>
+                <span className="chipMeta">{done ? 'Completed' : unlocked ? 'Ready to practice' : 'Locked'}</span>
               </Link>
             );
           })}

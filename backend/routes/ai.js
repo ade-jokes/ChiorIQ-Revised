@@ -37,40 +37,90 @@ function normalizeMessages(messages) {
 }
 
 function postGemini(body, apiKey) {
+  const preferredModel = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const modelCandidates = [
+    preferredModel,
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite',
+    'gemini-1.5-flash'
+  ].filter((value, index, arr) => value && arr.indexOf(value) === index);
+
+  const apiVersions = ['v1beta', 'v1'];
+
+  function shouldTryFallback(errorMessage, statusCode) {
+    if (statusCode === 404) {
+      return true;
+    }
+
+    if (!errorMessage) {
+      return false;
+    }
+
+    const msg = errorMessage.toLowerCase();
+    return msg.includes('not found') || msg.includes('not supported for generatecontent') || msg.includes('unknown model');
+  }
+
+  function requestOnce(payload, modelName, apiVersion) {
+    return new Promise((resolve, reject) => {
+      const req = https.request(
+        {
+          hostname: 'generativelanguage.googleapis.com',
+          path: `/${apiVersion}/models/${modelName}:generateContent?key=${encodeURIComponent(apiKey)}`,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'content-length': Buffer.byteLength(payload)
+          }
+        },
+        (response) => {
+          let raw = '';
+          response.on('data', (chunk) => {
+            raw += chunk;
+          });
+          response.on('end', () => {
+            try {
+              const parsed = JSON.parse(raw || '{}');
+              if (response.statusCode >= 400) {
+                return reject({
+                  statusCode: response.statusCode,
+                  message: parsed.error?.message || 'Gemini API request failed.'
+                });
+              }
+              return resolve(parsed);
+            } catch {
+              return reject({ statusCode: response.statusCode || 500, message: 'Failed to parse AI response.' });
+            }
+          });
+        }
+      );
+
+      req.on('error', (error) => reject({ statusCode: 502, message: error.message || 'AI request failed.' }));
+      req.write(payload);
+      req.end();
+    });
+  }
+
   return new Promise((resolve, reject) => {
     const payload = JSON.stringify(body);
-    const req = https.request(
-      {
-        hostname: 'generativelanguage.googleapis.com',
-        path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          'content-length': Buffer.byteLength(payload)
-        }
-      },
-      (response) => {
-        let raw = '';
-        response.on('data', (chunk) => {
-          raw += chunk;
-        });
-        response.on('end', () => {
-          try {
-            const parsed = JSON.parse(raw || '{}');
-            if (response.statusCode >= 400) {
-              return reject(new Error(parsed.error?.message || 'Gemini API request failed.'));
-            }
-            return resolve(parsed);
-          } catch {
-            return reject(new Error('Failed to parse AI response.'));
-          }
-        });
-      }
-    );
+    (async () => {
+      let lastError = null;
 
-    req.on('error', reject);
-    req.write(payload);
-    req.end();
+      for (const version of apiVersions) {
+        for (const modelName of modelCandidates) {
+          try {
+            const result = await requestOnce(payload, modelName, version);
+            return resolve(result);
+          } catch (error) {
+            lastError = error;
+            if (!shouldTryFallback(error?.message, error?.statusCode)) {
+              return reject(new Error(error?.message || 'Gemini API request failed.'));
+            }
+          }
+        }
+      }
+
+      return reject(new Error(lastError?.message || 'No available Gemini model could serve this request.'));
+    })().catch((error) => reject(new Error(error?.message || 'Gemini API request failed.')));
   });
 }
 

@@ -310,7 +310,9 @@ function PitchChecker() {
 }
 
 export default function SessionPage({ session, onComplete, onAskAi }) {
-  const [tab, setTab] = useState('lesson');
+  const [tab, setTab] = useState(() => window.localStorage.getItem('memberSessionTab') || 'lesson');
+  const lessonPages = ['Warm-Up', 'Posture', 'Resonance', 'Vocal', 'Pitch', 'Session'];
+  const [lessonPage, setLessonPage] = useState('Warm-Up');
   const [checked, setChecked] = useState([]);
   const [aiPrompt, setAiPrompt] = useState('How can I tighten my harmonies this week?');
   const [aiReply, setAiReply] = useState('');
@@ -323,6 +325,15 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
   const percent = useMemo(() => Math.round((checked.length / checklistTemplate.length) * 100), [checked.length]);
   const sessionReady = Boolean(session?.id);
   const sessionModules = Array.isArray(session?.modules) ? session.modules : [];
+  const promptSuggestions = [
+    'Give me a 5-minute warm-up plan for today.',
+    'How do I blend better in three-part harmony?',
+    'How can I improve breath support in long phrases?'
+  ];
+
+  React.useEffect(() => {
+    window.localStorage.setItem('memberSessionTab', tab);
+  }, [tab]);
 
   const blocks = lessonTechniques.map((group) => (
     <article key={group.id} className="lessonBlock">
@@ -339,6 +350,140 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
       </div>
     </article>
   ));
+
+  const techniqueById = useMemo(() => {
+    return lessonTechniques.reduce((acc, group) => {
+      acc[group.id] = group;
+      return acc;
+    }, {});
+  }, []);
+
+  const warmupChecklist = checklistTemplate.slice(0, 2);
+
+  const lessonContent = useMemo(() => {
+    if (lessonPage === 'Warm-Up') {
+      return (
+        <section className="grid2">
+          <article className="toolCard">
+            <h4>Warm-Up Routine</h4>
+            <p>Use this short routine to prepare breath, pitch center, and vocal flexibility before deeper drills.</p>
+            <div className="checkList">
+              {warmupChecklist.map((item) => <button key={item} type="button">Step · {item}</button>)}
+            </div>
+          </article>
+          <article className="toolCard">
+            <h4>Target Outcome</h4>
+            <p>By the end of warm-up, your tone should feel stable, your breathing should feel less shallow, and note attacks should be cleaner.</p>
+          </article>
+        </section>
+      );
+    }
+
+    if (lessonPage === 'Posture') {
+      const support = techniqueById.resonance?.items.find((item) => item.name.includes('Appoggio'));
+      return (
+        <section className="grid2">
+          <article className="toolCard">
+            <h4>Posture and Breath Support</h4>
+            <p>Build a lifted but relaxed stance: neutral neck, open ribs, steady knees, and grounded feet.</p>
+            {support && (
+              <>
+                <p><strong>Core drill:</strong> {support.exercise}</p>
+                <p><strong>Progress sign:</strong> {support.progressSignal}</p>
+              </>
+            )}
+          </article>
+          <article className="toolCard">
+            <h4>Quick Self-Check</h4>
+            <p>1. Shoulders down, not raised.</p>
+            <p>2. Jaw free, no neck tension.</p>
+            <p>3. Breath starts low and wide.</p>
+          </article>
+        </section>
+      );
+    }
+
+    if (lessonPage === 'Resonance') {
+      const resonanceItems = techniqueById.resonance?.items || [];
+      return (
+        <section className="grid2">
+          <article className="toolCard">
+            <h4>Resonance Balance</h4>
+            <p>Focus on chest-mask-head connection so your voice stays rich and consistent across range changes.</p>
+          </article>
+          {resonanceItems.map((item) => (
+            <article className="explainerCard" key={item.name}>
+              <h5>{item.name}</h5>
+              <p><strong>Meaning:</strong> {item.meaning}</p>
+              <p><strong>Exercise:</strong> {item.exercise}</p>
+            </article>
+          ))}
+        </section>
+      );
+    }
+
+    if (lessonPage === 'Vocal') {
+      return (
+        <section className="grid2">
+          <article className="toolCard">
+            <h4>Vocal Technique</h4>
+            <p>Blend agility, diction, and gospel phrasing to keep your delivery expressive and controlled.</p>
+          </article>
+          {lessonTechniques
+            .filter((group) => ['agility', 'gospel', 'language'].includes(group.id))
+            .map((group) => (
+              <article className="explainerCard" key={group.id}>
+                <h5>{group.title}</h5>
+                <p>{group.items[0]?.meaning || 'Technique details available in this module.'}</p>
+                <p><strong>Try now:</strong> {group.items[0]?.exercise || 'Practice your assigned drill.'}</p>
+              </article>
+            ))}
+        </section>
+      );
+    }
+
+    if (lessonPage === 'Pitch') {
+      const theoryItems = techniqueById.theory?.items || [];
+      return (
+        <section className="grid2">
+          <article className="toolCard">
+            <h4>Pitch Accuracy</h4>
+            <p>Train your ear with interval awareness and solfege so harmonies lock faster in rehearsal.</p>
+          </article>
+          {theoryItems.map((item) => (
+            <article className="explainerCard" key={item.name}>
+              <h5>{item.name}</h5>
+              <p>{item.meaning}</p>
+              <p><strong>Exercise:</strong> {item.exercise}</p>
+            </article>
+          ))}
+        </section>
+      );
+    }
+
+    const sessionItems = sessionModules.length > 0 ? sessionModules : [
+      {
+        id: 'session-plan',
+        title: 'Session Flow',
+        details: 'Warm up, run targeted drills, then complete checklist and reflect with AI Maestro.'
+      }
+    ];
+
+    return (
+      <section className="grid2">
+        <article className="toolCard">
+          <h4>Session Plan</h4>
+          <p>Use this page as your session recap and action plan before marking completion.</p>
+        </article>
+        {sessionItems.map((module) => (
+          <article className="explainerCard" key={module.id || module.key || module.title}>
+            <h5>{module.title || module.label}</h5>
+            <p>{module.details || module.content || 'Module guidance will appear here.'}</p>
+          </article>
+        ))}
+      </section>
+    );
+  }, [lessonPage, lessonTechniques, sessionModules, techniqueById, warmupChecklist]);
 
   async function submitAi() {
     setAiError('');
@@ -399,25 +544,42 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
       {tab === 'lesson' && (
         <section className="sectionCard">
           <article className="toolCard">
-            <h4>How to read this lesson</h4>
-            <p><strong>Meaning</strong> explains what the technique develops.</p>
-            <p><strong>Coaching exercise</strong> gives a practical rehearsal drill.</p>
-            <p><strong>Progress sign</strong> shows what improvement should sound or feel like.</p>
+            <h4>Lesson Pages</h4>
+            <p>Move through the pages in order for a complete coaching cycle.</p>
+            <div className="lessonPager">
+              {lessonPages.map((name) => (
+                <button
+                  className={lessonPage === name ? 'active' : ''}
+                  key={name}
+                  onClick={() => setLessonPage(name)}
+                  type="button"
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+            <div className="lessonPagerActions">
+              <button
+                onClick={() => {
+                  const currentIndex = lessonPages.indexOf(lessonPage);
+                  setLessonPage(lessonPages[Math.max(0, currentIndex - 1)]);
+                }}
+                type="button"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => {
+                  const currentIndex = lessonPages.indexOf(lessonPage);
+                  setLessonPage(lessonPages[Math.min(lessonPages.length - 1, currentIndex + 1)]);
+                }}
+                type="button"
+              >
+                Next
+              </button>
+            </div>
           </article>
-          {sessionModules.length > 0 && (
-            <article className="toolCard">
-              <h4>Session Modules</h4>
-              <div className="explainerGrid">
-                {sessionModules.map((module) => (
-                  <article className="explainerCard" key={module.id || module.key || module.title}>
-                    <h5>{module.title || module.label}</h5>
-                    <p>{module.details || module.content || 'Module guidance will appear here.'}</p>
-                  </article>
-                ))}
-              </div>
-            </article>
-          )}
-          <section className="grid2">{blocks}</section>
+          {lessonContent}
         </section>
       )}
 
@@ -444,6 +606,11 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
         <section className="sectionCard">
           <h3>Daily Session Checklist</h3>
           <p>Each checklist action maps to measurable coaching growth. Complete all tasks before marking the session complete.</p>
+          <div className="bar"><span style={{ width: `${percent}%` }} /></div>
+          <div className="toolActions toolActionsInline">
+            <button onClick={() => setChecked(checklistTemplate)} type="button">Mark all</button>
+            <button onClick={() => setChecked([])} type="button">Clear all</button>
+          </div>
           <div className="checkList">
             {checklistTemplate.map((task) => {
               const done = checked.includes(task);
@@ -479,6 +646,11 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
         <section className="sectionCard">
           <h3>AI Maestro</h3>
           <p>Ask about technique, breath support, phrasing, or harmony strategy. Maestro responds with coaching-focused guidance.</p>
+          <div className="promptSuggestions">
+            {promptSuggestions.map((suggestion) => (
+              <button key={suggestion} onClick={() => setAiPrompt(suggestion)} type="button">{suggestion}</button>
+            ))}
+          </div>
           <textarea value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} rows={5} />
           <button className="primary" disabled={aiLoading || !aiPrompt.trim()} onClick={submitAi} type="button">
             {aiLoading ? 'Maestro is thinking...' : 'Ask Maestro'}

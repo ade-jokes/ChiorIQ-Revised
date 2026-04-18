@@ -67,11 +67,21 @@ app.use((err, _req, res, _next) => {
 });
 
 if (require.main === module) {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log(`ChoirIQ backend listening at http://localhost:${PORT}`); // eslint-disable-line no-console
     if (!process.env.GEMINI_API_KEY) {
       console.warn(`GEMINI_API_KEY missing. Configure it in ${path.join(__dirname, '.env')}`); // eslint-disable-line no-console
     }
+  });
+
+  server.on('error', (error) => {
+    if (error && error.code === 'EADDRINUSE') {
+      console.error(`Port ${PORT} is already in use. A backend instance may already be running.`); // eslint-disable-line no-console
+      console.error('Use the existing backend process, stop it, or change PORT in backend/.env.'); // eslint-disable-line no-console
+      process.exit(1);
+    }
+
+    throw error;
   });
 }
 

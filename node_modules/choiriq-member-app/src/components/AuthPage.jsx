@@ -5,6 +5,7 @@ const levels = ['Beginner', 'Intermediate', 'Advanced'];
 
 export default function AuthPage({ onLogin, onRegister, loading }) {
   const [mode, setMode] = useState('login');
+  const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -40,6 +41,11 @@ export default function AuthPage({ onLogin, onRegister, loading }) {
       <section className="authCard">
         <h2>ChoirIQ Revised</h2>
         <p>Readable, role-based vocal training for members, managers, and admins.</p>
+        <div className="onboardingHints">
+          <span>Guided sessions</span>
+          <span>Live pitch tools</span>
+          <span>Progress tracking</span>
+        </div>
 
         <div className="switcher">
           <button className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')} type="button">Login</button>
@@ -95,7 +101,18 @@ export default function AuthPage({ onLogin, onRegister, loading }) {
           </label>
           <label>
             Password
-            <input type="password" required value={form.password} onChange={(e) => update('password', e.target.value)} />
+            <div className="inputWithButton">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={form.password}
+                onChange={(e) => update('password', e.target.value)}
+              />
+              <button onClick={() => setShowPassword((prev) => !prev)} type="button">
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+            {mode === 'register' && <small className="fieldHint">Use at least 8 characters for stronger account security.</small>}
           </label>
 
           {error && <div className="errorMsg">{error}</div>}
