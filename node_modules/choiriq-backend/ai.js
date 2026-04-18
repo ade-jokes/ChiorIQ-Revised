@@ -31,26 +31,44 @@ router.post('/chat', requireAuth, (req, res) => {
   // Add user context to system prompt
   const systemWithCtx = system + `\n\nSpeaking with: ${user.name} (${user.voicePart || 'voice part unset'}, ${user.level} level).`;
 
+  const contents = messages
+    .slice(-10)
+    .map((msg) => {
+      const role = msg.role === 'assistant' ? 'model' : 'user';
+      const text = typeof msg.content === 'string'
+        ? msg.content
+        : Array.isArray(msg.content)
+          ? msg.content.map((part) => (typeof part === 'string' ? part : part?.text || '')).join('\n')
+          : '';
+      return {
+        role,
+        parts: [{ text }],
+      };
+    })
+    .filter((item) => item.parts[0].text.trim().length > 0);
+
   const body = JSON.stringify({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1000,
-    system: systemWithCtx,
-    messages: messages.slice(-10), // last 10 messages for context window
+    systemInstruction: {
+      parts: [{ text: systemWithCtx }],
+    },
+    generationConfig: {
+      maxOutputTokens: 800,
+      temperature: 0.7,
+    },
+    contents,
   });
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: 'AI service not configured. Set ANTHROPIC_API_KEY.' });
+    return res.status(500).json({ error: 'AI service not configured. Set GEMINI_API_KEY.' });
   }
 
   const options = {
-    hostname: 'api.anthropic.com',
-    path: '/v1/messages',
+    hostname: 'generativelanguage.googleapis.com',
+    path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
       'Content-Length': Buffer.byteLength(body),
     },
   };
@@ -61,7 +79,9 @@ router.post('/chat', requireAuth, (req, res) => {
     proxyRes.on('end', () => {
       try {
         const parsed = JSON.parse(data);
-        const text = parsed.content?.[0]?.text || 'Sorry, I could not generate a response.';
+        const text = parsed.candidates?.[0]?.content?.parts
+          ?.map((part) => part.text || '')
+          .join('\n') || 'Sorry, I could not generate a response.';
         res.json({ reply: text });
       } catch {
         res.status(500).json({ error: 'AI response parse error' });

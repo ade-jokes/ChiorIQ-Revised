@@ -1,7 +1,7 @@
 [
   {
-    "id": "ses_mo47qo9q9e0twg",
-    "createdAt": "2026-04-18T10:47:32.702Z",
+    "id": "ses_mo49hi6jnw1ywe",
+    "createdAt": "2026-04-18T11:36:24.139Z",
     "status": "scheduled",
     "modules": [
       {
@@ -20,8 +20,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 1,
     "title": "Breath Foundations",
     "phase": "Foundation",
@@ -29,8 +29,8 @@
     "durationMin": 75
   },
   {
-    "id": "ses_mo47qo9ted2ive",
-    "createdAt": "2026-04-18T10:47:32.705Z",
+    "id": "ses_mo49hi6ma7oa11",
+    "createdAt": "2026-04-18T11:36:24.143Z",
     "status": "scheduled",
     "modules": [
       {
@@ -49,8 +49,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 2,
     "title": "Resonance Control",
     "phase": "Foundation",
@@ -58,8 +58,8 @@
     "durationMin": 75
   },
   {
-    "id": "ses_mo47qo9w5yqnwj",
-    "createdAt": "2026-04-18T10:47:32.708Z",
+    "id": "ses_mo49hi6svkfhyc",
+    "createdAt": "2026-04-18T11:36:24.148Z",
     "status": "scheduled",
     "modules": [
       {
@@ -78,8 +78,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 3,
     "title": "Agility and Runs",
     "phase": "Foundation",
@@ -87,8 +87,8 @@
     "durationMin": 75
   },
   {
-    "id": "ses_mo47qoa0y2u3ul",
-    "createdAt": "2026-04-18T10:47:32.712Z",
+    "id": "ses_mo49hi6x69wvbr",
+    "createdAt": "2026-04-18T11:36:24.153Z",
     "status": "scheduled",
     "modules": [
       {
@@ -107,8 +107,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 4,
     "title": "Blend and Harmony",
     "phase": "Skill Build",
@@ -116,8 +116,8 @@
     "durationMin": 75
   },
   {
-    "id": "ses_mo47qoa3mytsnm",
-    "createdAt": "2026-04-18T10:47:32.715Z",
+    "id": "ses_mo49hi7228eyux",
+    "createdAt": "2026-04-18T11:36:24.158Z",
     "status": "scheduled",
     "modules": [
       {
@@ -136,8 +136,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 5,
     "title": "Rhythm and Syncopation",
     "phase": "Skill Build",
@@ -145,8 +145,8 @@
     "durationMin": 75
   },
   {
-    "id": "ses_mo47qoa6bwlyzt",
-    "createdAt": "2026-04-18T10:47:32.718Z",
+    "id": "ses_mo49hi779cacox",
+    "createdAt": "2026-04-18T11:36:24.163Z",
     "status": "scheduled",
     "modules": [
       {
@@ -165,8 +165,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 6,
     "title": "Dynamics and Expression",
     "phase": "Skill Build",
@@ -174,8 +174,8 @@
     "durationMin": 75
   },
   {
-    "id": "ses_mo47qoa9od8uys",
-    "createdAt": "2026-04-18T10:47:32.721Z",
+    "id": "ses_mo49hi7cfktr04",
+    "createdAt": "2026-04-18T11:36:24.168Z",
     "status": "scheduled",
     "modules": [
       {
@@ -194,8 +194,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 7,
     "title": "Gospel Phrasing",
     "phase": "Performance",
@@ -203,8 +203,8 @@
     "durationMin": 75
   },
   {
-    "id": "ses_mo47qoabzjgw1g",
-    "createdAt": "2026-04-18T10:47:32.723Z",
+    "id": "ses_mo49hi7hqgmdsc",
+    "createdAt": "2026-04-18T11:36:24.173Z",
     "status": "scheduled",
     "modules": [
       {
@@ -223,8 +223,8 @@
         "details": "Apply techniques in arrangement excerpts."
       }
     ],
-    "choirId": "choir_mo47qo4v5zdcux",
-    "managerId": "usr_mo47qo9nfa9vy4",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "managerId": "usr_mo49hi6e2d3w9s",
     "order": 8,
     "title": "Performance Readiness",
     "phase": "Performance",

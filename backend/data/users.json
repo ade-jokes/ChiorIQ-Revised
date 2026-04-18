@@ -1,6 +1,6 @@
 [
   {
-    "id": "usr_mo47qo9nfa9vy4",
+    "id": "usr_mo49hi6e2d3w9s",
     "streak": 0,
     "lastActive": null,
     "skills": {
@@ -13,19 +13,19 @@
       "vowels": 20,
       "diction": 20
     },
-    "createdAt": "2026-04-18T10:47:32.699Z",
+    "createdAt": "2026-04-18T11:36:24.134Z",
     "name": "Manager",
-    "email": "manager-1776509252520-8062@choiriq.dev",
-    "passwordHash": "$2a$10$ei5puiinvKby97oznzIBw.7EmeYMCRSyMpdTx.B.v7c7Hm0iwsPqu",
+    "email": "manager-1776512183774-4551@choiriq.dev",
+    "passwordHash": "$2a$10$K8CJ6JrKlG0rR5dsP2l4Ee/ybJXI9aYhMAvlAbQulYM3ENRfF1syS",
     "role": "manager",
     "voicePart": "Tenor",
     "level": "Advanced",
-    "choirId": "choir_mo47qo4v5zdcux"
+    "choirId": "choir_mo49hhwt2r3e5w"
   },
   {
-    "id": "usr_mo47qoepoktgh8",
+    "id": "usr_mo49hifl3hc3dp",
     "streak": 1,
-    "lastActive": "2026-04-18T10:47:32.905Z",
+    "lastActive": "2026-04-18T11:36:24.514Z",
     "skills": {
       "agility": 22,
       "resonance": 20,
@@ -36,14 +36,37 @@
       "vowels": 20,
       "diction": 20
     },
-    "createdAt": "2026-04-18T10:47:32.881Z",
+    "createdAt": "2026-04-18T11:36:24.465Z",
     "name": "Member",
-    "email": "member-1776509252730-7556@choiriq.dev",
-    "passwordHash": "$2a$10$zqXq8FFkgihNEgu3bpLuH.oRz2D9ylqri7kwqPn4/gdPi2HUaFRG2",
+    "email": "member-1776512184186-4799@choiriq.dev",
+    "passwordHash": "$2a$10$hVg9Cxh9tR4q7D7HRKD9eOrmcYEJb7pSA/I5VeCeNpIn.BljeClLG",
     "role": "member",
     "voicePart": "Soprano",
     "level": "Beginner",
-    "choirId": "choir_mo47qo4v5zdcux",
-    "updatedAt": "2026-04-18T10:47:32.906Z"
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "updatedAt": "2026-04-18T11:36:24.516Z"
+  },
+  {
+    "id": "usr_mo4ahxzbwztpb6",
+    "streak": 0,
+    "lastActive": null,
+    "skills": {
+      "agility": 20,
+      "resonance": 20,
+      "solfege": 20,
+      "theory": 20,
+      "phrasing": 20,
+      "rhythm": 20,
+      "vowels": 20,
+      "diction": 20
+    },
+    "createdAt": "2026-04-18T12:04:44.231Z",
+    "name": "omotayo",
+    "email": "aduraayeni5@gmail.com",
+    "passwordHash": "$2a$10$TftFWU3gGS0ODm03Yqg4FeYnlu3/CVVSAbwU7dnBI9IZ.qbnMNgty",
+    "role": "member",
+    "voicePart": "Soprano",
+    "level": "Beginner",
+    "choirId": "choir_mo49hhwt2r3e5w"
   }
 ]

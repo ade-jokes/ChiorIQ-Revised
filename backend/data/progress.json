@@ -1,11 +1,11 @@
 [
   {
-    "id": "prg_mo47qofg6y5849",
-    "createdAt": "2026-04-18T10:47:32.908Z",
-    "updatedAt": "2026-04-18T10:47:32.908Z",
-    "choirId": "choir_mo47qo4v5zdcux",
-    "userId": "usr_mo47qoepoktgh8",
-    "sessionId": "ses_mo47qo9q9e0twg",
+    "id": "prg_mo49hih69pasm1",
+    "createdAt": "2026-04-18T11:36:24.522Z",
+    "updatedAt": "2026-04-18T11:36:24.522Z",
+    "choirId": "choir_mo49hhwt2r3e5w",
+    "userId": "usr_mo49hifl3hc3dp",
+    "sessionId": "ses_mo49hi6jnw1ywe",
     "checks": {
       "warmup": true
     },
@@ -17,6 +17,6 @@
     "durationMin": 50,
     "notes": "",
     "completed": true,
-    "completedAt": "2026-04-18T10:47:32.905Z"
+    "completedAt": "2026-04-18T11:36:24.514Z"
   }
 ]

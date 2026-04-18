@@ -2,7 +2,9 @@
 
 ChoirIQ-Revised is now implemented as a modular monorepo with:
 
-- React + TanStack frontend ([frontend](frontend))
+- React + TanStack member app ([member-app](member-app))
+- React + TanStack leader app ([leader-app](leader-app))
+- Shared starter frontend ([frontend](frontend))
 - Node.js + Express backend ([backend](backend))
 - Shared API client ([api.js](api.js))
 
@@ -11,6 +13,9 @@ ChoirIQ-Revised is now implemented as a modular monorepo with:
 ### Frontend (React + TanStack)
 
 - Role-based onboarding for **Admin**, **Choir Manager**, and **Choir Member**
+- Dedicated app split:
+  - Member Portal: [member-app](member-app)
+  - Leader Portal: [leader-app](leader-app)
 - 8-session learning dashboard with unlock flow and streak visibility
 - Session experience with tabbed modules and expandable technique coverage
 - Interactive tools:
@@ -39,14 +44,14 @@ ChoirIQ-Revised is now implemented as a modular monorepo with:
 
 ### Shared Client
 
-- [api.js](api.js): shared API wrapper that sets `window.api` and is imported by frontend.
+- [api.js](api.js): shared API wrapper that sets `window.api` and is imported by all frontends.
 
 ## Architecture Notes
 
 - Leaders/admins create choirs and receive 6-character join codes.
 - Members register with join code and are scoped to that choir.
 - JWT includes `role` + `choirId` for request scoping.
-- AI calls are proxied through backend only; browser never sees Anthropic key.
+- AI calls are proxied through backend only; browser never sees Gemini key.
 
 ## Run Locally
 
@@ -62,7 +67,7 @@ npm install
 copy backend\.env.example backend\.env
 ```
 
-Set `ANTHROPIC_API_KEY` in [backend/.env](backend/.env).
+Set `GEMINI_API_KEY` in [backend/.env](backend/.env).
 
 3. Start backend:
 
@@ -70,13 +75,19 @@ Set `ANTHROPIC_API_KEY` in [backend/.env](backend/.env).
 npm run dev:backend
 ```
 
-4. Start frontend:
+4. Start member frontend:
 
 ```bash
-npm run dev:frontend
+npm run dev:member
 ```
 
-Frontend runs on `http://localhost:5173` and backend on `http://localhost:3001`.
+5. Start leader frontend:
+
+```bash
+npm run dev:leader
+```
+
+Member app runs on `http://localhost:5173`, leader app runs on `http://localhost:5174`, and backend runs on `http://localhost:3001`.
 
 ## Testing
 
@@ -86,10 +97,12 @@ Frontend runs on `http://localhost:5173` and backend on `http://localhost:3001`.
 npm run test:backend
 ```
 
-- Frontend build validation:
+- Frontend build validation (all):
 
 ```bash
 npm run build --workspace frontend
+npm run build:member
+npm run build:leader
 ```
 
 ## Project Layout
@@ -108,6 +121,18 @@ backend/
   tests/
     api.test.js
 frontend/
+  src/
+    components/
+    lib/
+    main.jsx
+    styles.css
+member-app/
+  src/
+    components/
+    lib/
+    main.jsx
+    styles.css
+leader-app/
   src/
     components/
     lib/

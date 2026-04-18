@@ -1,20 +1,137 @@
 const fs = require('fs');
 const path = require('path');
+const Database = require('better-sqlite3');
 
-const DB_PATH = path.join(__dirname, 'data');
-
-if (!fs.existsSync(DB_PATH)) {
-  fs.mkdirSync(DB_PATH, { recursive: true });
+const DATA_DIR = path.join(__dirname, 'data');
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-const FILES = {
-  users: path.join(DB_PATH, 'users.json'),
-  choirs: path.join(DB_PATH, 'choirs.json'),
-  sessions: path.join(DB_PATH, 'sessions.json'),
-  progress: path.join(DB_PATH, 'progress.json'),
-  announcements: path.join(DB_PATH, 'announcements.json'),
-  notes: path.join(DB_PATH, 'notes.json')
+const DB_FILE = process.env.DB_FILE || path.join(DATA_DIR, 'choiriq.sqlite');
+const sqlite = new Database(DB_FILE);
+sqlite.pragma('journal_mode = WAL');
+
+const SCHEMAS = {
+  users: {
+    table: 'users',
+    columns: [
+      'id', 'name', 'email', 'passwordHash', 'role', 'voicePart', 'level',
+      'choirId', 'streak', 'lastActive', 'skills', 'createdAt', 'updatedAt'
+    ]
+  },
+  choirs: {
+    table: 'choirs',
+    columns: ['id', 'joinCode', 'name', 'createdByRole', 'createdAt', 'updatedAt']
+  },
+  sessions: {
+    table: 'sessions',
+    columns: [
+      'id', 'choirId', 'managerId', 'title', 'phase', 'description', 'date',
+      'durationMin', 'status', 'orderIndex', 'modules', 'createdAt', 'updatedAt'
+    ]
+  },
+  progress: {
+    table: 'progress',
+    columns: [
+      'id', 'choirId', 'userId', 'sessionId', 'checks', 'theoryScore', 'skillDeltas',
+      'durationMin', 'notes', 'completed', 'completedAt', 'createdAt', 'updatedAt'
+    ]
+  },
+  announcements: {
+    table: 'announcements',
+    columns: ['id', 'choirId', 'managerId', 'title', 'text', 'type', 'createdAt', 'updatedAt']
+  },
+  notes: {
+    table: 'notes',
+    columns: ['id', 'choirId', 'managerId', 'memberId', 'text', 'type', 'createdAt', 'updatedAt']
+  }
 };
+
+initSchema();
+
+function initSchema() {
+  sqlite.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      passwordHash TEXT NOT NULL,
+      role TEXT NOT NULL,
+      voicePart TEXT,
+      level TEXT,
+      choirId TEXT NOT NULL,
+      streak INTEGER NOT NULL DEFAULT 0,
+      lastActive TEXT,
+      skills TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS choirs (
+      id TEXT PRIMARY KEY,
+      joinCode TEXT NOT NULL UNIQUE,
+      name TEXT NOT NULL,
+      createdByRole TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS sessions (
+      id TEXT PRIMARY KEY,
+      choirId TEXT NOT NULL,
+      managerId TEXT,
+      title TEXT NOT NULL,
+      phase TEXT,
+      description TEXT,
+      date TEXT,
+      durationMin INTEGER,
+      status TEXT,
+      orderIndex INTEGER,
+      modules TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS progress (
+      id TEXT PRIMARY KEY,
+      choirId TEXT NOT NULL,
+      userId TEXT NOT NULL,
+      sessionId TEXT NOT NULL,
+      checks TEXT,
+      theoryScore INTEGER,
+      skillDeltas TEXT,
+      durationMin INTEGER,
+      notes TEXT,
+      completed INTEGER,
+      completedAt TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT NOT NULL,
+      UNIQUE(userId, sessionId)
+    );
+
+    CREATE TABLE IF NOT EXISTS announcements (
+      id TEXT PRIMARY KEY,
+      choirId TEXT NOT NULL,
+      managerId TEXT,
+      title TEXT,
+      text TEXT NOT NULL,
+      type TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS notes (
+      id TEXT PRIMARY KEY,
+      choirId TEXT NOT NULL,
+      managerId TEXT,
+      memberId TEXT NOT NULL,
+      text TEXT NOT NULL,
+      type TEXT,
+      createdAt TEXT NOT NULL,
+      updatedAt TEXT
+    );
+  `);
+}
 
 function now() {
   return new Date().toISOString();
@@ -22,47 +139,6 @@ function now() {
 
 function uid(prefix = 'id') {
   return `${prefix}_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
-}
-
-function read(file) {
-  try {
-    if (!fs.existsSync(file)) {
-      return [];
-    }
-    const raw = fs.readFileSync(file, 'utf8');
-    return JSON.parse(raw);
-  } catch {
-    return [];
-  }
-}
-
-function write(file, value) {
-  fs.writeFileSync(file, JSON.stringify(value, null, 2), 'utf8');
-}
-
-function getCollection(name) {
-  return read(FILES[name]);
-}
-
-function saveCollection(name, rows) {
-  write(FILES[name], rows);
-}
-
-function updateById(name, id, patch) {
-  const rows = getCollection(name);
-  const index = rows.findIndex((row) => row.id === id);
-  if (index < 0) {
-    return null;
-  }
-  rows[index] = { ...rows[index], ...patch, updatedAt: now() };
-  saveCollection(name, rows);
-  return rows[index];
-}
-
-function deleteById(name, id) {
-  const rows = getCollection(name);
-  const next = rows.filter((row) => row.id !== id);
-  saveCollection(name, next);
 }
 
 function randomJoinCode() {
@@ -74,26 +150,150 @@ function randomJoinCode() {
   return code;
 }
 
+function parseJson(value, fallback) {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return fallback;
+  }
+}
+
+function toDb(collection, row) {
+  const next = { ...row };
+
+  if (collection === 'users') {
+    next.skills = JSON.stringify(next.skills || {});
+    next.streak = Number(next.streak || 0);
+  }
+
+  if (collection === 'sessions') {
+    next.orderIndex = next.order !== undefined ? Number(next.order) : Number(next.orderIndex || 0);
+    delete next.order;
+    next.modules = JSON.stringify(next.modules || []);
+    next.durationMin = Number(next.durationMin || 0);
+  }
+
+  if (collection === 'progress') {
+    next.checks = JSON.stringify(next.checks || {});
+    next.skillDeltas = JSON.stringify(next.skillDeltas || {});
+    next.completed = next.completed ? 1 : 0;
+    next.theoryScore = Number(next.theoryScore || 0);
+    next.durationMin = Number(next.durationMin || 0);
+  }
+
+  return next;
+}
+
+function fromDb(collection, row) {
+  if (!row) return row;
+  const next = { ...row };
+
+  if (collection === 'users') {
+    next.skills = parseJson(next.skills, {
+      agility: 20,
+      resonance: 20,
+      solfege: 20,
+      theory: 20,
+      phrasing: 20,
+      rhythm: 20,
+      vowels: 20,
+      diction: 20
+    });
+  }
+
+  if (collection === 'sessions') {
+    next.modules = parseJson(next.modules, []);
+    next.order = next.orderIndex;
+    delete next.orderIndex;
+  }
+
+  if (collection === 'progress') {
+    next.checks = parseJson(next.checks, {});
+    next.skillDeltas = parseJson(next.skillDeltas, {});
+    next.completed = Boolean(next.completed);
+  }
+
+  return next;
+}
+
+function schemaFor(collection) {
+  const schema = SCHEMAS[collection];
+  if (!schema) {
+    throw new Error(`Unknown collection: ${collection}`);
+  }
+  return schema;
+}
+
+function insertOrReplace(collection, row) {
+  const schema = schemaFor(collection);
+  const dbRow = toDb(collection, row);
+  const placeholders = schema.columns.map((c) => `@${c}`).join(', ');
+  const columns = schema.columns.join(', ');
+  const stmt = sqlite.prepare(`INSERT OR REPLACE INTO ${schema.table} (${columns}) VALUES (${placeholders})`);
+
+  const values = {};
+  schema.columns.forEach((column) => {
+    values[column] = dbRow[column] !== undefined ? dbRow[column] : null;
+  });
+
+  stmt.run(values);
+}
+
+function getCollection(collection) {
+  const schema = schemaFor(collection);
+  const rows = sqlite.prepare(`SELECT * FROM ${schema.table}`).all();
+  return rows.map((row) => fromDb(collection, row));
+}
+
+function saveCollection(collection, rows) {
+  const schema = schemaFor(collection);
+  const tx = sqlite.transaction((allRows) => {
+    sqlite.prepare(`DELETE FROM ${schema.table}`).run();
+    allRows.forEach((row) => insertOrReplace(collection, row));
+  });
+  tx(rows || []);
+}
+
+function findById(collection, id) {
+  const schema = schemaFor(collection);
+  const row = sqlite.prepare(`SELECT * FROM ${schema.table} WHERE id = ?`).get(id);
+  return fromDb(collection, row);
+}
+
+function updateById(collection, id, patch) {
+  const current = findById(collection, id);
+  if (!current) {
+    return null;
+  }
+
+  const updated = { ...current, ...patch, updatedAt: now() };
+  insertOrReplace(collection, updated);
+  return findById(collection, id);
+}
+
+function deleteById(collection, id) {
+  const schema = schemaFor(collection);
+  sqlite.prepare(`DELETE FROM ${schema.table} WHERE id = ?`).run(id);
+}
+
 function createChoir(payload) {
-  const choirs = getCollection('choirs');
   let joinCode = randomJoinCode();
-  const existing = new Set(choirs.map((choir) => choir.joinCode));
-  while (existing.has(joinCode)) {
+  while (sqlite.prepare('SELECT 1 FROM choirs WHERE joinCode = ?').get(joinCode)) {
     joinCode = randomJoinCode();
   }
+
   const choir = {
     id: uid('choir'),
     joinCode,
     createdAt: now(),
     ...payload
   };
-  choirs.push(choir);
-  saveCollection('choirs', choirs);
-  return choir;
+  insertOrReplace('choirs', choir);
+  return findById('choirs', choir.id);
 }
 
 function createUser(payload) {
-  const users = getCollection('users');
   const user = {
     id: uid('usr'),
     streak: 0,
@@ -111,13 +311,11 @@ function createUser(payload) {
     createdAt: now(),
     ...payload
   };
-  users.push(user);
-  saveCollection('users', users);
-  return user;
+  insertOrReplace('users', user);
+  return findById('users', user.id);
 }
 
 function createSession(payload) {
-  const sessions = getCollection('sessions');
   const session = {
     id: uid('ses'),
     createdAt: now(),
@@ -125,54 +323,56 @@ function createSession(payload) {
     modules: [],
     ...payload
   };
-  sessions.push(session);
-  saveCollection('sessions', sessions);
-  return session;
+  insertOrReplace('sessions', session);
+  return findById('sessions', session.id);
 }
 
 function upsertProgress(payload) {
-  const rows = getCollection('progress');
-  const index = rows.findIndex(
-    (row) => row.userId === payload.userId && row.sessionId === payload.sessionId
-  );
-  if (index >= 0) {
-    rows[index] = { ...rows[index], ...payload, updatedAt: now() };
-    saveCollection('progress', rows);
-    return rows[index];
+  const existing = sqlite
+    .prepare('SELECT * FROM progress WHERE userId = ? AND sessionId = ?')
+    .get(payload.userId, payload.sessionId);
+
+  if (existing) {
+    const current = fromDb('progress', existing);
+    const next = {
+      ...current,
+      ...payload,
+      id: current.id,
+      updatedAt: now()
+    };
+    insertOrReplace('progress', next);
+    return findById('progress', current.id);
   }
+
   const created = {
     id: uid('prg'),
     createdAt: now(),
     updatedAt: now(),
     ...payload
   };
-  rows.push(created);
-  saveCollection('progress', rows);
-  return created;
+
+  insertOrReplace('progress', created);
+  return findById('progress', created.id);
 }
 
 function createAnnouncement(payload) {
-  const rows = getCollection('announcements');
   const created = {
     id: uid('ann'),
     createdAt: now(),
     ...payload
   };
-  rows.push(created);
-  saveCollection('announcements', rows);
-  return created;
+  insertOrReplace('announcements', created);
+  return findById('announcements', created.id);
 }
 
 function createNote(payload) {
-  const rows = getCollection('notes');
   const created = {
     id: uid('note'),
     createdAt: now(),
     ...payload
   };
-  rows.push(created);
-  saveCollection('notes', rows);
-  return created;
+  insertOrReplace('notes', created);
+  return findById('notes', created.id);
 }
 
 function seedDefaultSessions(choirId, managerId) {
@@ -206,7 +406,15 @@ function seedDefaultSessions(choirId, managerId) {
 }
 
 function resetAll() {
-  Object.keys(FILES).forEach((key) => write(FILES[key], []));
+  const tx = sqlite.transaction(() => {
+    sqlite.prepare('DELETE FROM progress').run();
+    sqlite.prepare('DELETE FROM notes').run();
+    sqlite.prepare('DELETE FROM announcements').run();
+    sqlite.prepare('DELETE FROM sessions').run();
+    sqlite.prepare('DELETE FROM users').run();
+    sqlite.prepare('DELETE FROM choirs').run();
+  });
+  tx();
 }
 
 module.exports = {

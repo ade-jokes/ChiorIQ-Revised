@@ -34,7 +34,7 @@ choiriq/
 ```bash
 cd backend
 cp .env.example .env
-# Edit .env — add your ANTHROPIC_API_KEY
+# Edit .env — add your GEMINI_API_KEY
 npm install
 npm start
 # Running on http://localhost:3001
@@ -147,7 +147,7 @@ For hosting:
 
 ```env
 PORT=3001
-ANTHROPIC_API_KEY=sk-ant-...   # Required for AI chat
+GEMINI_API_KEY=...   # Required for AI chat
 JWT_SECRET=change-me-in-production
 ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3002
 NODE_ENV=development

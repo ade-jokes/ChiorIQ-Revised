@@ -22,6 +22,11 @@ import NotesPage from './components/NotesPage';
 import LeaderPage from './components/LeaderPage';
 
 const queryClient = new QueryClient();
+const AppContext = React.createContext(null);
+
+function useAppContext() {
+  return React.useContext(AppContext);
+}
 
 function RequireAuth({ user, children }) {
   const navigate = useNavigate();
@@ -159,17 +164,19 @@ function AppShell() {
   };
 
   return (
-    <div className="appRoot">
-      <TopNav user={user} onLogout={appCtx.onLogout} />
-      <Outlet context={appCtx} />
-    </div>
+    <AppContext.Provider value={appCtx}>
+      <div className="appRoot">
+        <TopNav user={user} onLogout={appCtx.onLogout} />
+        <Outlet />
+      </div>
+    </AppContext.Provider>
   );
 }
 
 function LoginRoute() {
   const location = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
-  const ctx = loginRoute.useRouteContext();
+  const ctx = useAppContext();
   if (ctx.user && location === '/') {
     navigate({ to: '/dashboard' });
   }
@@ -177,7 +184,7 @@ function LoginRoute() {
 }
 
 function DashboardRoute() {
-  const ctx = dashboardRoute.useRouteContext();
+  const ctx = useAppContext();
   return (
     <RequireAuth user={ctx.user}>
       <DashboardPage
@@ -192,7 +199,7 @@ function DashboardRoute() {
 }
 
 function SessionRoute() {
-  const ctx = sessionRoute.useRouteContext();
+  const ctx = useAppContext();
   const { sessionId } = sessionRoute.useParams();
   const session = ctx.sessions.find((item) => item.id === sessionId) || ctx.sessions.find((item) => String(item.order) === sessionId) || ctx.sessions[0];
   return (
@@ -207,7 +214,7 @@ function SessionRoute() {
 }
 
 function ProgressRoute() {
-  const ctx = progressRoute.useRouteContext();
+  const ctx = useAppContext();
   return (
     <RequireAuth user={ctx.user}>
       <ProgressPage progressRows={ctx.progressRows} user={ctx.user} />
@@ -216,7 +223,7 @@ function ProgressRoute() {
 }
 
 function NotesRoute() {
-  const ctx = notesRoute.useRouteContext();
+  const ctx = useAppContext();
   return (
     <RequireAuth user={ctx.user}>
       <NotesPage notes={ctx.notes} />
@@ -225,7 +232,7 @@ function NotesRoute() {
 }
 
 function LeaderRoute() {
-  const ctx = leaderRoute.useRouteContext();
+  const ctx = useAppContext();
   if (!ctx.user || !['manager', 'admin'].includes(ctx.user.role)) {
     return (
       <main className="pageWrap">

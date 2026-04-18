@@ -48,7 +48,7 @@ router.post('/register', (req, res) => {
     const choirs = db.getCollection('choirs');
     choir = choirs.find((item) => item.joinCode === String(joinCode).toUpperCase());
     if (!choir) {
-      return res.status(404).json({ error: 'Invalid join code.' });
+      return res.status(400).json({ error: 'Invalid join code.' });
     }
   } else {
     choir = db.createChoir({
