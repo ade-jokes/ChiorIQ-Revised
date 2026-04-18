@@ -5,19 +5,36 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
   const completed = new Set(progressRows.map((row) => row.sessionId));
   const sorted = [...sessions].sort((a, b) => (a.order || 0) - (b.order || 0));
   const unlockedCount = Math.min((progressRows.length || 0) + 1, 8);
+  const nextSession = sorted[Math.max(0, unlockedCount - 1)];
 
   return (
     <main className="pageWrap">
       <section className="heroCard">
-        <h2>Welcome back, {user.name}</h2>
-        <p>
-          {choir?.name || 'Your Choir'} · {user.voicePart} · {user.level}
-        </p>
+        <div className="heroTopRow">
+          <div>
+            <h2>Welcome back, {user.name}</h2>
+            <p>
+              {choir?.name || 'Your Choir'} · {user.voicePart} · {user.level}
+            </p>
+          </div>
+          <div className="metaPill">Practice Streak: {user.streak || 0} days</div>
+        </div>
         <div className="statsGrid">
           <article><h3>Streak</h3><strong>{user.streak || 0} days</strong></article>
           <article><h3>Completed</h3><strong>{progressRows.length} / 8 sessions</strong></article>
           <article><h3>Unlock Status</h3><strong>{unlockedCount} unlocked</strong></article>
         </div>
+        {nextSession && (
+          <div className="highlightPanel">
+            <div>
+              <h3>Next Session</h3>
+              <p>{nextSession.title}</p>
+            </div>
+            <Link className="ghostButton" params={{ sessionId: nextSession.id }} to="/session/$sessionId">
+              Continue Training
+            </Link>
+          </div>
+        )}
       </section>
 
       <section className="sectionCard">
@@ -49,6 +66,7 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
             <div>
               <strong>{item.title}</strong>
               <p>{item.text}</p>
+              <small className="announceMeta">{new Date(item.createdAt || Date.now()).toLocaleString()}</small>
             </div>
             <span>{item.type}</span>
           </article>
