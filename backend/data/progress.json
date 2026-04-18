@@ -1,0 +1,22 @@
+[
+  {
+    "id": "prg_mo47qofg6y5849",
+    "createdAt": "2026-04-18T10:47:32.908Z",
+    "updatedAt": "2026-04-18T10:47:32.908Z",
+    "choirId": "choir_mo47qo4v5zdcux",
+    "userId": "usr_mo47qoepoktgh8",
+    "sessionId": "ses_mo47qo9q9e0twg",
+    "checks": {
+      "warmup": true
+    },
+    "theoryScore": 80,
+    "skillDeltas": {
+      "agility": 2,
+      "rhythm": 1
+    },
+    "durationMin": 50,
+    "notes": "",
+    "completed": true,
+    "completedAt": "2026-04-18T10:47:32.905Z"
+  }
+]

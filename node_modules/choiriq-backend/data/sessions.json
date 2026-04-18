@@ -1,0 +1,234 @@
+[
+  {
+    "id": "ses_mo47qo9q9e0twg",
+    "createdAt": "2026-04-18T10:47:32.702Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 1,
+    "title": "Breath Foundations",
+    "phase": "Foundation",
+    "description": "Session 1: Breath Foundations",
+    "durationMin": 75
+  },
+  {
+    "id": "ses_mo47qo9ted2ive",
+    "createdAt": "2026-04-18T10:47:32.705Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 2,
+    "title": "Resonance Control",
+    "phase": "Foundation",
+    "description": "Session 2: Resonance Control",
+    "durationMin": 75
+  },
+  {
+    "id": "ses_mo47qo9w5yqnwj",
+    "createdAt": "2026-04-18T10:47:32.708Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 3,
+    "title": "Agility and Runs",
+    "phase": "Foundation",
+    "description": "Session 3: Agility and Runs",
+    "durationMin": 75
+  },
+  {
+    "id": "ses_mo47qoa0y2u3ul",
+    "createdAt": "2026-04-18T10:47:32.712Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 4,
+    "title": "Blend and Harmony",
+    "phase": "Skill Build",
+    "description": "Session 4: Blend and Harmony",
+    "durationMin": 75
+  },
+  {
+    "id": "ses_mo47qoa3mytsnm",
+    "createdAt": "2026-04-18T10:47:32.715Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 5,
+    "title": "Rhythm and Syncopation",
+    "phase": "Skill Build",
+    "description": "Session 5: Rhythm and Syncopation",
+    "durationMin": 75
+  },
+  {
+    "id": "ses_mo47qoa6bwlyzt",
+    "createdAt": "2026-04-18T10:47:32.718Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 6,
+    "title": "Dynamics and Expression",
+    "phase": "Skill Build",
+    "description": "Session 6: Dynamics and Expression",
+    "durationMin": 75
+  },
+  {
+    "id": "ses_mo47qoa9od8uys",
+    "createdAt": "2026-04-18T10:47:32.721Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 7,
+    "title": "Gospel Phrasing",
+    "phase": "Performance",
+    "description": "Session 7: Gospel Phrasing",
+    "durationMin": 75
+  },
+  {
+    "id": "ses_mo47qoabzjgw1g",
+    "createdAt": "2026-04-18T10:47:32.723Z",
+    "status": "scheduled",
+    "modules": [
+      {
+        "id": "warmup",
+        "title": "Warm-up",
+        "details": "Breath and resonance setup for the day."
+      },
+      {
+        "id": "technique",
+        "title": "Technique",
+        "details": "Targeted drills for consistency and control."
+      },
+      {
+        "id": "application",
+        "title": "Application",
+        "details": "Apply techniques in arrangement excerpts."
+      }
+    ],
+    "choirId": "choir_mo47qo4v5zdcux",
+    "managerId": "usr_mo47qo9nfa9vy4",
+    "order": 8,
+    "title": "Performance Readiness",
+    "phase": "Performance",
+    "description": "Session 8: Performance Readiness",
+    "durationMin": 75
+  }
+]

@@ -1,66 +1,117 @@
 # ChoirIQ-Revised
 
-ChoirIQ is a high-performance, multi-page web application that elevates choral training through structured pedagogy and real-time audio analysis. This revised version supports three user types: **Admin**, **Choir Manager**, and **Choir Member**.
+ChoirIQ-Revised is now implemented as a modular monorepo with:
 
-## Core Product Scope
+- React + TanStack frontend ([frontend](frontend))
+- Node.js + Express backend ([backend](backend))
+- Shared API client ([api.js](api.js))
 
-### 1) Personalized onboarding
-Capture each member's:
-- Name
-- Role
-- Voice part
-- Skill level
+## What Was Built
 
-This data personalizes the full app journey.
+### Frontend (React + TanStack)
 
-### 2) 8-session learning dashboard
-- Full 8-session curriculum with clear progression
-- Visual progress tracker
-- Streak counter / gamification
-- Session unlock flow
+- Role-based onboarding for **Admin**, **Choir Manager**, and **Choir Member**
+- 8-session learning dashboard with unlock flow and streak visibility
+- Session experience with tabbed modules and expandable technique coverage
+- Interactive tools:
+  - Live Pitch Checker (Web Audio + tuning needle)
+  - Playable Piano
+  - Drill Timer
+  - Music Theory Quiz (8 rotating categories)
+  - Session Checklist and completion logging
+  - AI Maestro chat panel
+- Leader command center:
+  - Member roster (TanStack Table)
+  - Choir analytics
+  - Announcements
+  - Member notes
 
-### 3) Session learning experience
-Each session opens into tabbed lesson modules with expandable technique blocks.
+### Backend ([backend](backend))
 
-## Interactive Training Tools
+- [backend/server.js](backend/server.js): Express app, CORS, routing, health endpoint, errors
+- [backend/db.js](backend/db.js): file-based JSON data layer isolated in one place
+- [backend/auth.js](backend/auth.js): JWT auth, bcrypt hashing, role middleware
+- [backend/routes/auth.js](backend/routes/auth.js): register, login, me (get + update)
+- [backend/routes/sessions.js](backend/routes/sessions.js): CRUD sessions + attendance
+- [backend/routes/progress.js](backend/routes/progress.js): completion logging + analytics
+- [backend/routes/choir.js](backend/routes/choir.js): join codes, announcements, notes, member management
+- [backend/routes/ai.js](backend/routes/ai.js): secure server-side AI proxy
 
-- **Live Pitch Checker**  
-  Uses microphone input via the Web Audio API to detect pitch in real time, including:
-  - Note name
-  - Frequency
-  - Flat / sharp / in-tune status
-  - Moving tuning needle
+### Shared Client
 
-- **Playable Piano**  
-  Clickable keys to hear reference notes for matching.
+- [api.js](api.js): shared API wrapper that sets `window.api` and is imported by frontend.
 
-- **Drill Timers**  
-  Countdown timers with progress bars for breathing and agility drills.
+## Architecture Notes
 
-- **Music Theory Quiz**  
-  8 rotating question types covering scales, intervals, solfège, gospel terms, dynamics, and sight-reading with instant feedback.
+- Leaders/admins create choirs and receive 6-character join codes.
+- Members register with join code and are scoped to that choir.
+- JWT includes `role` + `choirId` for request scoping.
+- AI calls are proxied through backend only; browser never sees Anthropic key.
 
-- **Session Checklist**  
-  Members can mark completed daily practice tasks.
+## Run Locally
 
-- **AI Maestro (Claude-powered)**  
-  A 24/7 AI vocal coach trained on gospel and choral methodology.
+1. Install dependencies:
 
-## Techniques Across All Sessions
+```bash
+npm install
+```
 
-- Agility: runs, arpeggios, mordents, portamento, staccato
-- Resonance: chest/mask/head voice, passaggio, twang, appoggio
-- Solfège and sight-singing
-- Music theory (all 8 quiz types)
-- Gospel phrasing: melisma, call and response, subito piano, messa di voce
-- Rhythm and syncopation
-- Vowel IPA shaping
-- Diction management
+2. Copy backend env file and configure key:
 
-## SaaS Foundation
+```bash
+copy backend\.env.example backend\.env
+```
 
-ChoirIQ includes key startup/SaaS pillars:
-- Personalized onboarding
-- AI coach chat
-- Streak and gamification loop
-- Member roster and skill tracking
+Set `ANTHROPIC_API_KEY` in [backend/.env](backend/.env).
+
+3. Start backend:
+
+```bash
+npm run dev:backend
+```
+
+4. Start frontend:
+
+```bash
+npm run dev:frontend
+```
+
+Frontend runs on `http://localhost:5173` and backend on `http://localhost:3001`.
+
+## Testing
+
+- Backend API tests:
+
+```bash
+npm run test:backend
+```
+
+- Frontend build validation:
+
+```bash
+npm run build --workspace frontend
+```
+
+## Project Layout
+
+```
+backend/
+  server.js
+  db.js
+  auth.js
+  routes/
+    auth.js
+    sessions.js
+    progress.js
+    choir.js
+    ai.js
+  tests/
+    api.test.js
+frontend/
+  src/
+    components/
+    lib/
+    main.jsx
+    styles.css
+api.js
+```

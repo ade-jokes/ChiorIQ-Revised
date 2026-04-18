@@ -1,0 +1,249 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  Outlet,
+  RouterProvider,
+  useNavigate,
+  useRouterState
+} from '@tanstack/react-router';
+import { QueryClient, QueryClientProvider, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import api from './lib/api';
+import './styles.css';
+import TopNav from './components/TopNav';
+import AuthPage from './components/AuthPage';
+import DashboardPage from './components/DashboardPage';
+import SessionPage from './components/SessionPage';
+import ProgressPage from './components/ProgressPage';
+import NotesPage from './components/NotesPage';
+
+const queryClient = new QueryClient();
+
+function RequireAuth({ user, children }) {
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (!user) {
+      navigate({ to: '/' });
+    }
+  }, [navigate, user]);
+  return user ? children : null;
+}
+
+function RequireMember({ user, children }) {
+  if (!user) {
+    return null;
+  }
+
+  if (user.role !== 'member') {
+    return (
+      <main className="pageWrap">
+        <section className="sectionCard">
+          <h2>This portal is for Choir Members only.</h2>
+          <p>Please use the leader portal if you are a manager or admin.</p>
+        </section>
+      </main>
+    );
+  }
+
+  return children;
+}
+
+function AppShell() {
+  const navigate = useNavigate();
+  const qc = useQueryClient();
+  const [token, setToken] = React.useState(api.getToken());
+
+  const meQuery = useQuery({
+    queryKey: ['me', token],
+    queryFn: () => api.me(),
+    enabled: Boolean(token),
+    retry: false
+  });
+
+  const loginMutation = useMutation({
+    mutationFn: (payload) => api.login(payload),
+    onSuccess: (res) => {
+      api.setToken(res.token);
+      setToken(res.token);
+      qc.invalidateQueries();
+      navigate({ to: '/dashboard' });
+    }
+  });
+
+  const registerMutation = useMutation({
+    mutationFn: (payload) => api.register(payload),
+    onSuccess: (res) => {
+      api.setToken(res.token);
+      setToken(res.token);
+      qc.invalidateQueries();
+      navigate({ to: '/dashboard' });
+    }
+  });
+
+  const choirQuery = useQuery({
+    queryKey: ['choir'],
+    queryFn: () => api.getChoir(),
+    enabled: Boolean(meQuery.data?.user)
+  });
+
+  const sessionsQuery = useQuery({
+    queryKey: ['sessions'],
+    queryFn: () => api.listSessions(),
+    enabled: Boolean(meQuery.data?.user)
+  });
+
+  const progressQuery = useQuery({
+    queryKey: ['progress-me'],
+    queryFn: () => api.myProgress(),
+    enabled: Boolean(meQuery.data?.user)
+  });
+
+  const notesQuery = useQuery({
+    queryKey: ['notes'],
+    queryFn: () => api.getMyNotes(),
+    enabled: Boolean(meQuery.data?.user)
+  });
+
+  const announcementsQuery = useQuery({
+    queryKey: ['announcements'],
+    queryFn: () => api.getAnnouncements(),
+    enabled: Boolean(meQuery.data?.user)
+  });
+
+  const completeMutation = useMutation({
+    mutationFn: (payload) => api.logProgress(payload),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['progress-me'] });
+      qc.invalidateQueries({ queryKey: ['me', token] });
+      qc.invalidateQueries({ queryKey: ['choir-progress'] });
+    }
+  });
+
+  const postAnnouncementMutation = useMutation({
+    mutationFn: (payload) => api.createAnnouncement(payload),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['announcements'] })
+  });
+
+  const postNoteMutation = useMutation({
+    mutationFn: (payload) => api.createNote(payload)
+  });
+
+  const user = meQuery.data?.user || null;
+
+  const appCtx = {
+    user,
+    sessions: sessionsQuery.data?.sessions || [],
+    progressRows: progressQuery.data?.progress || [],
+    choir: choirQuery.data?.choir,
+    notes: notesQuery.data?.notes || [],
+    announcements: announcementsQuery.data?.announcements || [],
+    onLogin: (payload) => loginMutation.mutateAsync(payload),
+    onRegister: (payload) => registerMutation.mutateAsync(payload),
+    onLogout: () => {
+      api.clearToken();
+      setToken(null);
+      qc.clear();
+      navigate({ to: '/' });
+    },
+    onCompleteSession: (sessionId, payload) => completeMutation.mutateAsync({ sessionId, ...payload }),
+    onAskAi: (messages) => api.aiChat(messages),
+    onPostAnnouncement: (payload) => postAnnouncementMutation.mutateAsync(payload),
+    onAddNote: (payload) => postNoteMutation.mutateAsync(payload),
+    loadingAuth: loginMutation.isPending || registerMutation.isPending
+  };
+
+  return (
+    <div className="appRoot">
+      <TopNav user={user} onLogout={appCtx.onLogout} />
+      <Outlet context={appCtx} />
+    </div>
+  );
+}
+
+function LoginRoute() {
+  const location = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  const ctx = loginRoute.useRouteContext();
+  if (ctx.user && location === '/') {
+    navigate({ to: '/dashboard' });
+  }
+  return <AuthPage loading={ctx.loadingAuth} onLogin={ctx.onLogin} onRegister={ctx.onRegister} />;
+}
+
+function DashboardRoute() {
+  const ctx = dashboardRoute.useRouteContext();
+  return (
+    <RequireAuth user={ctx.user}>
+      <RequireMember user={ctx.user}>
+        <DashboardPage
+          announcements={ctx.announcements}
+          choir={ctx.choir}
+          progressRows={ctx.progressRows}
+          sessions={ctx.sessions}
+          user={ctx.user}
+        />
+      </RequireMember>
+    </RequireAuth>
+  );
+}
+
+function SessionRoute() {
+  const ctx = sessionRoute.useRouteContext();
+  const { sessionId } = sessionRoute.useParams();
+  const session = ctx.sessions.find((item) => item.id === sessionId) || ctx.sessions.find((item) => String(item.order) === sessionId) || ctx.sessions[0];
+  return (
+    <RequireAuth user={ctx.user}>
+      <RequireMember user={ctx.user}>
+        <SessionPage
+          onAskAi={ctx.onAskAi}
+          onComplete={(payload) => ctx.onCompleteSession(session?.id, payload)}
+          session={session}
+        />
+      </RequireMember>
+    </RequireAuth>
+  );
+}
+
+function ProgressRoute() {
+  const ctx = progressRoute.useRouteContext();
+  return (
+    <RequireAuth user={ctx.user}>
+      <RequireMember user={ctx.user}>
+        <ProgressPage progressRows={ctx.progressRows} user={ctx.user} />
+      </RequireMember>
+    </RequireAuth>
+  );
+}
+
+function NotesRoute() {
+  const ctx = notesRoute.useRouteContext();
+  return (
+    <RequireAuth user={ctx.user}>
+      <RequireMember user={ctx.user}>
+        <NotesPage notes={ctx.notes} />
+      </RequireMember>
+    </RequireAuth>
+  );
+}
+
+const rootRoute = createRootRoute({ component: AppShell });
+
+const loginRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', component: LoginRoute });
+const dashboardRoute = createRoute({ getParentRoute: () => rootRoute, path: '/dashboard', component: DashboardRoute });
+const sessionRoute = createRoute({ getParentRoute: () => rootRoute, path: '/session/$sessionId', component: SessionRoute });
+const progressRoute = createRoute({ getParentRoute: () => rootRoute, path: '/progress', component: ProgressRoute });
+const notesRoute = createRoute({ getParentRoute: () => rootRoute, path: '/notes', component: NotesRoute });
+
+const routeTree = rootRoute.addChildren([loginRoute, dashboardRoute, sessionRoute, progressRoute, notesRoute]);
+
+const router = createRouter({ routeTree });
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  </React.StrictMode>
+);

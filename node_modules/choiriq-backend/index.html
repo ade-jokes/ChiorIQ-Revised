@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChoirIQ — Member</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold:#C9A84C;--gold-light:#E8C96A;--gold-dim:#8A6E2F;
+  --cream:#FAF7F0;--ink:#0F0D0A;--ink2:#2A2720;
+  --muted:#8A8278;--surface:#1A1713;--surface2:#221F1A;--surface3:#2C2820;
+  --border:rgba(201,168,76,0.15);--border2:rgba(201,168,76,0.3);
+  --success:#4CAF7A;--danger:#E85D3A;--info:#5B9BD5;
+  --r:10px;--r-lg:16px;--r-xl:24px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9999;opacity:0.5;}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:var(--ink);}::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:58px;background:rgba(15,13,10,0.9);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);}
+.logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:7px;}
+.logo-mark{width:26px;height:26px;background:var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--ink);font-weight:700;}
+.nav-tabs{display:flex;gap:2px;}
+.nav-tab{padding:5px 12px;border-radius:6px;font-size:12px;font-weight:500;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.nav-tab:hover{color:var(--cream);background:var(--surface2);}
+.nav-tab.active{color:var(--gold);}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.streak-pill{display:flex;align-items:center;gap:4px;background:rgba(201,168,76,0.1);border:0.5px solid var(--border2);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;color:var(--gold);font-family:'DM Mono',monospace;}
+.nav-user{font-size:12px;color:var(--muted);cursor:pointer;}
+.nav-user:hover{color:var(--cream);}
+
+/* PAGES */
+.page{display:none;padding-top:58px;min-height:100vh;}
+.page.active{display:block;}
+.inner{max-width:860px;margin:0 auto;padding:2rem 1.5rem;}
+
+/* AUTH PAGE */
+#auth-page{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+.auth-box{max-width:420px;width:100%;}
+.auth-logo{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:4px;}
+.auth-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:2rem;}
+.auth-tabs{display:flex;background:var(--surface);border-radius:var(--r-lg);padding:4px;margin-bottom:1.5rem;}
+.auth-tab{flex:1;padding:8px;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .2s;}
+.auth-tab.active{background:var(--gold);color:var(--ink);font-weight:700;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;display:block;}
+.form-input,.form-select{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:11px 13px;font-size:13px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.form-input:focus,.form-select:focus{border-color:var(--gold);}
+.form-input::placeholder{color:var(--muted);}
+.form-select{appearance:none;cursor:pointer;}
+.btn-primary{width:100%;padding:12px;background:var(--gold);color:var(--ink);font-size:14px;font-weight:700;border:none;border-radius:var(--r);cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;margin-top:6px;}
+.btn-primary:hover{background:var(--gold-light);}
+.btn-primary:disabled{opacity:0.5;cursor:not-allowed;}
+.form-err{font-size:12px;color:var(--danger);margin-top:8px;text-align:center;}
+
+/* DASHBOARD */
+.greeting{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,36px);font-weight:400;line-height:1.2;margin-bottom:4px;}
+.greeting em{font-style:italic;color:var(--gold);}
+.greeting-sub{font-size:13px;color:var(--muted);margin-bottom:1.5rem;}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+@media(max-width:520px){.stats-row{grid-template-columns:1fr 1fr;}}
+.stat-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;position:relative;overflow:hidden;}
+.stat-card::after{content:'';position:absolute;top:0;right:0;width:50px;height:50px;background:radial-gradient(circle at top right,rgba(201,168,76,0.08),transparent 70%);}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.stat-val{font-size:26px;font-weight:600;color:var(--cream);font-family:'DM Mono',monospace;}
+.stat-sub{font-size:11px;color:var(--gold);margin-top:3px;}
+.sec-title{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-title::after{content:'';flex:1;height:0.5px;background:var(--border);}
+
+/* SESSION TRACK */
+.session-track{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1.5rem;}
+.sdot{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s;border:1.5px solid var(--border);color:var(--muted);background:var(--surface);}
+.sdot.done{background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold);}
+.sdot.current{background:var(--gold);border-color:var(--gold);color:var(--ink);box-shadow:0 0 14px rgba(201,168,76,0.4);animation:pgold 2s ease-in-out infinite;}
+.sdot.locked{opacity:0.3;cursor:not-allowed;}
+@keyframes pgold{0%,100%{box-shadow:0 0 14px rgba(201,168,76,0.4);}50%{box-shadow:0 0 24px rgba(201,168,76,0.7);}}
+
+/* TODAY CARD */
+.today-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-xl);padding:22px 24px;margin-bottom:1.5rem;position:relative;overflow:hidden;cursor:pointer;transition:border-color .2s;}
+.today-card:hover{border-color:var(--gold);}
+.today-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(201,168,76,0.1) 0%,transparent 70%);pointer-events:none;}
+.today-tag{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;}
+.today-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.today-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
+.phase-pill{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600;background:rgba(201,168,76,0.1);border:0.5px solid var(--border2);color:var(--gold);margin-right:6px;}
+.start-btn{display:inline-flex;align-items:center;gap:5px;background:var(--gold);color:var(--ink);padding:9px 20px;border-radius:8px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;margin-top:12px;}
+.start-btn:hover{background:var(--gold-light);}
+
+/* ANNOUNCEMENTS */
+.announce-list{display:flex;flex-direction:column;gap:8px;margin-bottom:1.5rem;}
+.announce-item{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.announce-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.announce-text{font-size:13px;line-height:1.5;flex:1;}
+.announce-time{font-size:10px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;}
+.announce-type-info{border-left:2px solid var(--info);}
+.announce-type-reminder{border-left:2px solid var(--gold);}
+.announce-type-praise{border-left:2px solid var(--success);}
+
+/* AI CHAT */
+.ai-panel{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-xl);padding:20px 22px;}
+.ai-header{display:flex;align-items:center;gap:9px;margin-bottom:14px;}
+.ai-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold-dim),var(--gold));display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ai-name{font-size:13px;font-weight:600;}
+.ai-role{font-size:10px;color:var(--muted);}
+.ai-msgs{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;max-height:260px;overflow-y:auto;}
+.ai-msg{padding:9px 13px;border-radius:var(--r);font-size:13px;line-height:1.6;}
+.ai-msg.user{background:rgba(201,168,76,0.1);border:0.5px solid var(--border2);color:var(--cream);align-self:flex-end;max-width:85%;}
+.ai-msg.ai{background:var(--surface2);color:var(--muted);align-self:flex-start;max-width:92%;}
+.ai-msg.ai strong{color:var(--cream);}
+.ai-msg.typing{font-style:italic;opacity:0.6;}
+.ai-input-row{display:flex;gap:7px;}
+.ai-input{flex:1;background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--r);padding:9px 13px;font-size:13px;color:var(--cream);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.ai-input:focus{border-color:var(--gold);}
+.ai-input::placeholder{color:var(--muted);}
+.ai-send{background:var(--gold);border:none;width:38px;height:38px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;flex-shrink:0;font-size:15px;}
+.ai-send:hover{background:var(--gold-light);}
+.ai-send:disabled{opacity:0.4;cursor:not-allowed;}
+
+/* SESSION PAGE */
+.session-back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);cursor:pointer;margin-bottom:1.2rem;transition:color .2s;background:none;border:none;font-family:'DM Sans',sans-serif;}
+.session-back:hover{color:var(--cream);}
+.session-phase{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--gold);margin-bottom:6px;}
+.session-h1{font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,30px);font-weight:700;margin-bottom:8px;line-height:1.2;}
+.session-meta{font-size:12px;color:var(--muted);margin-bottom:1.5rem;}
+
+/* MODULE TABS */
+.mod-tabs{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:1.2rem;background:var(--surface);padding:5px;border-radius:var(--r-lg);border:0.5px solid var(--border);}
+.mod-tab{padding:7px 13px;border-radius:var(--r);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s;color:var(--muted);background:transparent;border:none;font-family:'DM Sans',sans-serif;white-space:nowrap;}
+.mod-tab.active{background:var(--gold);color:var(--ink);font-weight:700;}
+.mod-tab:hover:not(.active){color:var(--cream);}
+.mod-panel{display:none;}
+.mod-panel.active{display:block;}
+
+/* LESSON BLOCKS */
+.lb{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);margin-bottom:12px;overflow:hidden;}
+.lb-hdr{padding:14px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .2s;}
+.lb-hdr:hover{background:var(--surface2);}
+.lb-icon{width:30px;height:30px;border-radius:7px;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.lb-title{font-size:13px;font-weight:600;flex:1;}
+.lb-badge{font-size:9px;padding:2px 7px;border-radius:10px;background:var(--surface2);color:var(--muted);font-family:'DM Mono',monospace;}
+.lb-badge.done{background:rgba(76,175,122,0.15);color:var(--success);}
+.lb-chev{color:var(--muted);transition:transform .25s;font-size:13px;}
+.lb-chev.open{transform:rotate(180deg);}
+.lb-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.lb-body.open{max-height:900px;border-top:0.5px solid var(--border);}
+.lb-inner{padding:18px;}
+
+/* TECHNIQUE GRID */
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
+@media(max-width:500px){.tech-grid{grid-template-columns:1fr;}}
+.tech-card{background:var(--surface2);border-radius:var(--r);padding:12px;border:0.5px solid var(--border);}
+.tc-name{font-size:11px;font-weight:600;color:var(--cream);margin-bottom:3px;}
+.tc-desc{font-size:11px;color:var(--muted);line-height:1.5;}
+.ai-tip{background:var(--surface2);border-radius:var(--r);padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:12px;border-left:2px solid var(--gold);}
+.ai-tip strong{color:var(--cream);}
+
+/* TIMER */
+.drill-timer{background:var(--surface2);border-radius:var(--r-lg);padding:18px;text-align:center;margin-bottom:12px;border:0.5px solid var(--border2);}
+.timer-display{font-family:'DM Mono',monospace;font-size:46px;font-weight:500;color:var(--gold);line-height:1;margin-bottom:10px;letter-spacing:-2px;}
+.timer-label{font-size:11px;color:var(--muted);margin-bottom:14px;}
+.timer-controls{display:flex;gap:7px;justify-content:center;}
+.timer-btn{padding:7px 18px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;border:0.5px solid var(--border2);color:var(--cream);background:var(--surface);}
+.timer-btn.primary{background:var(--gold);color:var(--ink);border-color:var(--gold);}
+.timer-btn:hover{opacity:0.85;}
+.timer-prog{height:3px;background:var(--surface);border-radius:2px;margin-top:12px;overflow:hidden;}
+.timer-fill{height:100%;background:var(--gold);border-radius:2px;transition:width .1s linear;}
+
+/* PITCH */
+.pitch-box{background:var(--surface2);border-radius:var(--r-lg);padding:18px;border:0.5px solid var(--border);}
+.pitch-note{font-family:'Playfair Display',serif;font-size:46px;font-weight:700;color:var(--gold);text-align:center;margin:8px 0;}
+.pitch-freq{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);text-align:center;margin-bottom:8px;}
+.pitch-meter{height:7px;background:var(--surface);border-radius:4px;margin-bottom:12px;position:relative;}
+.pitch-needle{position:absolute;top:-4px;width:15px;height:15px;background:var(--gold);border-radius:50%;transform:translateX(-50%);transition:left .08s ease;left:50%;box-shadow:0 0 7px rgba(201,168,76,0.5);}
+.pitch-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);font-family:'DM Mono',monospace;}
+.pitch-status{text-align:center;font-size:12px;font-weight:500;margin-top:6px;}
+.pitch-status.in-tune{color:var(--success);}
+.pitch-status.sharp{color:var(--danger);}
+.pitch-status.flat{color:var(--info);}
+.mic-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:9px;border-radius:var(--r);background:var(--gold);color:var(--ink);font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;margin-top:10px;}
+.mic-btn.recording{background:var(--danger);color:#fff;animation:prec .8s ease-in-out infinite;}
+@keyframes prec{0%,100%{opacity:1}50%{opacity:.7}}
+.piano-wrap{overflow-x:auto;padding:8px 0;}
+.piano{display:flex;height:80px;width:max-content;position:relative;margin:0 auto;}
+.pkey{width:32px;height:80px;background:var(--cream);border-radius:0 0 5px 5px;border:0.5px solid #ccc;margin-right:2px;cursor:pointer;transition:all .1s;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;font-size:8px;color:#999;position:relative;z-index:1;font-family:'DM Mono',monospace;}
+.pkey:hover{background:#e8e0c8;}
+.pkey.active{background:var(--gold);}
+.pkey.black{width:20px;height:52px;background:var(--ink2);margin-left:-10px;margin-right:-10px;z-index:2;border-radius:0 0 3px 3px;border-color:var(--ink);color:transparent;}
+.pkey.black:hover{background:var(--surface3);}
+.pkey.black.active{background:var(--gold-dim);}
+
+/* THEORY */
+.theory-card{background:var(--surface2);border-radius:var(--r-lg);padding:16px;border:0.5px solid var(--border);margin-bottom:10px;}
+.theory-q{font-size:13px;font-weight:500;margin-bottom:12px;line-height:1.5;}
+.theory-opts{display:flex;flex-direction:column;gap:6px;}
+.theory-opt{padding:9px 12px;border-radius:var(--r);border:0.5px solid var(--border2);background:var(--surface);font-size:12px;cursor:pointer;transition:all .2s;color:var(--cream);text-align:left;font-family:'DM Sans',sans-serif;}
+.theory-opt:hover{border-color:var(--gold);background:rgba(201,168,76,0.05);}
+.theory-opt.correct{border-color:var(--success);background:rgba(76,175,122,0.1);color:var(--success);}
+.theory-opt.wrong{border-color:var(--danger);background:rgba(232,93,58,0.1);color:var(--danger);}
+.theory-fb{font-size:11px;color:var(--muted);margin-top:9px;line-height:1.5;display:none;}
+.theory-fb.show{display:block;}
+.theory-score{font-family:'DM Mono',monospace;font-size:11px;color:var(--gold);margin-bottom:8px;}
+
+/* CHECKLIST */
+.check-list{display:flex;flex-direction:column;gap:7px;}
+.check-item{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border-radius:var(--r);background:var(--surface2);cursor:pointer;transition:all .15s;border:0.5px solid transparent;}
+.check-item:hover{border-color:var(--border);}
+.check-item.checked{opacity:0.55;}
+.check-box{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .2s;font-size:10px;}
+.check-item.checked .check-box{background:var(--gold);border-color:var(--gold);}
+.check-text{font-size:12px;line-height:1.5;}
+.check-text.done{text-decoration:line-through;color:var(--muted);}
+.complete-btn{width:100%;padding:13px;border-radius:var(--r-lg);background:var(--gold);color:var(--ink);font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;border:none;cursor:pointer;transition:all .2s;margin-top:1.5rem;}
+.complete-btn:hover{background:var(--gold-light);transform:translateY(-1px);}
+.complete-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* PROGRESS PAGE */
+.skill-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem;}
+@media(max-width:500px){.skill-grid{grid-template-columns:1fr;}}
+.skill-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px;}
+.skill-name{font-size:12px;font-weight:600;margin-bottom:3px;}
+.skill-level{font-size:10px;color:var(--muted);margin-bottom:8px;}
+.skill-bar{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.skill-fill{height:100%;border-radius:3px;background:var(--gold);transition:width 1s ease;}
+.hist-list{display:flex;flex-direction:column;gap:8px;}
+.hist-item{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;display:flex;align-items:center;gap:12px;}
+.hist-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.hist-done-bg{background:rgba(76,175,122,0.15);}
+.hist-pend-bg{background:var(--surface2);}
+.hist-info{flex:1;}
+.hist-title{font-size:12px;font-weight:500;margin-bottom:2px;}
+.hist-date{font-size:10px;color:var(--muted);}
+.hist-score{font-family:'DM Mono',monospace;font-size:12px;font-weight:600;color:var(--gold);}
+
+/* NOTES PAGE */
+.note-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;margin-bottom:10px;}
+.note-type{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+.note-type.general{color:var(--muted);}
+.note-type.praise{color:var(--success);}
+.note-type.improvement{color:var(--gold);}
+.note-type.health{color:var(--info);}
+.note-text{font-size:13px;line-height:1.6;margin-bottom:6px;}
+.note-time{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-overlay.show{opacity:1;pointer-events:all;}
+.modal-box{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-xl);padding:30px;max-width:380px;width:100%;text-align:center;transform:translateY(20px);transition:transform .25s;}
+.modal-overlay.show .modal-box{transform:translateY(0);}
+.modal-emoji{font-size:44px;margin-bottom:14px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:7px;}
+.modal-body{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:18px;}
+.modal-btn{background:var(--gold);color:var(--ink);padding:11px 24px;border-radius:var(--r);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;transition:background .2s;}
+.modal-btn:hover{background:var(--gold-light);}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface2);border:0.5px solid var(--border2);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:12px;font-weight:500;z-index:9998;transition:transform .3s ease;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.divider{height:0.5px;background:var(--border);margin:12px 0;}
+.empty-state{text-align:center;padding:2.5rem 1rem;color:var(--muted);font-size:13px;}
+.empty-state .icon{font-size:32px;margin-bottom:10px;}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+
+<!-- AUTH PAGE -->
+<div id="auth-page">
+  <div class="auth-box">
+    <div class="auth-logo">ChoirIQ</div>
+    <p class="auth-sub">Member Portal — Your vocal journey starts here</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchAuth('login')">Sign in</button>
+      <button class="auth-tab" id="tab-register" onclick="switchAuth('register')">Join a choir</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-form">
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="l-email" type="email" placeholder="your@email.com" /></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="l-password" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" /></div>
+      <div class="form-err" id="login-err"></div>
+      <button class="btn-primary" id="login-btn" onclick="doLogin()">Sign in →</button>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="register-form" style="display:none">
+      <div class="form-group"><label class="form-label">Your name</label><input class="form-input" id="r-name" placeholder="e.g. Adaeze Okoye" /></div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="r-email" type="email" placeholder="your@email.com" /></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="r-password" type="password" placeholder="Min 6 characters" /></div>
+      <div class="form-group"><label class="form-label">Choir join code</label><input class="form-input" id="r-code" placeholder="e.g. GRACE7" style="text-transform:uppercase" /></div>
+      <div class="form-group"><label class="form-label">Voice part</label>
+        <select class="form-select" id="r-voice"><option value="Soprano">Soprano</option><option value="Alto">Alto</option><option value="Tenor">Tenor</option><option value="Bass">Bass</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Experience level</label>
+        <select class="form-select" id="r-level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select>
+      </div>
+      <div class="form-err" id="register-err"></div>
+      <button class="btn-primary" id="register-btn" onclick="doRegister()">Join choir →</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV (hidden until logged in) -->
+<nav id="main-nav" style="display:none">
+  <div class="logo"><div class="logo-mark">C</div>ChoirIQ</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="nt-dash" onclick="showPage('dash')">Home</button>
+    <button class="nav-tab" id="nt-progress" onclick="showPage('progress')">Progress</button>
+    <button class="nav-tab" id="nt-notes" onclick="showPage('notes')">My Notes</button>
+  </div>
+  <div class="nav-right">
+    <div class="streak-pill" id="streak-pill">🔥 0</div>
+    <span class="nav-user" id="nav-user-name" onclick="doLogout()">Sign out</span>
+  </div>
+</nav>
+
+<!-- DASHBOARD PAGE -->
+<div class="page" id="dash-page">
+  <div class="inner">
+    <div class="greeting" id="greeting">Good morning, <em>Singer</em></div>
+    <p class="greeting-sub" id="greeting-sub">Saturday sessions · 2:30 PM</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Sessions done</div><div class="stat-val" id="s-done">0</div><div class="stat-sub">of 8</div></div>
+      <div class="stat-card"><div class="stat-label">Streak</div><div class="stat-val" id="s-streak">0</div><div class="stat-sub">weeks</div></div>
+      <div class="stat-card"><div class="stat-label">Theory score</div><div class="stat-val" id="s-theory">0</div><div class="stat-sub">correct</div></div>
+    </div>
+
+    <div class="sec-title">8-week journey</div>
+    <div class="session-track" id="session-track"></div>
+
+    <div class="today-card" id="today-card">
+      <div class="today-tag">▶ Next session</div>
+      <div class="today-title" id="today-title">Loading…</div>
+      <div class="today-desc" id="today-desc"></div>
+      <div id="today-pills"></div>
+      <button class="start-btn" id="today-start-btn">Start session →</button>
+    </div>
+
+    <div class="sec-title">Announcements from your director</div>
+    <div class="announce-list" id="announce-list">
+      <div class="empty-state"><div class="icon">📢</div>No announcements yet</div>
+    </div>
+
+    <div class="sec-title">Ask Maestro</div>
+    <div class="ai-panel">
+      <div class="ai-header">
+        <div class="ai-avatar">🎵</div>
+        <div><div class="ai-name">Maestro · AI Vocal Coach</div><div class="ai-role">Available 24/7</div></div>
+      </div>
+      <div class="ai-msgs" id="ai-msgs">
+        <div class="ai-msg ai">Welcome! I'm <strong>Maestro</strong>. Ask me anything about breathing, resonance, harmony, agility, or theory. I'm here for your growth. 🎶</div>
+      </div>
+      <div class="ai-input-row">
+        <input class="ai-input" id="ai-input" placeholder="e.g. How do I improve my head voice?" onkeydown="if(event.key==='Enter')sendChat()" />
+        <button class="ai-send" id="ai-send" onclick="sendChat()">↑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SESSION PAGE -->
+<div class="page" id="session-page">
+  <div class="inner">
+    <button class="session-back" onclick="showPage('dash')">← Back</button>
+    <div class="session-phase" id="sp-phase">Phase 1</div>
+    <div class="session-h1" id="sp-title">Session</div>
+    <div class="session-meta" id="sp-meta"></div>
+    <div class="mod-tabs" id="mod-tabs"></div>
+    <div id="mod-panels"></div>
+    <button class="complete-btn" id="complete-btn" onclick="completeSession()">Mark session complete ✓</button>
+  </div>
+</div>
+
+<!-- PROGRESS PAGE -->
+<div class="page" id="progress-page">
+  <div class="inner">
+    <div class="greeting">Your <em>growth</em></div>
+    <p class="greeting-sub" style="margin-bottom:1.5rem">Track every skill across the 8-week programme</p>
+    <div class="sec-title">Skill tracker</div>
+    <div class="skill-grid" id="skill-grid"></div>
+    <div class="sec-title">Session history</div>
+    <div class="hist-list" id="hist-list"></div>
+  </div>
+</div>
+
+<!-- NOTES PAGE -->
+<div class="page" id="notes-page">
+  <div class="inner">
+    <div class="greeting">Director's <em>notes</em></div>
+    <p class="greeting-sub" style="margin-bottom:1.5rem">Feedback from your choir leader — just for you</p>
+    <div id="notes-list"><div class="empty-state"><div class="icon">📝</div>No notes yet from your director</div></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-emoji" id="m-emoji">🏆</div>
+    <div class="modal-title" id="m-title">Session Complete!</div>
+    <div class="modal-body" id="m-body">Amazing work today.</div>
+    <button class="modal-btn" onclick="closeModal()">Continue →</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+window.API_BASE = 'http://localhost:3001';
+</script>
+<script src="api.js"></script>
+<script>
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+const S = {
+  sessions: [], progress: [], currentSession: null,
+  checks: {}, theoryIdx: 0, theoryScore: 0,
+  micActive: false, audioCtx: null, analyser: null,
+  micStream: null, pitchInterval: null, timerInterval: null,
+  chatHistory: [],
+};
+
+const SESSIONS_TEMPLATE = [
+  { n:1, date:'Apr 12', phase:'Phase 1 — Foundation', title:'Voice Audit & Breathing Basics', desc:'Establish a safe space. Master diaphragmatic breath support — the engine of all singing.', modules:['warmup','breath','resonance','pitch','theory','check'] },
+  { n:2, date:'Apr 19', phase:'Phase 1 — Foundation', title:'Posture, Placement & Tone', desc:'Fix posture, open the resonators, and learn WHERE sound should live in the body.', modules:['warmup','posture','resonance','agility','pitch','check'] },
+  { n:3, date:'Apr 26', phase:'Phase 1 — Foundation', title:'Vowel Shaping & Pitch Accuracy', desc:'Unified vowels separate a choir from a crowd. Add precision pitch-matching.', modules:['warmup','vowels','pitch','agility','theory','check'] },
+  { n:4, date:'May 3',  phase:'Phase 2 — Development', title:'Harmony Introduction & Blending', desc:'Introduce SATB part harmony. Learn to hear yourself as ONE voice inside a section.', modules:['warmup','harmony','resonance','agility','theory','check'] },
+  { n:5, date:'May 10', phase:'Phase 2 — Development', title:'Dynamics, Diction & Gospel Phrasing', desc:'Gospel music lives in its dynamics. Move between piano and forte as one body.', modules:['warmup','dynamics','diction','pitch','theory','check'] },
+  { n:6, date:'May 17', phase:'Phase 2 — Development', title:'Rhythm, Groove & CCM Feel', desc:'Lock to the groove. Understand syncopation — the heartbeat of contemporary worship.', modules:['warmup','rhythm','agility','gospel','theory','check'] },
+  { n:7, date:'May 31', phase:'Phase 3 — Excellence', title:'Musicianship: Sight-Singing & Ear Training', desc:'Introduce solfège and interval recognition. Build the internal ear of a real musician.', modules:['warmup','solfege','pitch','theory','harmony','check'] },
+  { n:8, date:'Jun 6',  phase:'Phase 3 — Excellence', title:'Integration & Performance Readiness', desc:'Pull every skill together into a full performance run. Celebrate eight weeks of growth.', modules:['warmup','breath','resonance','harmony','theory','check'] },
+];
+
+const THEORY_QS = [
+  { q:'What is a major scale?', opts:['7 whole steps only','W-W-H-W-W-W-H pattern','Only for sopranos','5 notes'], ans:1, fb:'A major scale follows Whole-Whole-Half-Whole-Whole-Whole-Half. This gives it its bright sound common in worship.' },
+  { q:'What does fortissimo (ff) mean?', opts:['Very soft','Medium loud','Very loud','Getting louder'], ans:2, fb:'Fortissimo means very loud. Gospel climaxes use this for powerful praise moments.' },
+  { q:'What is a perfect fifth?', opts:['5 notes in a row','7 semitones — e.g. C to G','A 5-beat rhythm','Five-part harmony'], ans:1, fb:'A perfect fifth spans 7 semitones. It\'s one of the most consonant intervals in gospel harmony.' },
+  { q:'What is call and response?', opts:['Two choirs simultaneously','Leader phrase answered by choir','A breathing exercise','A sight-reading method'], ans:1, fb:'Call and response is foundational in African-American gospel — a leader "calls," the choir "responds." It creates dynamic worship energy.' },
+  { q:'What does legato mean?', opts:['Fast and loud','Short and detached','Smooth and connected','Getting softer'], ans:2, fb:'Legato means smooth and connected notes. This is the default for lyrical gospel phrases and worship ballads.' },
+  { q:'What is solfège?', opts:['A type of microphone','Do Re Mi Fa Sol La Ti syllables for pitches','A gospel hymn style','Choir management'], ans:1, fb:'Solfège uses syllables for each scale degree. It\'s how professionals learn music quickly and communicate with other musicians.' },
+  { q:'What is vibrato?', opts:['Singing quietly','A natural oscillation in pitch for expression','Breathing from the diaphragm','Singing in harmony'], ans:1, fb:'Vibrato is a slight wavering in pitch that adds warmth and expression — used tastefully by gospel soloists on held notes.' },
+  { q:'What does a cappella mean?', opts:['Singing with piano only','Singing without any instruments','A slow worship style','Singing in a chapel'], ans:1, fb:'A cappella means voice only. Practicing a cappella is the best way to develop pitch accuracy — there\'s nowhere to hide.' },
+];
+
+const NOTE_FREQS = {C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25};
+const CHROMATIC = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  if (api.isLoggedIn) bootApp();
+});
+
+async function bootApp() {
+  try {
+    await api.getMe();
+  } catch { api.logout(); return; }
+
+  document.getElementById('auth-page').style.display = 'none';
+  document.getElementById('main-nav').style.display = 'flex';
+
+  const user = api.user;
+  document.getElementById('nav-user-name').textContent = user.name + ' · sign out';
+  updateStreak(user.streak || 0);
+
+  await loadAll();
+  showPage('dash');
+}
+
+async function loadAll() {
+  try {
+    const [sessRes, progRes] = await Promise.all([api.getSessions(), api.getMyProgress()]);
+    S.sessions = sessRes.sessions || [];
+    S.progress = progRes.progress || [];
+    S.theoryScore = progRes.progress?.reduce((a,p) => a+(p.theoryScore||0), 0) || 0;
+
+    // If no sessions from backend yet, use template
+    if (S.sessions.length === 0) S.sessions = SESSIONS_TEMPLATE.map((t,i) => ({...t, id:`tpl-${i}`, choirId:'local'}));
+
+    renderDashboard();
+    loadAnnouncements();
+  } catch(e) {
+    S.sessions = SESSIONS_TEMPLATE.map((t,i) => ({...t, id:`tpl-${i}`}));
+    renderDashboard();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════
+function switchAuth(tab) {
+  document.getElementById('login-form').style.display = tab==='login' ? 'block' : 'none';
+  document.getElementById('register-form').style.display = tab==='register' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab==='login');
+  document.getElementById('tab-register').classList.toggle('active', tab==='register');
+}
+
+async function doLogin() {
+  const email = document.getElementById('l-email').value.trim();
+  const pass = document.getElementById('l-password').value;
+  const btn = document.getElementById('login-btn');
+  const errEl = document.getElementById('login-err');
+  errEl.textContent = '';
+  if (!email || !pass) { errEl.textContent = 'Please fill in all fields'; return; }
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    await api.login(email, pass);
+    if (api.user.role !== 'member') {
+      api.logout();
+      errEl.textContent = 'Use the Leader app to sign in as a director.';
+      btn.disabled = false; btn.textContent = 'Sign in →';
+      return;
+    }
+    bootApp();
+  } catch(e) {
+    errEl.textContent = e.message || 'Login failed';
+    btn.disabled = false; btn.textContent = 'Sign in →';
+  }
+}
+
+async function doRegister() {
+  const name = document.getElementById('r-name').value.trim();
+  const email = document.getElementById('r-email').value.trim();
+  const pass = document.getElementById('r-password').value;
+  const code = document.getElementById('r-code').value.trim().toUpperCase();
+  const voice = document.getElementById('r-voice').value;
+  const level = document.getElementById('r-level').value;
+  const btn = document.getElementById('register-btn');
+  const errEl = document.getElementById('register-err');
+  errEl.textContent = '';
+  if (!name||!email||!pass||!code) { errEl.textContent = 'Please fill in all fields'; return; }
+  if (pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters'; return; }
+  btn.disabled = true; btn.textContent = 'Joining…';
+  try {
+    await api.register({ name, email, password: pass, role: 'member', choirCode: code, voicePart: voice, level });
+    bootApp();
+  } catch(e) {
+    errEl.textContent = e.message || 'Registration failed';
+    btn.disabled = false; btn.textContent = 'Join choir →';
+  }
+}
+
+function doLogout() {
+  if (!confirm('Sign out?')) return;
+  api.logout();
+  location.reload();
+}
+
+// ══════════════════════════════════════════════════════
+// ROUTING
+// ══════════════════════════════════════════════════════
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const p = document.getElementById(id+'-page');
+  if (p) p.classList.add('active');
+  const nt = document.getElementById('nt-'+id);
+  if (nt) nt.classList.add('active');
+  if (id === 'progress') renderProgress();
+  if (id === 'notes') loadNotes();
+  window.scrollTo(0,0);
+}
+
+// ══════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════
+function renderDashboard() {
+  const user = api.user;
+  const h = new Date().getHours();
+  const greet = h<12 ? 'Good morning' : h<17 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('greeting').innerHTML = `${greet}, <em>${user.name.split(' ')[0]}</em>`;
+
+  const done = S.progress.filter(p => p.completed).length;
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-streak').textContent = user.streak || 0;
+  document.getElementById('s-theory').textContent = S.theoryScore;
+  updateStreak(user.streak || 0);
+
+  // Session track
+  const track = document.getElementById('session-track');
+  track.innerHTML = '';
+  S.sessions.forEach((s, i) => {
+    const isCompleted = S.progress.some(p => p.sessionId === s.id && p.completed);
+    const isCurrent = !isCompleted && S.sessions.slice(0,i).every(ss => S.progress.some(p => p.sessionId===ss.id && p.completed));
+    const dot = document.createElement('div');
+    dot.className = 'sdot' + (isCompleted ? ' done' : isCurrent ? ' current' : i <= done ? '' : ' locked');
+    dot.textContent = s.n || (i+1);
+    dot.title = s.title;
+    if (!dot.classList.contains('locked')) dot.onclick = () => openSession(i);
+    track.appendChild(dot);
+  });
+
+  // Today card
+  const cur = S.sessions[Math.min(done, S.sessions.length-1)];
+  if (cur) {
+    document.getElementById('today-title').textContent = `Session ${cur.n||done+1} · ${cur.title}`;
+    document.getElementById('today-desc').textContent = cur.desc || cur.description || '';
+    document.getElementById('today-pills').innerHTML = `<span class="phase-pill">${cur.phase||'General'}</span><span style="font-size:10px;color:var(--muted)">${cur.durationMin||60} min</span>`;
+    document.getElementById('today-start-btn').onclick = () => openSession(Math.min(done, S.sessions.length-1));
+  }
+}
+
+function updateStreak(n) {
+  document.getElementById('streak-pill').textContent = `🔥 ${n}`;
+}
+
+async function loadAnnouncements() {
+  try {
+    const { announcements } = await api.getAnnouncements();
+    const el = document.getElementById('announce-list');
+    if (!announcements.length) { el.innerHTML = '<div class="empty-state"><div class="icon">📢</div>No announcements yet</div>'; return; }
+    const icons = { info:'📋', reminder:'⏰', praise:'🌟' };
+    el.innerHTML = announcements.map(a => `
+      <div class="announce-item announce-type-${a.type}">
+        <div class="announce-icon">${icons[a.type]||'📋'}</div>
+        <div><div class="announce-text">${esc(a.text)}</div><div class="announce-time">${relTime(a.createdAt)}</div></div>
+      </div>`).join('');
+  } catch {}
+}
+
+// ══════════════════════════════════════════════════════
+// SESSION
+// ══════════════════════════════════════════════════════
+function openSession(idx) {
+  S.currentSession = idx;
+  const s = S.sessions[idx];
+  document.getElementById('sp-phase').textContent = s.phase || 'Session';
+  document.getElementById('sp-title').textContent = `Session ${s.n||idx+1} · ${s.title}`;
+  document.getElementById('sp-meta').textContent = `${s.date||''} · 2:30 – 3:30 PM · ${s.durationMin||60} min`;
+  buildModules(s);
+  showPage('session');
+}
+
+const MOD_META = {
+  warmup:   { icon:'🌅', label:'Warm-Up' },
+  breath:   { icon:'💨', label:'Breathing' },
+  resonance:{ icon:'🔔', label:'Resonance' },
+  pitch:    { icon:'🎵', label:'Pitch' },
+  theory:   { icon:'📖', label:'Theory' },
+  check:    { icon:'✅', label:'Checklist' },
+  posture:  { icon:'🧍', label:'Posture' },
+  agility:  { icon:'⚡', label:'Agility' },
+  vowels:   { icon:'👄', label:'Vowels' },
+  harmony:  { icon:'🎼', label:'Harmony' },
+  dynamics: { icon:'📊', label:'Dynamics' },
+  diction:  { icon:'🗣️', label:'Diction' },
+  rhythm:   { icon:'🥁', label:'Rhythm' },
+  gospel:   { icon:'✝️', label:'Gospel' },
+  solfege:  { icon:'🎶', label:'Solfège' },
+};
+
+function buildModules(s) {
+  const mods = s.modules || ['warmup','breath','resonance','pitch','theory','check'];
+  const tabsEl = document.getElementById('mod-tabs');
+  const panelsEl = document.getElementById('mod-panels');
+  tabsEl.innerHTML = ''; panelsEl.innerHTML = '';
+  mods.forEach((m, i) => {
+    const meta = MOD_META[m] || { icon:'📌', label:m };
+    const tab = document.createElement('button');
+    tab.className = 'mod-tab' + (i===0?' active':'');
+    tab.textContent = meta.icon+' '+meta.label;
+    tab.onclick = () => {
+      document.querySelectorAll('.mod-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.mod-panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-'+m+'-'+i).classList.add('active');
+    };
+    tabsEl.appendChild(tab);
+    const panel = document.createElement('div');
+    panel.className = 'mod-panel' + (i===0?' active':'');
+    panel.id = 'panel-'+m+'-'+i;
+    panel.innerHTML = buildModuleHTML(m);
+    panelsEl.appendChild(panel);
+  });
+  initPiano();
+}
+
+function buildModuleHTML(m) {
+  switch(m) {
+    case 'warmup': return warmupHTML();
+    case 'breath': return breathHTML();
+    case 'resonance': return resonanceHTML();
+    case 'pitch': return pitchHTML();
+    case 'theory': return theoryHTML();
+    case 'check': return checkHTML();
+    case 'posture': return postureHTML();
+    case 'agility': return agilityHTML();
+    case 'vowels': return vowelsHTML();
+    case 'harmony': return harmonyHTML();
+    case 'dynamics': return dynamicsHTML();
+    case 'diction': return dictionHTML();
+    case 'rhythm': return rhythmHTML();
+    case 'gospel': return gospelHTML();
+    case 'solfege': return solfegeHTML();
+    default: return `<div class="lb"><div class="lb-inner"><p class="ai-tip">Module content coming soon.</p></div></div>`;
+  }
+}
+
+// ── Module HTML builders ──────────────────────────────
+function warmupHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🌅</div><div class="lb-title">10-Minute Warm-Up Sequence</div><div class="lb-badge">Follow along</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner">${timerHTML('wt','2:00',120,'Diaphragmatic breathing — 4 in, hold 4, out 8')}<div class="tech-grid"><div class="tech-card"><div class="tc-name">🌬️ Hiss Release</div><div class="tc-desc">Inhale fully, release on a steady hiss for 8–12 counts. Feel the diaphragm stay engaged throughout.</div></div><div class="tech-card"><div class="tc-name">👄 Lip Trills</div><div class="tc-desc">Loose lips buzz on a comfortable pitch. Slide up and down. Releases jaw tension, warms the passaggio.</div></div><div class="tech-card"><div class="tc-name">🎵 Humming</div><div class="tc-desc">Hum on a mid-range pitch. Feel the buzz in your cheekbones — that is forward mask resonance.</div></div><div class="tech-card"><div class="tc-name">🔊 Yawn-Sigh</div><div class="tc-desc">Fake a big yawn, sigh top of range to bottom. Opens the soft palate and releases throat tension.</div></div></div></div></div></div>`; }
+
+function breathHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">💨</div><div class="lb-title">Diaphragmatic Breathing & Appoggio</div><div class="lb-badge">Foundation</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Grammy Coach Insight:</strong> 95% of pitch, tone, and power problems trace back to breath. The diaphragm drops down to create a vacuum that pulls air in — it does not push air up.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">Hand on Belly Check</div><div class="tc-desc">Place one hand on belly, one on chest. Only the belly hand should move. Chest breathing constricts tone.</div></div><div class="tech-card"><div class="tc-name">4-7-8 Breathing</div><div class="tc-desc">Inhale 4 counts → Hold 7 → Exhale 8. Builds breath control and lung capacity over consistent practice.</div></div><div class="tech-card"><div class="tc-name">Appoggio (Italian Support)</div><div class="tc-desc">Maintain ribcage expansion while you sing. Do not let it collapse. This creates consistent sub-glottal pressure — the secret of great gospel soloists.</div></div><div class="tech-card"><div class="tc-name">Staccato Bursts</div><div class="tc-desc">Say "ha ha ha ha" rapidly from the belly. Each "ha" is a small punch from your core. Isolates and strengthens the diaphragm.</div></div></div>${timerHTML('br','0:30',30,'Sustained hiss — hold for the full duration')}</div></div></div>`; }
+
+function resonanceHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🔔</div><div class="lb-title">Resonance & Tone Placement</div><div class="lb-badge">Placement</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Three resonance chambers:</strong> Chest (warm, low) · Pharynx/throat (mid) · Mask/head (bright, projecting). Blending all three creates a rich, full gospel tone.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">🎭 Chest Voice Activation</div><div class="tc-desc">Hand on chest, sing a low "ah" — feel the vibration. This rich warmth is your foundation for gospel power notes.</div></div><div class="tech-card"><div class="tc-name">👁️ Mask Resonance</div><div class="tc-desc">Hum while pinching your nose. The buzz in your cheeks and sinuses is "forward placement." This carries your voice without strain.</div></div><div class="tech-card"><div class="tc-name">✨ Head Voice Access</div><div class="tc-desc">Sing "wee" ascending gently. Let tone float and lighten. Head voice is NOT falsetto — it is a lighter, connected upper register.</div></div><div class="tech-card"><div class="tc-name">🔄 Passaggio</div><div class="tc-desc">The "bridge" between chest and head. Practise slow scales through this area with "mum-mum" to smooth the transition.</div></div><div class="tech-card"><div class="tc-name">🎙️ Twang for Projection</div><div class="tc-desc">Say "nay-nay-nay" with a bright sound. This twang amplifies the voice significantly without increasing volume.</div></div><div class="tech-card"><div class="tc-name">🌊 Resonance Blend</div><div class="tc-desc">Sing from low chest up a 5-note scale, allowing resonance to shift naturally chest → pharynx → mask. Never force it.</div></div></div></div></div></div>`; }
+
+function pitchHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🎵</div><div class="lb-title">Interactive Pitch Checker</div><div class="lb-badge">AI Tool</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="pitch-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:12px;font-weight:600">Live tuner</span><span style="font-size:10px;color:var(--muted)">Sing → match → hold</span></div><div class="pitch-note" id="pitch-note">—</div><div class="pitch-freq" id="pitch-freq">Press mic to begin</div><div class="pitch-meter"><div class="pitch-needle" id="pitch-needle"></div></div><div class="pitch-labels"><span>♭ Flat</span><span>In tune</span><span>Sharp ♯</span></div><div class="pitch-status" id="pitch-status"></div><button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤 Start listening</button></div><div class="divider"></div><div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:9px;text-transform:uppercase;letter-spacing:.08em">Play a reference note</div><div class="piano-wrap"><div class="piano" id="piano"></div></div></div></div></div>`; }
+
+function theoryHTML(){
+  const q = THEORY_QS[S.theoryIdx % THEORY_QS.length];
+  const opts = q.opts.map((o,i) => `<button class="theory-opt" onclick="answerTheory(this,${i},${q.ans},${JSON.stringify(q.fb)})">${String.fromCharCode(65+i)}. ${o}</button>`).join('');
+  return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">📖</div><div class="lb-title">Music Theory Quiz</div><div class="lb-badge">Question ${(S.theoryIdx%THEORY_QS.length)+1}/${THEORY_QS.length}</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="theory-score">Score this session: ${S.theoryScore} correct</div><div class="theory-card"><div class="theory-q">${q.q}</div><div class="theory-opts">${opts}</div><div class="theory-fb" id="theory-fb"></div></div><div style="text-align:center;margin-top:8px"><button onclick="nextTheory()" style="background:none;border:none;color:var(--gold);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif">Next question →</button></div></div></div></div>`; }
+
+function checkHTML(){
+  const items = ['I practised diaphragmatic breathing for at least 5 minutes','I hummed to find my forward mask resonance','I sang lip trills through my full comfortable range','I matched pitch with at least one reference note','I completed a music theory question','I identified my voice part clearly in the group','I focused on listening more than I sang today'];
+  const sid = S.currentSession;
+  if (!S.checks[sid]) S.checks[sid] = {};
+  const list = items.map((item,i) => {
+    const done = !!S.checks[sid][i];
+    return `<div class="check-item${done?' checked':''}" onclick="toggleCheck(${sid},${i},this)"><div class="check-box">${done?'✓':''}</div><div class="check-text${done?' done':''}">${item}</div></div>`;
+  }).join('');
+  return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">✅</div><div class="lb-title">Session Goals Checklist</div><div class="lb-badge">Track</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="check-list" id="cl-${sid}">${list}</div></div></div></div>`;
+}
+
+function postureHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🧍</div><div class="lb-title">Posture & Alignment</div><div class="lb-badge">Foundation</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Posture is your first instrument.</strong> Poor posture compresses the lungs by up to 30% and forces the throat to compensate — leading to strain and pitch problems.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">🧱 Wall Check</div><div class="tc-desc">Heels, hips, shoulder blades and head against wall. This is your correct singing posture. Step forward and maintain it.</div></div><div class="tech-card"><div class="tc-name">👑 Crown Lift</div><div class="tc-desc">Imagine a string pulling the crown of your head upward. Chin slightly in, neck lengthens, throat opens.</div></div><div class="tech-card"><div class="tc-name">🦋 Shoulder Release</div><div class="tc-desc">Roll shoulders back and DOWN — never up. Raised shoulders tighten the throat. Wide and down, always.</div></div><div class="tech-card"><div class="tc-name">⚖️ Singer's Stance</div><div class="tc-desc">Feet hip-width, slight bend in knees, weight slightly forward on balls of feet. Energy stays forward.</div></div></div></div></div></div>`; }
+
+function agilityHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">⚡</div><div class="lb-title">Vocal Agility Drills</div><div class="lb-badge">Advanced</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Agility = moving between pitches quickly, cleanly, and with control.</strong> Build slowly — precision first, speed later. Whitney Houston's runs took years, not weeks.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">⬆️ Stepwise Scale Runs</div><div class="tc-desc">Major scale up and down on "la." Slowly first. Every note must be distinct. Speed is the enemy of clarity.</div></div><div class="tech-card"><div class="tc-name">🎸 Arpeggio Runs</div><div class="tc-desc">Sing 1-3-5-3-1 (Do-Mi-Sol-Mi-Do) on "ah." Trains voice to jump thirds — foundation of gospel melisma.</div></div><div class="tech-card"><div class="tc-name">🌀 Mordent (Grace Note)</div><div class="tc-desc">Quickly touch the note above before landing on your target. The most basic gospel ornament.</div></div><div class="tech-card"><div class="tc-name">🏃 Scales of 3rds</div><div class="tc-desc">Skip every other note: C-E-D-F-E-G… Builds the intervallic agility for runs and complex harmonics.</div></div><div class="tech-card"><div class="tc-name">🎯 Staccato Accuracy</div><div class="tc-desc">Each arpeggio note staccato (separated). Forces the larynx to articulate quickly. Secret to clean fast runs.</div></div><div class="tech-card"><div class="tc-name">🌊 Portamento Slides</div><div class="tc-desc">Glide smoothly between two notes a 5th apart. Builds laryngeal flexibility for gospel bends and scoops.</div></div></div>${timerHTML('ag','1:30',90,'Arpeggio drill — repeat 5x ascending semitones')}</div></div></div>`; }
+
+function vowelsHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">👄</div><div class="lb-title">Vowel Unification</div><div class="lb-badge">Blend</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Off-pitch singers usually have vowel problems, not ear problems.</strong> 21 people shaping "ah" 21 different ways sounds muddy. Unified vowels = unified pitch = powerful blend.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">🅰️ "Ah" (Father)</div><div class="tc-desc">Jaw drops 2 fingers wide. Tongue flat, tip behind lower teeth. Throat wide and open. Pure open vowel.</div></div><div class="tech-card"><div class="tc-name">🅴 "Eh" (Bed)</div><div class="tc-desc">Slightly more closed than "ah." Avoid spreading lips sideways — that creates a pinched, nasal tone.</div></div><div class="tech-card"><div class="tc-name">🅸 "Ee" (See)</div><div class="tc-desc">Keep lips slightly rounded and forward — as if saying "ee" with a French accent. Bright without shrill.</div></div><div class="tech-card"><div class="tc-name">🅾️ "Oh" & "Oo"</div><div class="tc-desc">Round, forward lips — like blowing through a straw. These vowels darken and warm the tone naturally.</div></div></div><div class="ai-tip" style="margin-top:10px"><strong>Mirror Drill:</strong> Practise each vowel in front of your phone camera. What looks the same sounds the same.</div></div></div></div>`; }
+
+function harmonyHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🎼</div><div class="lb-title">Harmony & Part Blending</div><div class="lb-badge">Ensemble</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Harmony is listening, not singing.</strong> The choir that blends best listens most. If you can hear yourself too clearly — sing softer.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">🔇 Section Isolation</div><div class="tc-desc">Each section sings their part alone while others listen actively. Builds awareness of each part's role.</div></div><div class="tech-card"><div class="tc-name">📚 Stacking Method</div><div class="tc-desc">Sopranos hold → Altos add → Tenors add → Bass adds last. Each section listens before joining.</div></div><div class="tech-card"><div class="tc-name">🎚️ Volume Matching</div><div class="tc-desc">Melody slightly louder. Inner voices (Alto, Tenor) support — never dominate. Bass at medium volume.</div></div><div class="tech-card"><div class="tc-name">👁️ Eyes Closed Blend</div><div class="tc-desc">On a held chord, close eyes and listen. Can you find YOUR voice inside the group? If yes and it's loud — softer.</div></div></div></div></div></div>`; }
+
+function dynamicsHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">📊</div><div class="lb-title">Dynamics & Expression</div><div class="lb-badge">Expression</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>A whispered gospel phrase can move a congregation more than a shouted one.</strong> The CONTRAST creates emotion — not just volume alone.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">🔉 pp → ff Scale</div><div class="tc-desc">Practise a held note growing through all 6 dynamic levels on one breath: pp → p → mp → mf → f → ff.</div></div><div class="tech-card"><div class="tc-name">〰️ Messa di voce</div><div class="tc-desc">Start very soft, swell to full volume, diminish back — all on one pitch. Builds exceptional breath control.</div></div><div class="tech-card"><div class="tc-name">📐 Phrase Shaping</div><div class="tc-desc">Start softer, swell to the peak word, then release. This is how Kirk Franklin's directors shape every phrase.</div></div><div class="tech-card"><div class="tc-name">🎭 Subito Piano</div><div class="tc-desc">"Suddenly soft" — dramatic drop in volume. The congregation leans in. Then the swell hits even harder.</div></div></div></div></div></div>`; }
+
+function dictionHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🗣️</div><div class="lb-title">Diction & Articulation</div><div class="lb-badge">Clarity</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>If the congregation cannot understand the words, the message is lost.</strong> Diction is ministry. Crisp consonants + sustained vowels is the formula.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">🔤 Consonant Drills</div><div class="tc-desc">Rapid: "Ta-Ka-Da-Ga-Pa-Ba" on one pitch. Plosive consonants must be crisp and short — vowel is the sustained sound.</div></div><div class="tech-card"><div class="tc-name">📌 Final Consonants</div><div class="tc-desc">Don't drop word endings. "Lord" must not become "Lor." Final D, T, N must be articulated even on long held notes.</div></div><div class="tech-card"><div class="tc-name">🐝 "S" Management</div><div class="tc-desc">21 people singing "s" simultaneously sounds like a snake pit. Back-row singers soften sibilants. Front row leads diction.</div></div><div class="tech-card"><div class="tc-name">🧩 Text First</div><div class="tc-desc">Before singing any song, speak the lyrics in rhythm as a group. This ensures stress and meaning before tone is added.</div></div></div></div></div></div>`; }
+
+function rhythmHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🥁</div><div class="lb-title">Rhythm & Groove</div><div class="lb-badge">Feel</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Many choirs sing ON the beat, not WITH the beat.</strong> Contemporary gospel lives slightly behind the beat — that pocket is where the power lives.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">👏 Backbeat (2 & 4)</div><div class="tc-desc">In 4/4, clap ONLY on beats 2 and 4. This is the gospel/soul groove. Clapping 1 and 3 is the march — find the backbeat.</div></div><div class="tech-card"><div class="tc-name">🗣️ Speak Before Sing</div><div class="tc-desc">Speak the rhythm on "ta" before adding pitch. Fixes rhythm and note learning separately.</div></div><div class="tech-card"><div class="tc-name">🏃 Syncopation</div><div class="tc-desc">Syncopation = emphasis on OFF beats. Clap off-beats while leader marks main beats. This is what makes gospel feel alive.</div></div><div class="tech-card"><div class="tc-name">🎯 Lock to Click</div><div class="tc-desc">Sing with a metronome. Zero rushing, zero dragging. If you drag — speed up. If you rush — slow down and rebuild.</div></div></div></div></div></div>`; }
+
+function gospelHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">✝️</div><div class="lb-title">Gospel Phrasing & Style</div><div class="lb-badge">Authentic</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>Gospel is a language, not just a genre.</strong> Authentic gospel phrasing is rooted in the Black church tradition. It cannot be faked — it must be felt.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">📣 Call & Response</div><div class="tc-desc">Leader sings a phrase → choir answers. The oldest pattern in African and African-American music. Build spontaneous response awareness.</div></div><div class="tech-card"><div class="tc-name">🌊 Melisma (Runs)</div><div class="tc-desc">Multiple notes on one syllable. Start with 2–3 note runs on "Je-sus." Precision first, speed later. Always.</div></div><div class="tech-card"><div class="tc-name">🎭 Gospel Inflection</div><div class="tc-desc">A slight speech quality in the singing voice — phrases delivered like earnest speech set to melody. The emotion must be genuine.</div></div><div class="tech-card"><div class="tc-name">🔥 Build & Release</div><div class="tc-desc">Gospel builds tension through repeated phrases and rising keys, then releases into a powerful climax. Know your song's structure.</div></div></div></div></div></div>`; }
+
+function solfegeHTML(){ return `<div class="lb"><div class="lb-hdr" onclick="toggleLB(this)"><div class="lb-icon">🎶</div><div class="lb-title">Solfège & Sight-Singing</div><div class="lb-badge">Reading</div><span class="lb-chev">▾</span></div><div class="lb-body open"><div class="lb-inner"><div class="ai-tip"><strong>A singer who reads music is worth ten who cannot.</strong> Solfège (Do Re Mi Fa Sol La Ti Do) is the universal shorthand for pitch.</div><div class="tech-grid"><div class="tech-card"><div class="tc-name">🎵 Scale Degrees</div><div class="tc-desc">Do=1, Re=2, Mi=3, Fa=4, Sol=5, La=6, Ti=7, Do=8. Sing up and down the major scale on solfège every day.</div></div><div class="tech-card"><div class="tc-name">🎯 Interval Anchors</div><div class="tc-desc">Do→Sol = perfect fifth ("Twinkle Twinkle"). Do→Mi = major third ("Oh When the Saints"). These song anchors are used by professionals worldwide.</div></div><div class="tech-card"><div class="tc-name">👁️ Note Reading Basics</div><div class="tc-desc">Treble lines: E G B D F (Every Good Boy). Spaces: FACE. Bass lines: G B D F A. Spaces: A C E G.</div></div><div class="tech-card"><div class="tc-name">✋ Curwen Hand Signs</div><div class="tc-desc">Each solfège syllable has a hand sign. This kinesthetic method dramatically speeds up interval recognition. Look them up and practise together.</div></div></div><div class="ai-tip" style="margin-top:10px"><strong>Daily Habit:</strong> Sing Amazing Grace on solfège instead of words. Within 4 weeks, your ears will sharpen noticeably.</div></div></div></div>`; }
+
+function timerHTML(id, label, secs, desc) {
+  return `<div class="drill-timer"><div class="timer-label">${desc}</div><div class="timer-display" id="${id}-disp">${label}</div><div class="timer-prog"><div class="timer-fill" id="${id}-fill" style="width:100%"></div></div><div class="timer-controls"><button class="timer-btn primary" onclick="startTimer('${id}-disp','${id}-fill',${secs})">Start</button><button class="timer-btn" onclick="resetTimer('${id}-disp','${id}-fill',${secs},'${label}')">Reset</button></div></div>`;
+}
+
+// ── Lesson block toggle ──────────────────────────────
+function toggleLB(hdr) {
+  const body = hdr.nextElementSibling;
+  const chev = hdr.querySelector('.lb-chev');
+  const open = body.classList.toggle('open');
+  if (chev) chev.classList.toggle('open', open);
+}
+
+// ── Timer ────────────────────────────────────────────
+function startTimer(dispId, fillId, total) {
+  if (S.timerInterval) clearInterval(S.timerInterval);
+  let rem = total;
+  S.timerInterval = setInterval(() => {
+    rem--;
+    const el = document.getElementById(dispId);
+    const fill = document.getElementById(fillId);
+    if (el) el.textContent = fmtTime(rem);
+    if (fill) fill.style.width = (rem/total*100)+'%';
+    if (rem <= 0) { clearInterval(S.timerInterval); showToast('Timer done! Great work 🎉'); }
+  }, 1000);
+}
+function resetTimer(dispId, fillId, total, label) {
+  if (S.timerInterval) clearInterval(S.timerInterval);
+  const el = document.getElementById(dispId);
+  const fill = document.getElementById(fillId);
+  if (el) el.textContent = label;
+  if (fill) fill.style.width = '100%';
+}
+function fmtTime(s) { const m=Math.floor(s/60); return m+':'+(s%60<10?'0':'')+(s%60); }
+
+// ── Piano ────────────────────────────────────────────
+function initPiano() {
+  const piano = document.getElementById('piano');
+  if (!piano) return;
+  piano.innerHTML = '';
+  const keys = [
+    {note:'C4',b:0},{note:'C#4',b:1},{note:'D4',b:0},{note:'D#4',b:1},{note:'E4',b:0},
+    {note:'F4',b:0},{note:'F#4',b:1},{note:'G4',b:0},{note:'G#4',b:1},{note:'A4',b:0},{note:'A#4',b:1},{note:'B4',b:0},{note:'C5',b:0}
+  ];
+  keys.forEach(k => {
+    const key = document.createElement('div');
+    key.className = 'pkey' + (k.b?' black':'');
+    key.textContent = k.b ? '' : k.note.replace(/\d/,'');
+    key.onclick = () => playNote(NOTE_FREQS[k.note]||440, key);
+    piano.appendChild(key);
+  });
+}
+
+function playNote(freq, keyEl) {
+  if (!S.audioCtx) S.audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  const ctx = S.audioCtx;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain); gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq, ctx.currentTime);
+  gain.gain.setValueAtTime(0.4, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+1.5);
+  osc.start(); osc.stop(ctx.currentTime+1.5);
+  if (keyEl) { keyEl.classList.add('active'); setTimeout(()=>keyEl.classList.remove('active'),500); }
+}
+
+// ── Pitch Detection ──────────────────────────────────
+async function toggleMic() {
+  const btn = document.getElementById('mic-btn');
+  if (S.micActive) {
+    S.micActive = false;
+    if (S.micStream) S.micStream.getTracks().forEach(t=>t.stop());
+    if (S.pitchInterval) clearInterval(S.pitchInterval);
+    btn.className = 'mic-btn'; btn.textContent = '🎤 Start listening';
+    document.getElementById('pitch-note').textContent = '—';
+    document.getElementById('pitch-status').textContent = '';
+    document.getElementById('pitch-needle').style.left = '50%';
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    S.micStream = stream; S.micActive = true;
+    if (!S.audioCtx) S.audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const src = S.audioCtx.createMediaStreamSource(stream);
+    S.analyser = S.audioCtx.createAnalyser();
+    S.analyser.fftSize = 2048;
+    src.connect(S.analyser);
+    btn.className = 'mic-btn recording'; btn.textContent = '⏹ Stop';
+    S.pitchInterval = setInterval(detectPitch, 80);
+  } catch { showToast('Microphone access needed'); }
+}
+
+function detectPitch() {
+  if (!S.analyser) return;
+  const buf = new Float32Array(S.analyser.fftSize);
+  S.analyser.getFloatTimeDomainData(buf);
+  const freq = autoCorr(buf, S.audioCtx.sampleRate);
+  const ne = document.getElementById('pitch-note');
+  const fe = document.getElementById('pitch-freq');
+  const se = document.getElementById('pitch-status');
+  const needle = document.getElementById('pitch-needle');
+  if (!ne) return;
+  if (freq < 0) { ne.textContent='—'; fe.textContent='Sing louder'; return; }
+  const info = freqToNote(freq);
+  ne.textContent = info.name;
+  fe.textContent = Math.round(freq)+' Hz';
+  const pct = 50+(info.cents/50)*40;
+  needle.style.left = Math.max(8,Math.min(92,pct))+'%';
+  if (Math.abs(info.cents)<15) { se.textContent='✓ In tune'; se.className='pitch-status in-tune'; }
+  else if (info.cents>0) { se.textContent='▲ Sharp'; se.className='pitch-status sharp'; }
+  else { se.textContent='▼ Flat'; se.className='pitch-status flat'; }
+}
+
+function autoCorr(buf, sr) {
+  let rms=0; for(let i=0;i<buf.length;i++) rms+=buf[i]*buf[i]; rms=Math.sqrt(rms/buf.length);
+  if(rms<0.01) return -1;
+  let r1=0,r2=buf.length-1;
+  for(let i=0;i<buf.length/2;i++){if(Math.abs(buf[i])<0.2){r1=i;break;}}
+  for(let i=1;i<buf.length/2;i++){if(Math.abs(buf[buf.length-i])<0.2){r2=buf.length-i;break;}}
+  const sl=buf.slice(r1,r2);
+  const c=new Array(sl.length).fill(0);
+  for(let i=0;i<sl.length;i++) for(let j=0;j<sl.length-i;j++) c[i]+=sl[j]*sl[j+i];
+  let d=0; while(c[d]>c[d+1]) d++;
+  let mx=-1,mp=-1; for(let i=d;i<sl.length;i++){if(c[i]>mx){mx=c[i];mp=i;}}
+  let T=mp; const x1=c[T-1],x2=c[T],x3=c[T+1]; const a=(x1+x3-2*x2)/2,b=(x3-x1)/2;
+  if(a) T-=b/(2*a); return sr/T;
+}
+
+function freqToNote(freq) {
+  const A4=440, st=12*Math.log2(freq/A4), n=Math.round(st);
+  const ni=((n%12)+12)%12, oct=4+Math.floor((n+9)/12), cents=(st-n)*100;
+  return { name:CHROMATIC[ni]+oct, cents };
+}
+
+// ── Theory ───────────────────────────────────────────
+function answerTheory(btn, idx, ans, fb) {
+  const opts = btn.parentElement.querySelectorAll('.theory-opt');
+  opts.forEach(o=>o.disabled=true);
+  if (idx===ans) { btn.classList.add('correct'); showToast('Correct! 🎉'); S.theoryScore++; }
+  else { btn.classList.add('wrong'); opts[ans].classList.add('correct'); }
+  const el = document.getElementById('theory-fb');
+  if (el) { el.textContent=fb; el.classList.add('show'); }
+}
+function nextTheory() {
+  S.theoryIdx++;
+  const panels = document.querySelectorAll('.mod-panel.active');
+  panels.forEach(p => { if(p.querySelector('.theory-q')) p.innerHTML = theoryHTML(); });
+}
+
+// ── Checklist ────────────────────────────────────────
+function toggleCheck(sid, idx, el) {
+  if (!S.checks[sid]) S.checks[sid]={};
+  const done = !S.checks[sid][idx];
+  S.checks[sid][idx] = done;
+  el.classList.toggle('checked', done);
+  const box = el.querySelector('.check-box');
+  const txt = el.querySelector('.check-text');
+  if (box) box.textContent = done ? '✓' : '';
+  if (txt) txt.classList.toggle('done', done);
+}
+
+// ── Complete Session ─────────────────────────────────
+async function completeSession() {
+  const btn = document.getElementById('complete-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const s = S.sessions[S.currentSession];
+  const skillDeltas = { breath:8, resonance:7, pitch:6, harmony:5, agility:5, dynamics:4, diction:4, theory:3, rhythm:5, gospel:5 };
+  try {
+    const result = await api.logProgress({
+      sessionId: s.id,
+      checks: S.checks[S.currentSession] || {},
+      theoryScore: S.theoryScore,
+      skillDeltas,
+      durationMin: s.durationMin || 60,
+    });
+    S.progress.push({ sessionId: s.id, completed: true });
+    updateStreak(result.streak || 0);
+    // Update cached user skills
+    if (api.user) {
+      api._user = { ...api.user, skills: result.skills, streak: result.streak };
+      localStorage.setItem('choiriq_user', JSON.stringify(api._user));
+    }
+  } catch(e) {
+    // Offline mode — still celebrate
+    S.progress.push({ sessionId: s.id, completed: true });
+  }
+  document.getElementById('m-emoji').textContent = ['🏆','🎵','🌟','✨','🎶'][S.currentSession%5];
+  document.getElementById('m-title').textContent = `Session ${(s.n||S.currentSession+1)} Complete!`;
+  document.getElementById('m-body').textContent = `Incredible work today. Every Saturday session brings you closer to the choir you are meant to be. Your skills are growing week by week.`;
+  document.getElementById('modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+  const btn = document.getElementById('complete-btn');
+  if(btn){btn.disabled=false;btn.textContent='Mark session complete ✓';}
+  renderDashboard();
+  showPage('dash');
+}
+
+// ── Progress ─────────────────────────────────────────
+async function renderProgress() {
+  try { const d = await api.getMyProgress(); S.progress = d.progress||[]; } catch {}
+  const user = api.user;
+  const skills = user?.skills || {};
+  const skillDefs = [
+    {k:'breath',n:'Breath Support'},{k:'resonance',n:'Resonance & Tone'},{k:'pitch',n:'Pitch Accuracy'},
+    {k:'harmony',n:'Harmony & Blend'},{k:'agility',n:'Vocal Agility'},{k:'dynamics',n:'Dynamics'},
+    {k:'diction',n:'Diction'},{k:'theory',n:'Music Theory'},{k:'rhythm',n:'Rhythm & Groove'},{k:'gospel',n:'Gospel Style'},
+  ];
+  document.getElementById('skill-grid').innerHTML = skillDefs.map(s => {
+    const v = skills[s.k]||5;
+    const lvl = v<25?'Beginner':v<55?'Developing':v<80?'Proficient':'Advanced';
+    return `<div class="skill-card"><div class="skill-name">${s.n}</div><div class="skill-level">${lvl} · ${v}%</div><div class="skill-bar"><div class="skill-fill" style="width:${v}%"></div></div></div>`;
+  }).join('');
+
+  document.getElementById('hist-list').innerHTML = S.sessions.map((s,i) => {
+    const done = S.progress.some(p => p.sessionId===s.id && p.completed);
+    return `<div class="hist-item"><div class="hist-icon ${done?'hist-done-bg':'hist-pend-bg'}">${done?'✓':'○'}</div><div class="hist-info"><div class="hist-title">Session ${s.n||i+1} · ${s.title}</div><div class="hist-date">${s.date||''} · ${s.phase||''}</div></div>${done?'<div class="hist-score">Done ✓</div>':''}</div>`;
+  }).join('');
+}
+
+// ── Notes ────────────────────────────────────────────
+async function loadNotes() {
+  try {
+    const { notes } = await api.getMyNotes();
+    const el = document.getElementById('notes-list');
+    if (!notes.length) { el.innerHTML = '<div class="empty-state"><div class="icon">📝</div>No notes yet from your director</div>'; return; }
+    el.innerHTML = notes.map(n => `
+      <div class="note-card">
+        <div class="note-type ${n.type}">${n.type.toUpperCase()}</div>
+        <div class="note-text">${esc(n.text)}</div>
+        <div class="note-time">${relTime(n.createdAt)}</div>
+      </div>`).join('');
+  } catch { document.getElementById('notes-list').innerHTML = '<div class="empty-state"><div class="icon">📝</div>Could not load notes</div>'; }
+}
+
+// ── AI Chat ──────────────────────────────────────────
+async function sendChat() {
+  const input = document.getElementById('ai-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  const sendBtn = document.getElementById('ai-send');
+  sendBtn.disabled = true;
+  const msgsEl = document.getElementById('ai-msgs');
+  S.chatHistory.push({ role:'user', content: msg });
+  const uBubble = document.createElement('div');
+  uBubble.className = 'ai-msg user'; uBubble.textContent = msg;
+  msgsEl.appendChild(uBubble);
+  const typing = document.createElement('div');
+  typing.className = 'ai-msg ai typing'; typing.textContent = 'Maestro is thinking…';
+  msgsEl.appendChild(typing);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  try {
+    const { reply } = await api.chat(S.chatHistory);
+    S.chatHistory.push({ role:'assistant', content: reply });
+    typing.classList.remove('typing');
+    typing.innerHTML = reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  } catch {
+    typing.classList.remove('typing');
+    typing.innerHTML = "I couldn't connect right now. <strong>Always start with breath</strong> — every vocal problem traces back to support.";
+  }
+  sendBtn.disabled = false;
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+// ── Helpers ──────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function relTime(iso) {
+  if (!iso) return '';
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff/60000), h = Math.floor(m/60), d = Math.floor(h/24);
+  if (d>0) return `${d}d ago`; if (h>0) return `${h}h ago`; if (m>0) return `${m}m ago`; return 'just now';
+}
+</script>
+</body>
+</html>

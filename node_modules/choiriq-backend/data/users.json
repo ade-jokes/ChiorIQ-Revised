@@ -1,0 +1,49 @@
+[
+  {
+    "id": "usr_mo47qo9nfa9vy4",
+    "streak": 0,
+    "lastActive": null,
+    "skills": {
+      "agility": 20,
+      "resonance": 20,
+      "solfege": 20,
+      "theory": 20,
+      "phrasing": 20,
+      "rhythm": 20,
+      "vowels": 20,
+      "diction": 20
+    },
+    "createdAt": "2026-04-18T10:47:32.699Z",
+    "name": "Manager",
+    "email": "manager-1776509252520-8062@choiriq.dev",
+    "passwordHash": "$2a$10$ei5puiinvKby97oznzIBw.7EmeYMCRSyMpdTx.B.v7c7Hm0iwsPqu",
+    "role": "manager",
+    "voicePart": "Tenor",
+    "level": "Advanced",
+    "choirId": "choir_mo47qo4v5zdcux"
+  },
+  {
+    "id": "usr_mo47qoepoktgh8",
+    "streak": 1,
+    "lastActive": "2026-04-18T10:47:32.905Z",
+    "skills": {
+      "agility": 22,
+      "resonance": 20,
+      "solfege": 20,
+      "theory": 20,
+      "phrasing": 20,
+      "rhythm": 21,
+      "vowels": 20,
+      "diction": 20
+    },
+    "createdAt": "2026-04-18T10:47:32.881Z",
+    "name": "Member",
+    "email": "member-1776509252730-7556@choiriq.dev",
+    "passwordHash": "$2a$10$zqXq8FFkgihNEgu3bpLuH.oRz2D9ylqri7kwqPn4/gdPi2HUaFRG2",
+    "role": "member",
+    "voicePart": "Soprano",
+    "level": "Beginner",
+    "choirId": "choir_mo47qo4v5zdcux",
+    "updatedAt": "2026-04-18T10:47:32.906Z"
+  }
+]

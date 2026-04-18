@@ -1,0 +1,22 @@
+{
+  "name": "choiriq-revised",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend",
+    "member-app",
+    "leader-app",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "npm run dev:member",
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:frontend": "npm run dev --workspace frontend",
+    "dev:member": "npm run dev --workspace member-app",
+    "dev:leader": "npm run dev --workspace leader-app",
+    "build:member": "npm run build --workspace member-app",
+    "build:leader": "npm run build --workspace leader-app",
+    "test": "npm run test --workspace backend",
+    "test:backend": "npm run test --workspace backend"
+  }
+}
