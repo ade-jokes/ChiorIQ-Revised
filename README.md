@@ -1,4 +1,4 @@
-# ChiorIQ-Revised
+# ChoirIQ-Revised
 
 ChoirIQ is a high-performance, multi-page web application that elevates choral training through structured pedagogy and real-time audio analysis. This revised version supports three user types: **Admin**, **Choir Manager**, and **Choir Member**.
 
