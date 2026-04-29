@@ -22,6 +22,7 @@ This app is a **monorepo** with a unified frontend (both member + leader roles) 
 2. Click **"Add New Project"** → select your GitHub repo
 3. Vercel auto-detects the monorepo structure
 4. Configure build settings:
+   - **Root Directory**: leave empty / use the repository root (`.`)
    - **Framework**: Vite
    - **Build Command**: `npm run build:frontend`
    - **Output Directory**: `frontend/dist`
