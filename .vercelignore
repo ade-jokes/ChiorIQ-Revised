@@ -1,0 +1,17 @@
+node_modules
+backend
+leader-app
+.git
+.gitignore
+.env
+.env.local
+*.log
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+data/
+mnt/
+dist/
+.vscode
+.idea
+coverage/
