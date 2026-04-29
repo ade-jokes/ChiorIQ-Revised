@@ -15,6 +15,17 @@ function isLocalDevOrigin(origin) {
   return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
 }
 
+function isTrustedHostedOrigin(origin) {
+  if (!origin) return false;
+
+  // Support Vercel production and preview deployments out of the box.
+  if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) {
+    return true;
+  }
+
+  return false;
+}
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) {
@@ -22,6 +33,10 @@ app.use(cors({
     }
 
     if (configuredOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    if (isTrustedHostedOrigin(origin)) {
       return callback(null, true);
     }
 

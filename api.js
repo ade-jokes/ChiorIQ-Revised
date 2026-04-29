@@ -1,5 +1,5 @@
 const DEFAULT_LOCAL_BASE_URL = 'http://localhost:3001/api';
-const DEFAULT_PROD_BASE_URL = 'https://choiriq-backend.onrender.com/api';
+const DEFAULT_PROD_BASE_URL = 'https://chioriq.onrender.com/api';
 
 function normalizeBaseUrl(url) {
   if (!url || typeof url !== 'string') {
@@ -12,7 +12,8 @@ function normalizeBaseUrl(url) {
   }
 
   // Correct common typo/misconfiguration seen in deployment settings.
-  normalized = normalized.replace('://choiriq.onrender.com', '://choiriq-backend.onrender.com');
+  normalized = normalized.replace('://choiriq-backend.onrender.com', '://chioriq.onrender.com');
+  normalized = normalized.replace('://choiriq.onrender.com', '://chioriq.onrender.com');
   normalized = normalized.replace(/\/+$/, '');
 
   if (!/\/api$/i.test(normalized)) {
