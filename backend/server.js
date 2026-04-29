@@ -10,6 +10,9 @@ const configuredOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map((item) => item.trim()).filter(Boolean)
   : [];
 
+// Hardcode the Vercel domain to ensure CORS always works for deployed app
+const VERCEL_DOMAIN = 'https://chioriq-steel.vercel.app';
+
 function isLocalDevOrigin(origin) {
   if (!origin) return false;
   return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
@@ -29,6 +32,11 @@ function isTrustedHostedOrigin(origin) {
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) {
+      return callback(null, true);
+    }
+
+    // Allow the deployed Vercel domain
+    if (origin === VERCEL_DOMAIN) {
       return callback(null, true);
     }
 
