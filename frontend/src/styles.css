@@ -693,3 +693,145 @@ textarea {
     align-items: flex-start;
   }
 }
+
+/* Final consistency layer: dark brown/gold/black/white brand theme across deployment. */
+:root {
+  --bg: #0f0d0b;
+  --bg-strong: #1a140f;
+  --panel: #201a14;
+  --panel-soft: #2b231b;
+  --text: #f4efe7;
+  --muted: #cbbba4;
+  --line: #5a4937;
+  --brand: #c9a44c;
+  --brand-strong: #e2bf67;
+  --brand-soft: #3d3122;
+  --accent: #8f7040;
+  --success: #80cf9a;
+  --danger: #db7f7f;
+  --shadow-sm: 0 10px 28px rgba(0, 0, 0, 0.44);
+  --shadow-md: 0 22px 56px rgba(0, 0, 0, 0.62);
+}
+
+body {
+  color: var(--text);
+  background:
+    radial-gradient(circle at 8% 12%, rgba(201, 164, 76, 0.22) 0%, rgba(201, 164, 76, 0) 36%),
+    radial-gradient(circle at 88% 4%, rgba(242, 210, 130, 0.14) 0%, rgba(242, 210, 130, 0) 40%),
+    linear-gradient(152deg, var(--bg) 0%, var(--bg-strong) 100%);
+}
+
+.topnav {
+  background: rgba(12, 12, 13, 0.92);
+  border-bottom: 1px solid rgba(201, 164, 76, 0.36);
+}
+
+.topnav nav a {
+  color: var(--muted);
+}
+
+.topnav nav a.active,
+.topnav nav a:hover,
+.tabs button.active,
+.tabs button:hover,
+.primary {
+  color: #f5faff;
+  background: linear-gradient(120deg, var(--brand-strong), var(--accent));
+}
+
+.userPill,
+.authCard,
+.heroCard,
+.sectionCard,
+.lessonBlock,
+.toolCard,
+.announce,
+.statsGrid article,
+.sessionChip,
+.switcher,
+.switcher .active,
+.highlightPanel,
+.explainerCard,
+.key,
+.quizOptions button,
+.toolActions button,
+.checkList button,
+.tabs button,
+.ghostButton,
+input,
+select,
+textarea,
+.table th,
+.table td,
+.aiReply {
+  color: var(--text);
+  background: rgba(28, 28, 31, 0.9);
+  border-color: rgba(201, 164, 76, 0.34);
+}
+
+.heroCard,
+.sectionCard,
+.authCard {
+  box-shadow: var(--shadow-md);
+}
+
+.highlightPanel,
+.announce,
+.aiReply,
+.explainerCard,
+.lessonBlock,
+.toolCard,
+.bar {
+  background: rgba(36, 36, 40, 0.92);
+}
+
+.metaPill,
+.announce span {
+  color: #f7e4b6;
+  background: rgba(201, 164, 76, 0.18);
+  border-color: rgba(201, 164, 76, 0.45);
+}
+
+.textMuted,
+.announceMeta,
+.statsGrid h3,
+.statsGrid h4,
+.authCard label,
+.sectionCard label,
+.controlGroup,
+p {
+  color: var(--muted);
+}
+
+.table th,
+.highlightPanel h3,
+.lessonBlock h5,
+.toolCard h5,
+.explainerCard h5,
+.statsGrid strong {
+  color: #f1dfb3;
+}
+
+.errorMsg,
+.quizOptions button.wrong {
+  color: #ffd9df;
+  background: rgba(255, 91, 119, 0.14);
+  border-color: rgba(255, 91, 119, 0.46);
+}
+
+.successText,
+.checkList .checked,
+.sessionChip.done,
+.quizOptions button.correct {
+  color: #b8ffe2;
+  background: rgba(45, 226, 157, 0.14);
+  border-color: rgba(45, 226, 157, 0.48);
+}
+
+.bar {
+  background: rgba(42, 42, 46, 0.95);
+}
+
+.bar span {
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+}

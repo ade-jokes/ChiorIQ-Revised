@@ -1,8 +1,54 @@
-const DEFAULT_BASE_URL = 'http://localhost:3001/api';
+const DEFAULT_LOCAL_BASE_URL = 'http://localhost:3001/api';
+const DEFAULT_PROD_BASE_URL = 'https://choiriq-backend.onrender.com/api';
+
+function normalizeBaseUrl(url) {
+  if (!url || typeof url !== 'string') {
+    return null;
+  }
+
+  let normalized = url.trim();
+  if (!normalized) {
+    return null;
+  }
+
+  // Correct common typo/misconfiguration seen in deployment settings.
+  normalized = normalized.replace('://choiriq.onrender.com', '://choiriq-backend.onrender.com');
+  normalized = normalized.replace(/\/+$/, '');
+
+  if (!/\/api$/i.test(normalized)) {
+    normalized = `${normalized}/api`;
+  }
+
+  return normalized;
+}
+
+function getDefaultBaseUrl() {
+  if (typeof window === 'undefined') {
+    return DEFAULT_LOCAL_BASE_URL;
+  }
+
+  const host = window.location?.hostname || '';
+  if (host === 'localhost' || host === '127.0.0.1') {
+    return DEFAULT_LOCAL_BASE_URL;
+  }
+
+  return DEFAULT_PROD_BASE_URL;
+}
+
+function isLocalUrl(url) {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/api$/i.test(url);
+}
 
 export function createApi(options = {}) {
   const storage = options.storage || (typeof window !== 'undefined' ? window.localStorage : null);
-  const baseUrl = options.baseUrl || (typeof window !== 'undefined' && window.__API_BASE_URL__) || DEFAULT_BASE_URL;
+  const configuredBaseUrl = options.baseUrl || (typeof window !== 'undefined' && window.__API_BASE_URL__);
+  const normalizedConfiguredBaseUrl = normalizeBaseUrl(configuredBaseUrl);
+  const defaultBaseUrl = normalizeBaseUrl(getDefaultBaseUrl()) || DEFAULT_LOCAL_BASE_URL;
+  const isLocalHostRuntime = typeof window !== 'undefined' && (window.location?.hostname === 'localhost' || window.location?.hostname === '127.0.0.1');
+
+  const baseUrl = normalizedConfiguredBaseUrl && (isLocalHostRuntime || !isLocalUrl(normalizedConfiguredBaseUrl))
+    ? normalizedConfiguredBaseUrl
+    : defaultBaseUrl;
 
   function getToken() {
     return storage ? storage.getItem('choiriq_token') : null;
@@ -35,7 +81,7 @@ export function createApi(options = {}) {
         headers
       });
     } catch (networkError) {
-      const message = `Network error contacting ${baseUrl}${path}. Ensure backend is running (npm run dev:backend) and API base URL is correct.`;
+      const message = `Network error contacting ${baseUrl}${path}. Ensure backend is running and VITE_API_BASE_URL points to your live API.`;
       const error = new Error(message);
       error.cause = networkError;
       throw error;
