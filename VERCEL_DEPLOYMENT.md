@@ -25,55 +25,81 @@ This app is a **monorepo** with separate frontend and backend. Vercel can deploy
      - Example: `https://choiriq-backend.onrender.com/api`
 6. Click **Deploy**
 
-### 2. Deploy Backend Separately
+### 2. Deploy Backend on Glitch (FREE!)
 
-The backend uses Node.js + SQLite and **cannot run on Vercel** (serverless functions don't support persistent file I/O). Deploy to:
+The backend uses Node.js + SQLite and **cannot run on Vercel** (serverless functions don't support persistent file I/O). **Glitch** is completely free with persistent storage.
 
-#### Option A: **Railway** (Recommended - Simple)
-1. Go to [railway.app](https://railway.app)
-2. Click **"New Project"** → **"Deploy from GitHub Repo"**
-3. Select your repo, Railway auto-detects `backend/package.json`
-4. Add environment variables:
-   - `PORT=3001`
-   - `NODE_ENV=production`
-   - `DB_FILE=/data/choiriq.sqlite`
-   - `GEMINI_API_KEY=your_key_here`
-   - `ALLOWED_ORIGINS=https://your-vercel-frontend.vercel.app`
-5. Railway generates a public URL automatically
-6. Use that URL as `VITE_API_BASE_URL` on Vercel
+#### **Glitch** (Completely Free - Recommended)
+1. Go to [glitch.com](https://glitch.com)
+2. Sign up with GitHub (free account)
+3. Click **"New Project"** → **"Import from GitHub"**
+4. Paste your repo URL: `https://github.com/ade-jokes/ChiorIQ-Revised`
+5. Glitch creates a project. Click into it.
+6. In the file explorer, find **`backend/server.js`**
+7. Open `.env` file in the root and add:
+   ```
+   PORT=3001
+   NODE_ENV=production
+   DB_FILE=/data/choiriq.sqlite
+   GEMINI_API_KEY=your_google_api_key_here
+   ALLOWED_ORIGINS=https://your-vercel-app.vercel.app
+   ```
+8. Click **"Start"** button (Glitch auto-starts the server)
+9. Glitch generates a URL like `https://mystical-cloud-1234.glitch.me`
+10. Copy that URL and use it as `VITE_API_BASE_URL` on Vercel (e.g., `https://mystical-cloud-1234.glitch.me/api`)
 
-#### Option B: **Render.com**
-1. Go to [render.com](https://render.com)
-2. Click **"New +"** → **"Web Service"**
-3. Connect GitHub repo
-4. Set **Build Command**: `npm install --prefix backend`
-5. Set **Start Command**: `node backend/server.js`
-6. Add environment variables (same as Railway)
-7. Deploy
+**Glitch Free Features**:
+- ✅ Always-on Node.js server
+- ✅ Persistent file storage (SQLite works!)
+- ✅ Automatic HTTPS
+- ✅ Auto-restarts on crash
+- ✅ No credit card required
 
-#### Option C: **Docker + Any Cloud Provider**
+#### Alternative: **Replit** (Also Free)
+1. Go to [replit.com](https://replit.com)
+2. Sign up with GitHub
+3. Click **"Create"** → **"Import from GitHub"**
+4. Paste repo URL
+5. Set up `.env` same as Glitch
+6. Click **"Run"** to start server
+7. Replit generates a URL automatically
+
+#### Docker + Local Server (If running your own machine 24/7)
 Use the provided `docker-compose.yml`:
 ```bash
 docker compose up --build
 ```
-Then push the images to Docker Hub or a cloud registry (Azure ACR, AWS ECR, etc.)
+Then expose it via a reverse proxy (nginx, ngrok, etc.)
 
 ---
 
-## Environment Variables
+## Get a Free Gemini API Key
+
+Your backend needs `GEMINI_API_KEY` for the AI features (completely free).
+
+1. Go to [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Click **"Get API Key"**
+3. Click **"Create API Key in new project"**
+4. Copy the key
+5. Add to your Glitch `.env`:
+   ```
+   GEMINI_API_KEY=your_copied_key_here
+   ```
+
+---
 
 ### Frontend (Vercel)
 | Variable | Value |
 |----------|-------|
-| `VITE_API_BASE_URL` | `https://your-backend.onrender.com/api` |
+| `VITE_API_BASE_URL` | `https://mystical-cloud-1234.glitch.me/api` *(your Glitch URL)* |
 
-### Backend (Railway/Render)
+### Backend (Glitch `.env` file)
 | Variable | Required | Example |
 |----------|----------|---------|
 | `PORT` | ✅ | `3001` |
 | `NODE_ENV` | ✅ | `production` |
-| `DB_FILE` | ❌ | `/data/choiriq.sqlite` |
-| `GEMINI_API_KEY` | ✅ | Your Google API key |
+| `DB_FILE` | ✅ | `/data/choiriq.sqlite` |
+| `GEMINI_API_KEY` | ✅ | Get free key at [aistudio.google.com](https://aistudio.google.com/app/apikey) |
 | `ALLOWED_ORIGINS` | ✅ | `https://yourapp.vercel.app` |
 
 ---
@@ -93,16 +119,22 @@ Once both frontend and backend are live:
 ## Troubleshooting
 
 ### 404 or CORS errors
-- Check `VITE_API_BASE_URL` matches your backend URL
-- Verify `ALLOWED_ORIGINS` on backend includes your Vercel domain
+- Check `VITE_API_BASE_URL` matches your **Glitch URL** (e.g., `https://mystical-cloud-1234.glitch.me/api`)
+- Verify `ALLOWED_ORIGINS` on Glitch `.env` includes your Vercel domain
 
 ### Database errors
-- Ensure `DB_FILE=/data/choiriq.sqlite` is set
-- Check backend has write permissions to `/data`
+- Glitch automatically creates `/data/` folder
+- Ensure `DB_FILE=/data/choiriq.sqlite` is set in Glitch `.env`
 
-### API calls fail
-- Verify backend environment variables (especially `GEMINI_API_KEY`)
-- Check backend logs for connection errors
+### API calls fail  
+- Check Glitch logs (click **"Logs"** in Glitch editor)
+- Verify `GEMINI_API_KEY` is set (get free key at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey))
+- Check Glitch server is running (click **"Start"** button)
+
+### Glitch project stopped
+- Glitch keeps free projects running 24/7, but if idle they may pause
+- Click **"Start"** to restart
+- For always-on, upgrade to Glitch Pro ($5/month optional)
 
 ---
 
@@ -130,6 +162,7 @@ docker compose up --build
 ## Links
 
 - [Vercel Docs](https://vercel.com/docs)
-- [Railway Docs](https://docs.railway.app)
-- [Render Docs](https://render.com/docs)
+- [Glitch Docs](https://glitch.com/help)
+- [Replit Docs](https://docs.replit.com)
+- [Google AI Studio (Free Gemini API)](https://aistudio.google.com/app/apikey)
 - [Docker Docs](https://docs.docker.com)
