@@ -206,17 +206,69 @@ function PitchChecker() {
   );
 }
 
+const lessonBlueprints = {
+  Foundation: {
+    label: 'Foundation lesson',
+    goal: 'Build breath, resonance, and pitch stability before adding speed or complexity.',
+    outcomes: ['You can start the phrase with steady airflow.', 'You can match a reference pitch quickly.', 'You can identify one correction before repeating a phrase.'],
+    coachCue: 'Listen for a tall vowel and a centered first tone.',
+    checklistLead: 'Use the checklist to verify posture, pitch, and repetition before you finish.'
+  },
+  'Skill Build': {
+    label: 'Skill-building lesson',
+    goal: 'Layer blend, rhythm, diction, and control into the choir sound.',
+    outcomes: ['You can keep the section together on the beat.', 'You can shape vowels to match the ensemble.', 'You can apply the technique in an excerpt.'],
+    coachCue: 'Make the vowel shape match first, then add clarity to the consonants.',
+    checklistLead: 'The lesson should feel complete only after the technique is applied in context.'
+  },
+  Performance: {
+    label: 'Performance lesson',
+    goal: 'Turn rehearsal detail into confident phrasing and stage-ready consistency.',
+    outcomes: ['You can sing the passage with energy and accuracy.', 'You can recover quickly if the phrase slips.', 'You can complete the whole lesson without losing the musical line.'],
+    coachCue: 'Keep the musical line forward even when the passage gets demanding.',
+    checklistLead: 'Finish by reviewing one take and naming the next correction.'
+  }
+};
+
 export default function SessionPage({ session, onComplete, onAskAi }) {
   const [tab, setTab] = useState('lesson');
   const [checked, setChecked] = useState([]);
-  const [aiPrompt, setAiPrompt] = useState('How can I tighten my harmonies this week?');
+  const [aiPrompt, setAiPrompt] = useState('How should I rehearse this lesson to sound more together?');
   const [aiReply, setAiReply] = useState('');
 
-  const percent = useMemo(() => Math.round((checked.length / checklistTemplate.length) * 100), [checked.length]);
+  const activeSession = session || {
+    title: 'Lesson session',
+    phase: 'Foundation',
+    description: 'Open a session from the dashboard to begin the guided rehearsal path.',
+    durationMin: 75,
+    modules: []
+  };
 
-  const blocks = lessonTechniques.map((group) => (
-    <article key={group.id} className="lessonBlock">
-      <h4>{group.title}</h4>
+  const blueprint = lessonBlueprints[activeSession.phase] || lessonBlueprints.Foundation;
+  const modules = activeSession.modules && activeSession.modules.length > 0
+    ? activeSession.modules
+    : [
+        { id: 'warmup', title: 'Warm-up', details: 'Breath and resonance setup for the day.' },
+        { id: 'technique', title: 'Technique', details: 'Targeted drills for consistency and control.' },
+        { id: 'application', title: 'Application', details: 'Apply the lesson in an excerpt or phrase.' }
+      ];
+
+  const lessonChecklist = [
+    `Prepare the body and breath for ${activeSession.title}`,
+    'Complete the technique block with the reference tool',
+    'Apply the skill in a phrase or excerpt',
+    'Review one recording or run-through for correction',
+    'Mark the lesson complete when the work is steady'
+  ];
+
+  const percent = useMemo(() => Math.round((checked.length / lessonChecklist.length) * 100), [checked.length, lessonChecklist.length]);
+
+  const lessonBlocks = lessonTechniques.map((group) => (
+    <article key={group.id} className="lessonBlock lessonTechniqueBlock">
+      <div className="lessonBlockHeaderCopy">
+        <span className="metaPill">Technique bank</span>
+        <h4>{group.title}</h4>
+      </div>
       <ul>
         {group.items.map((item) => <li key={item}>{item}</li>)}
       </ul>
@@ -230,46 +282,146 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
   }
 
   return (
-    <main className="pageWrap">
-      <section className="heroCard">
-        <h2>{session?.title || 'Session'}</h2>
-        <p>{session?.description || 'Session learning experience with tabbed modules and expandable techniques.'}</p>
+    <main className="pageWrap lessonSession">
+      <section className="heroCard lessonSessionHero">
+        <div className="sessionHeroTop">
+          <div>
+            <div className="sessionPhaseTag">{blueprint.label}</div>
+            <h2 className="sessionTitle">{activeSession.title}</h2>
+            <p className="sessionIntro">{activeSession.description || blueprint.goal}</p>
+          </div>
+          <div className="sessionHeroMeta">
+            <span>{activeSession.phase}</span>
+            <span>{activeSession.durationMin || 75} min</span>
+            <span>{modules.length} blocks</span>
+          </div>
+        </div>
+
+        <div className="sessionSignalGrid">
+          <article>
+            <h3>Lesson goal</h3>
+            <p>{blueprint.goal}</p>
+          </article>
+          <article>
+            <h3>Coach cue</h3>
+            <p>{blueprint.coachCue}</p>
+          </article>
+          <article>
+            <h3>Finish line</h3>
+            <p>{blueprint.checklistLead}</p>
+          </article>
+        </div>
       </section>
 
-      <div className="tabs">
-        {['lesson', 'tools', 'checklist', 'maestro'].map((name) => (
-          <button key={name} className={tab === name ? 'active' : ''} onClick={() => setTab(name)} type="button">
-            {name}
+      <section className="sectionCard lessonIntroPanel">
+        <div className="sectionHeading">
+          <div>
+            <h3>Session path</h3>
+            <p>The page reads like a lesson plan: what to learn, how to practice it, and what counts as done.</p>
+          </div>
+        </div>
+        <div className="lessonStepRail">
+          {modules.map((module, index) => (
+            <article key={module.id || module.title} className="lessonStepCard">
+              <div className="lessonStepNumber">0{index + 1}</div>
+              <div>
+                <h4>{module.title}</h4>
+                <p>{module.details}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <div className="lessonTabs">
+        {[
+          { key: 'lesson', label: 'Lesson' },
+          { key: 'practice', label: 'Practice' },
+          { key: 'checklist', label: 'Checklist' },
+          { key: 'coach', label: 'Coach' }
+        ].map((item) => (
+          <button key={item.key} className={tab === item.key ? 'active' : ''} onClick={() => setTab(item.key)} type="button">
+            {item.label}
           </button>
         ))}
       </div>
 
-      {tab === 'lesson' && <section className="sectionCard grid2">{blocks}</section>}
+      {tab === 'lesson' && (
+        <section className="sectionCard lessonLayout">
+          <div className="lessonMainColumn">
+            <div className="sectionHeading">
+              <div>
+                <h3>Lesson blocks</h3>
+                <p>Work through the blocks in order so the technique, repetition, and application stay connected.</p>
+              </div>
+            </div>
+            <div className="lessonModuleGrid">
+              {modules.map((module, index) => (
+                <article key={module.id || module.title} className="lessonModuleCard">
+                  <div className="lessonModuleIndex">{index + 1}</div>
+                  <div>
+                    <h4>{module.title}</h4>
+                    <p>{module.details}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
 
-      {tab === 'tools' && (
-        <section className="sectionCard grid2">
+          <aside className="lessonSidebar">
+            <article className="lessonSidebarCard">
+              <h4>Learning outcomes</h4>
+              <ul>
+                {blueprint.outcomes.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </article>
+            <article className="lessonSidebarCard lessonCalloutCard">
+              <h4>What to listen for</h4>
+              <p>
+                A stable first pitch, consistent vowel shape, and a phrase that does not rush when the notes get harder.
+              </p>
+            </article>
+          </aside>
+        </section>
+      )}
+
+      {tab === 'practice' && (
+        <section className="sectionCard practiceGrid">
+          <div className="practiceIntroCard">
+            <span className="metaPill">Practice lab</span>
+            <h3>Use these drills to rehearse the lesson, not just inspect it.</h3>
+            <p>Each tool reinforces the session goal so the page feels like a guided tutorial, not a random toolbox.</p>
+          </div>
           <PitchChecker />
           <DrillTimer />
           <TheoryQuiz />
-          <div className="toolCard">
-            <h4>Playable Piano</h4>
+          <div className="toolCard pianoCard">
+            <h4>Playable piano</h4>
+            <p>Use the keyboard to anchor your starting pitch before you rehearse the phrase.</p>
             <Piano />
           </div>
         </section>
       )}
 
       {tab === 'checklist' && (
-        <section className="sectionCard">
-          <h3>Daily Session Checklist</h3>
-          <div className="checkList">
-            {checklistTemplate.map((task) => {
+        <section className="sectionCard checklistPanel">
+          <div className="sectionHeading">
+            <div>
+              <h3>Lesson checklist</h3>
+              <p>{blueprint.checklistLead}</p>
+            </div>
+            <span className="metaPill">{percent}% complete</span>
+          </div>
+
+          <div className="checkList lessonChecklist">
+            {lessonChecklist.map((task) => {
               const done = checked.includes(task);
               return (
                 <button
                   className={done ? 'checked' : ''}
                   key={task}
                   onClick={() => {
-                    setChecked((prev) => done ? prev.filter((x) => x !== task) : [...prev, task]);
+                    setChecked((prev) => (done ? prev.filter((x) => x !== task) : [...prev, task]));
                   }}
                   type="button"
                 >
@@ -278,26 +430,47 @@ export default function SessionPage({ session, onComplete, onAskAi }) {
               );
             })}
           </div>
-          <p>Completion: {percent}%</p>
-          <button
-            className="primary"
-            disabled={checked.length < checklistTemplate.length}
-            onClick={() => onComplete({ checks: checked, theoryScore: 85, durationMin: 55, skillDeltas: { agility: 2, rhythm: 2 } })}
-            type="button"
-          >
-            Mark Session Complete
-          </button>
+
+          <div className="lessonCompletionRow">
+            <p>
+              Finish the checklist before marking the lesson complete. That keeps the platform behaving like a course,
+              not a passive tracker.
+            </p>
+            <button
+              className="primary"
+              disabled={checked.length < lessonChecklist.length}
+              onClick={() => onComplete({ checks: checked, theoryScore: 85, durationMin: activeSession.durationMin || 75, skillDeltas: { agility: 2, rhythm: 2 } })}
+              type="button"
+            >
+              Mark lesson complete
+            </button>
+          </div>
         </section>
       )}
 
-      {tab === 'maestro' && (
-        <section className="sectionCard">
-          <h3>AI Maestro</h3>
+      {tab === 'coach' && (
+        <section className="sectionCard coachPanel">
+          <div className="sectionHeading">
+            <div>
+              <h3>Coach guidance</h3>
+              <p>Ask for feedback on the exact lesson you are working through.</p>
+            </div>
+          </div>
           <textarea value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} rows={5} />
-          <button className="primary" onClick={submitAi} type="button">Ask Maestro</button>
+          <button className="primary" onClick={submitAi} type="button">Ask coach</button>
           {aiReply && <article className="aiReply">{aiReply}</article>}
         </section>
       )}
+
+      <section className="sectionCard">
+        <div className="sectionHeading">
+          <div>
+            <h3>Technique reference</h3>
+            <p>These core skills stay visible across the platform as the lesson path progresses.</p>
+          </div>
+        </div>
+        <div className="grid2 techniqueReferenceGrid">{lessonBlocks}</div>
+      </section>
     </main>
   );
 }

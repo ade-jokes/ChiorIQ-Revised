@@ -1,22 +1,23 @@
 :root {
-  --bg: #edf2f8;
-  --bg-strong: #d8e3f3;
-  --panel: #ffffff;
-  --panel-soft: #f7fbff;
-  --text: #10223d;
-  --muted: #4d6486;
-  --line: #c9d6ea;
-  --brand: #005f9e;
-  --brand-strong: #004877;
-  --brand-soft: #dff0ff;
-  --accent: #e2762f;
-  --success: #0a9552;
-  --danger: #c22d2d;
-  --shadow-sm: 0 6px 18px rgba(15, 53, 94, 0.08);
-  --shadow-md: 0 14px 36px rgba(15, 53, 94, 0.14);
-  --radius-lg: 18px;
-  --radius-md: 12px;
-  --radius-pill: 999px;
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
+  --gold-dim: #8A6E2F;
+  --cream: #FAF7F0;
+  --ink: #0F0D0A;
+  --ink2: #2A2720;
+  --ink3: #4A4540;
+  --muted: #8A8278;
+  --surface: #3d470c;
+  --surface2: #221F1A;
+  --surface3: #2C2820;
+  --border: rgba(201, 168, 76, 0.15);
+  --border2: rgba(201, 168, 76, 0.3);
+  --success: #4CAF7A;
+  --danger: #E85D3A;
+  --info: #5B9BD5;
+  --r: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
 }
 
 * {
@@ -31,12 +32,12 @@ body,
 
 body {
   margin: 0;
-  font-family: 'Manrope', sans-serif;
-  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--cream);
   background:
-    radial-gradient(circle at 15% 12%, #ffffff 0%, rgba(255, 255, 255, 0.75) 26%, transparent 54%),
-    radial-gradient(circle at 90% 0%, rgba(0, 95, 158, 0.14) 0%, transparent 44%),
-    linear-gradient(150deg, var(--bg) 0%, var(--bg-strong) 100%);
+    radial-gradient(circle at 18% 12%, rgba(201, 168, 76, 0.1) 0%, transparent 24%),
+    radial-gradient(circle at 85% 0%, rgba(201, 168, 76, 0.08) 0%, transparent 28%),
+    linear-gradient(160deg, #15110e 0%, #0f0d0a 55%, #17120f 100%);
 }
 
 h1,
@@ -45,8 +46,8 @@ h3,
 h4 {
   margin: 0;
   letter-spacing: 0.01em;
-  font-family: 'Instrument Serif', serif;
-  color: var(--text);
+  font-family: 'Playfair Display', serif;
+  color: var(--cream);
 }
 
 h2 {
@@ -85,9 +86,9 @@ button {
   justify-content: space-between;
   gap: 1rem;
   padding: 0.95rem 1.2rem;
-  background: rgba(255, 255, 255, 0.84);
-  border-bottom: 1px solid rgba(201, 214, 234, 0.85);
-  backdrop-filter: blur(16px);
+  background: rgba(15, 13, 10, 0.88);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(14px);
 }
 
 .brand {
@@ -111,10 +112,10 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--ink);
   font-weight: 800;
-  background: linear-gradient(135deg, var(--brand), var(--accent));
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+  background: var(--gold);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
 }
 
 .topnav nav {
@@ -135,8 +136,8 @@ button {
 
 .topnav nav a.active,
 .topnav nav a:hover {
-  color: #fff;
-  background: linear-gradient(120deg, var(--brand), var(--brand-strong));
+  color: var(--gold);
+  background: var(--surface2);
   box-shadow: var(--shadow-sm);
 }
 
@@ -146,8 +147,8 @@ button {
   gap: 0.42rem;
   padding: 0.35rem 0.4rem 0.35rem 0.72rem;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--line);
-  background: #fff;
+  border: 1px solid var(--border);
+  background: var(--surface);
   box-shadow: var(--shadow-sm);
 }
 
@@ -160,24 +161,24 @@ button {
   text-transform: uppercase;
   font-size: 0.67rem;
   letter-spacing: 0.08em;
-  color: var(--brand);
+  color: var(--gold);
   padding: 0.2rem 0.45rem;
   border-radius: var(--radius-pill);
-  background: var(--brand-soft);
+  background: rgba(201, 168, 76, 0.08);
 }
 
 .userPill button {
   border-radius: var(--radius-pill);
-  background: #eef4fb;
+  background: var(--surface2);
   padding: 0.3rem 0.62rem;
-  color: var(--brand-strong);
+  color: var(--cream);
   cursor: pointer;
   font-weight: 700;
   transition: 0.2s ease;
 }
 
 .userPill button:hover {
-  background: #dfeaf8;
+  background: var(--surface3);
 }
 
 .authWrap {
@@ -191,9 +192,9 @@ button {
   width: min(620px, 100%);
   padding: 1.5rem;
   border-radius: 24px;
-  border: 1px solid rgba(201, 214, 234, 0.95);
+  border: 1px solid var(--border);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(247, 251, 255, 0.96));
+    linear-gradient(180deg, rgba(34, 31, 26, 0.98), rgba(23, 18, 15, 0.98));
   box-shadow: var(--shadow-md);
   display: grid;
   gap: 1rem;
@@ -201,7 +202,7 @@ button {
 }
 
 .switcher {
-  background: #e8f1fb;
+  background: var(--surface2);
   padding: 0.3rem;
   border-radius: var(--radius-pill);
   display: grid;
@@ -212,15 +213,16 @@ button {
 .switcher button {
   border-radius: var(--radius-pill);
   padding: 0.58rem 0.8rem;
-  color: var(--brand-strong);
+  color: var(--muted);
   font-weight: 700;
   cursor: pointer;
   transition: 0.2s ease;
 }
 
 .switcher .active {
-  background: #fff;
+  background: var(--surface);
   box-shadow: var(--shadow-sm);
+  color: var(--cream);
 }
 
 .authCard form {
@@ -241,19 +243,19 @@ input,
 select,
 textarea {
   width: 100%;
-  border: 1px solid var(--line);
+  border: 1px solid var(--border2);
   border-radius: 11px;
   padding: 0.68rem 0.78rem;
-  background: #fff;
-  color: var(--text);
+  background: var(--surface);
+  color: var(--cream);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: var(--brand);
-  box-shadow: 0 0 0 3px rgba(0, 95, 158, 0.16);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.14);
   outline: none;
 }
 
@@ -268,11 +270,11 @@ textarea {
 }
 
 .errorMsg {
-  color: var(--danger);
+  color: #f4b0a0;
   font-size: 0.88rem;
   font-weight: 600;
-  background: #ffecec;
-  border: 1px solid #ffc6c6;
+  background: rgba(232, 93, 58, 0.08);
+  border: 1px solid rgba(232, 93, 58, 0.25);
   padding: 0.5rem 0.6rem;
   border-radius: 10px;
 }
@@ -280,8 +282,8 @@ textarea {
 .primary {
   border-radius: 11px;
   padding: 0.68rem 0.9rem;
-  color: #fff;
-  background: linear-gradient(120deg, var(--brand), var(--brand-strong));
+  color: var(--ink);
+  background: linear-gradient(120deg, var(--gold), var(--gold-light));
   box-shadow: var(--shadow-sm);
   font-weight: 700;
   cursor: pointer;
@@ -302,15 +304,278 @@ textarea {
 .pageWrap {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 1.15rem;
+  padding: 1.3rem;
   display: grid;
   gap: 1rem;
 }
 
+.dashboardLayout {
+  padding-top: 1.5rem;
+}
+
+.lessonHero,
+.prototypeHero {
+  gap: 1.1rem;
+}
+
+.heroGreeting {
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.12;
+  font-family: 'Playfair Display', serif;
+  color: var(--cream);
+}
+
+.heroGreeting em {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.heroSub {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.prototypeStats {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.prototypeStats article {
+  padding: 0.95rem 1rem;
+}
+
+.statLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.prototypeStats strong {
+  font-family: 'DM Mono', monospace;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--cream);
+}
+
+.prototypeStats p {
+  font-size: 0.78rem;
+  color: var(--gold);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+}
+
+.sectionTitle::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.prototypeDots {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.2rem;
+}
+
+.sessionDot {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
+}
+
+.sessionDot:hover {
+  transform: translateY(-1px);
+  border-color: var(--gold);
+  color: var(--cream);
+}
+
+.sessionDot.done {
+  background: rgba(201, 168, 76, 0.12);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.sessionDot.current {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+  box-shadow: 0 0 16px rgba(201, 168, 76, 0.35);
+}
+
+.sessionDot.locked {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.todayCard {
+  display: grid;
+  gap: 0.55rem;
+  text-decoration: none;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-xl, 24px);
+  padding: 1.1rem 1.2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.todayCard::before {
+  content: '';
+  position: absolute;
+  top: -36px;
+  right: -36px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.13) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.todayCard:hover {
+  border-color: var(--gold);
+}
+
+.todayTag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.todayTitle {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  line-height: 1.15;
+  color: var(--cream);
+}
+
+.todayDesc {
+  max-width: 70ch;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.phasePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.36rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.phaseMeta {
+  margin-left: 0.7rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.startBtn {
+  width: fit-content;
+  margin-top: 0.25rem;
+  border-radius: 999px;
+  padding: 0.72rem 1rem;
+  background: var(--gold);
+  color: var(--ink);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.coachPanel {
+  display: grid;
+  gap: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(44, 40, 32, 0.98), rgba(34, 31, 26, 0.98));
+  padding: 1rem;
+}
+
+.coachHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.coachAvatar {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+  font-weight: 800;
+}
+
+.coachName {
+  color: var(--cream);
+  font-weight: 700;
+}
+
+.coachRole {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.coachMessage {
+  border-left: 2px solid var(--gold);
+  background: var(--surface2);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 0.9rem 1rem;
+  color: var(--cream);
+}
+
+.coachHintRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.coachHintRow span {
+  padding: 0.34rem 0.64rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: var(--surface2);
+  font-size: 0.76rem;
+}
+
+.announcementsRail {
+  display: grid;
+  gap: 0.5rem;
+}
+
 .heroCard,
 .sectionCard {
-  background: var(--panel);
-  border: 1px solid rgba(201, 214, 234, 0.95);
+  background: rgba(34, 31, 26, 0.92);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1.1rem;
   display: grid;
@@ -320,7 +585,7 @@ textarea {
 
 .heroCard {
   background:
-    linear-gradient(130deg, rgba(255, 255, 255, 0.98) 0%, rgba(242, 248, 255, 0.98) 100%);
+    linear-gradient(135deg, rgba(37, 33, 26, 0.98) 0%, rgba(24, 21, 17, 0.98) 100%);
 }
 
 .heroTopRow {
@@ -333,18 +598,18 @@ textarea {
 .metaPill {
   font-size: 0.82rem;
   font-weight: 700;
-  color: var(--brand-strong);
-  background: var(--brand-soft);
-  border: 1px solid #cde5ff;
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+  border: 1px solid var(--border);
   border-radius: var(--radius-pill);
   padding: 0.32rem 0.62rem;
   white-space: nowrap;
 }
 
 .highlightPanel {
-  border: 1px solid #cfe4fa;
+  border: 1px solid var(--border2);
   border-radius: var(--radius-md);
-  background: linear-gradient(120deg, #f8fcff 0%, #edf7ff 100%);
+  background: linear-gradient(120deg, rgba(42, 39, 32, 0.98) 0%, rgba(34, 31, 26, 0.98) 100%);
   padding: 0.75rem;
   display: flex;
   align-items: center;
@@ -354,21 +619,21 @@ textarea {
 
 .highlightPanel h3 {
   font-size: 1rem;
-  color: var(--brand-strong);
+  color: var(--cream);
 }
 
 .highlightPanel p {
   font-size: 0.95rem;
-  color: var(--text);
+  color: var(--cream);
   font-weight: 600;
 }
 
 .ghostButton {
   text-decoration: none;
   border-radius: 10px;
-  border: 1px solid #afcfee;
-  background: #fff;
-  color: var(--brand-strong);
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--cream);
   padding: 0.5rem 0.7rem;
   font-weight: 700;
   transition: 0.2s ease;
@@ -376,8 +641,8 @@ textarea {
 }
 
 .ghostButton:hover {
-  border-color: var(--brand);
-  background: #f0f8ff;
+  border-color: var(--gold);
+  background: var(--surface3);
 }
 
 .statsGrid {
@@ -387,8 +652,8 @@ textarea {
 }
 
 .statsGrid article {
-  border: 1px solid #d8e6f9;
-  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  background: var(--surface2);
   border-radius: var(--radius-md);
   padding: 0.72rem;
   display: grid;
@@ -402,7 +667,7 @@ textarea {
 }
 
 .statsGrid strong {
-  color: var(--brand-strong);
+  color: var(--cream);
   font-size: 1.15rem;
 }
 
@@ -415,10 +680,10 @@ textarea {
 .sessionChip {
   text-decoration: none;
   border-radius: 11px;
-  border: 1px solid #cedcf0;
+  border: 1px solid var(--border);
   padding: 0.68rem 0.75rem;
-  color: var(--text);
-  background: #fff;
+  color: var(--cream);
+  background: var(--surface2);
   font-weight: 600;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -429,8 +694,8 @@ textarea {
 }
 
 .sessionChip.done {
-  background: #e6faee;
-  border-color: #98ddb6;
+  background: rgba(201, 168, 76, 0.12);
+  border-color: var(--gold);
 }
 
 .sessionChip.locked {
@@ -443,8 +708,8 @@ textarea {
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.8rem;
-  border: 1px solid #d6e3f5;
-  background: #f6fbff;
+  border: 1px solid var(--border);
+  background: var(--surface2);
   border-radius: 12px;
   padding: 0.78rem;
 }
@@ -466,8 +731,8 @@ textarea {
   text-transform: capitalize;
   font-weight: 700;
   font-size: 0.8rem;
-  color: var(--brand);
-  background: #e4f2ff;
+  color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
   border-radius: var(--radius-pill);
   padding: 0.22rem 0.54rem;
 }
@@ -479,9 +744,9 @@ textarea {
 }
 
 .tabs button {
-  border: 1px solid #d0dff3;
+  border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  background: #fff;
+  background: var(--surface);
   color: var(--muted);
   font-weight: 700;
   padding: 0.46rem 0.88rem;
@@ -491,9 +756,9 @@ textarea {
 
 .tabs button.active,
 .tabs button:hover {
-  color: #fff;
-  border-color: var(--brand);
-  background: linear-gradient(120deg, var(--brand), var(--brand-strong));
+  color: var(--ink);
+  border-color: var(--gold);
+  background: linear-gradient(120deg, var(--gold), var(--gold-light));
 }
 
 .grid2 {
@@ -504,10 +769,10 @@ textarea {
 
 .lessonBlock,
 .toolCard {
-  border: 1px solid #d8e5f6;
+  border: 1px solid var(--border);
   border-radius: 13px;
   padding: 0.85rem;
-  background: #f9fcff;
+  background: var(--surface);
   display: grid;
   gap: 0.55rem;
 }
@@ -527,10 +792,10 @@ textarea {
 }
 
 .key {
-  border: 1px solid var(--line);
+  border: 1px solid var(--border);
   border-radius: 7px;
-  background: #fff;
-  color: var(--brand-strong);
+  background: var(--surface2);
+  color: var(--cream);
   font-weight: 650;
   min-width: 50px;
   padding: 0.45rem;
@@ -543,16 +808,16 @@ textarea {
 }
 
 .key.black {
-  border-color: #0f385f;
-  background: #123f6a;
-  color: #fff;
+  border-color: var(--border2);
+  background: var(--ink2);
+  color: var(--cream);
 }
 
 .bar {
   width: 100%;
   height: 8px;
   border-radius: var(--radius-pill);
-  background: #dce9f9;
+  background: var(--surface3);
   overflow: hidden;
   position: relative;
 }
@@ -562,7 +827,7 @@ textarea {
   left: 0;
   top: 0;
   bottom: 0;
-  background: linear-gradient(90deg, var(--brand), var(--accent));
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
 }
 
 .meter span {
@@ -581,10 +846,10 @@ textarea {
 .quizOptions button,
 .toolActions button,
 .checkList button {
-  border: 1px solid #cfe0f5;
+  border: 1px solid var(--border);
   border-radius: 10px;
-  background: #fff;
-  color: var(--text);
+  background: var(--surface2);
+  color: var(--cream);
   padding: 0.58rem 0.64rem;
   cursor: pointer;
   transition: 0.2s ease;
@@ -593,8 +858,8 @@ textarea {
 .quizOptions button:hover,
 .toolActions button:hover,
 .checkList button:hover {
-  background: #f1f7ff;
-  border-color: #b7d0ee;
+  background: var(--surface3);
+  border-color: var(--gold);
 }
 
 .checkList button {
@@ -602,20 +867,444 @@ textarea {
 }
 
 .checkList .checked {
-  border-color: #8fd2ad;
-  background: #e9f9f0;
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.12);
 }
 
 .aiReply {
-  border: 1px solid #d2e3f8;
+  border: 1px solid var(--border);
   border-radius: 12px;
-  background: #f7fbff;
+  background: var(--surface);
   padding: 0.86rem;
   white-space: pre-wrap;
 }
 
 .skillGrid {
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.lessonDashboard {
+  gap: 1rem;
+}
+
+.lessonHero {
+  gap: 1rem;
+}
+
+.lessonHeroTop {
+  align-items: flex-start;
+}
+
+.lessonIntroCopy {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 700px;
+}
+
+.lessonIntroCopy p {
+  max-width: 62ch;
+}
+
+.lessonBadgeStack {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 170px;
+}
+
+.lessonBadgeStack span {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  border-radius: var(--radius-pill);
+  padding: 0.42rem 0.7rem;
+  color: var(--gold);
+  font-weight: 700;
+  text-align: center;
+}
+
+.lessonPurposePanel {
+  align-items: center;
+}
+
+.lessonPurposePanel small {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.lessonCta {
+  align-self: center;
+}
+
+.lessonStatsGrid {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeading p {
+  max-width: 70ch;
+}
+
+.roadmapStack {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.phaseRail {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.95rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(44, 40, 32, 0.98) 0%, rgba(34, 31, 26, 0.98) 100%);
+}
+
+.phaseRailHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.phaseRailHeader h4 {
+  font-size: 1.05rem;
+}
+
+.phaseRailHeader p {
+  margin-top: 0.2rem;
+}
+
+.roadmapSessions {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.sessionChip {
+  display: grid;
+  gap: 0.28rem;
+  text-decoration: none;
+}
+
+.sessionChip strong {
+  display: block;
+  font-size: 0.92rem;
+}
+
+.sessionChip span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.sessionChip.locked {
+  cursor: not-allowed;
+}
+
+.outcomeGrid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.outcomeCard {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface2);
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.outcomeCard h4 {
+  font-size: 1rem;
+}
+
+.lessonAnnouncement {
+  background: var(--surface2);
+}
+
+.lessonSession {
+  gap: 1rem;
+}
+
+.lessonSessionHero {
+  gap: 1rem;
+}
+
+.sessionHeroTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sessionTitle {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  line-height: 1.05;
+}
+
+.sessionIntro {
+  margin-top: 0.45rem;
+  max-width: 68ch;
+}
+
+.sessionHeroMeta {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 150px;
+}
+
+.sessionHeroMeta span {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  border-radius: var(--radius-pill);
+  padding: 0.38rem 0.7rem;
+  color: var(--gold);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.sessionSignalGrid {
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.sessionSignalGrid article {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface2);
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.sessionSignalGrid h3 {
+  font-size: 0.98rem;
+}
+
+.lessonIntroPanel {
+  gap: 0.9rem;
+}
+
+.lessonStepRail {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.lessonStepCard {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+}
+
+.lessonStepNumber {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(201, 168, 76, 0.12);
+  color: var(--gold);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.lessonStepCard h4 {
+  font-size: 1rem;
+}
+
+.lessonStepCard p {
+  margin-top: 0.25rem;
+}
+
+.lessonTabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.lessonTabs button {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--muted);
+  font-weight: 700;
+  padding: 0.46rem 0.88rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.lessonTabs button.active,
+.lessonTabs button:hover {
+  color: var(--ink);
+  border-color: var(--gold);
+  background: linear-gradient(120deg, var(--gold), var(--gold-light));
+}
+
+.lessonLayout {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 0.9fr);
+}
+
+.lessonMainColumn,
+.lessonSidebar {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.lessonModuleGrid {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.lessonModuleCard,
+.lessonSidebarCard,
+.practiceIntroCard,
+.pianoCard {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface2);
+  padding: 0.85rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.lessonModuleCard {
+  grid-template-columns: auto 1fr;
+  align-items: flex-start;
+}
+
+.lessonModuleIndex {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: rgba(201, 168, 76, 0.12);
+  color: var(--gold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.lessonSidebarCard ul {
+  margin: 0;
+  padding-left: 1rem;
+  color: var(--muted);
+  display: grid;
+  gap: 0.3rem;
+}
+
+.lessonCalloutCard {
+  background: linear-gradient(180deg, rgba(44, 40, 32, 0.98) 0%, rgba(34, 31, 26, 0.98) 100%);
+}
+
+.practiceGrid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.practiceIntroCard {
+  grid-column: 1 / -1;
+}
+
+.practiceIntroCard h3 {
+  max-width: 22ch;
+}
+
+.pianoCard p {
+  margin-bottom: 0.1rem;
+}
+
+.checklistPanel {
+  gap: 0.9rem;
+}
+
+.lessonChecklist {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.lessonCompletionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.85rem;
+}
+
+.lessonCompletionRow p {
+  max-width: 62ch;
+}
+
+.coachPanel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lessonTechniqueBlock {
+  background: var(--surface);
+}
+
+.lessonBlockHeaderCopy {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.lessonBlockHeaderCopy h4 {
+  font-size: 1rem;
+}
+
+.techniqueReferenceGrid {
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+@media (max-width: 900px) {
+  .lessonHeroTop,
+  .sessionHeroTop,
+  .sectionHeading,
+  .lessonCompletionRow {
+    flex-direction: column;
+  }
+
+  .lessonLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .lessonBadgeStack,
+  .sessionHeroMeta {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .phaseRailHeader {
+    flex-direction: column;
+  }
+
+  .lessonModuleCard {
+    grid-template-columns: 1fr;
+  }
+
+  .lessonCompletionRow {
+    align-items: flex-start;
+  }
 }
 
 .table {

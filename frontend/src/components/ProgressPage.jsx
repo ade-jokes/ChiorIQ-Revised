@@ -6,8 +6,8 @@ export default function ProgressPage({ user, progressRows }) {
   return (
     <main className="pageWrap">
       <section className="heroCard">
-        <h2>Progress and Skill Tracking</h2>
-        <p>Track growth in technique, rhythm, diction, theory, and consistency.</p>
+        <h2>Learning progress</h2>
+        <p>Track skill growth across the lesson path in technique, rhythm, diction, theory, and consistency.</p>
       </section>
 
       <section className="sectionCard skillGrid">
@@ -22,7 +22,7 @@ export default function ProgressPage({ user, progressRows }) {
 
       <section className="sectionCard">
         <h3>Completion History</h3>
-        {progressRows.length === 0 && <p>No completed sessions yet.</p>}
+        {progressRows.length === 0 && <p>No lessons completed yet.</p>}
         {progressRows.map((row) => (
           <article className="announce" key={row.id}>
             <div>

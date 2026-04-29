@@ -12,12 +12,12 @@ export default function TopNav({ user, onLogout }) {
         <span className="brandMark">CQ</span>
         <div>
           <h1>ChoirIQ</h1>
-          <p>Revised Training Platform</p>
+          <p>Lesson Platform</p>
         </div>
       </div>
       <nav>
         <Link className={location === '/dashboard' ? 'active' : ''} to="/dashboard">Dashboard</Link>
-        <Link className={location.startsWith('/session') ? 'active' : ''} to="/session/$sessionId" params={{ sessionId: '1' }}>Session</Link>
+        <Link className={location.startsWith('/session') ? 'active' : ''} to="/session/$sessionId" params={{ sessionId: '1' }}>Lesson</Link>
         <Link className={location === '/progress' ? 'active' : ''} to="/progress">Progress</Link>
         <Link className={location === '/notes' ? 'active' : ''} to="/notes">Notes</Link>
         {(user.role === 'manager' || user.role === 'admin') && (
