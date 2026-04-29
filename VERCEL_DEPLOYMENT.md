@@ -1,6 +1,12 @@
 # Vercel Deployment Guide for ChoirIQ
 
-This app is a **monorepo** with separate frontend and backend. Vercel can deploy the frontend; the backend requires a separate platform.
+This app is a **monorepo** with a unified frontend (both member + leader roles) and a backend. Vercel deploys the frontend; the backend runs on Glitch.
+
+## Architecture
+
+- **Frontend** (`frontend/`): Unified React app with role-based routing (members see member views, managers/admins see leader views)
+- **Backend** (`backend/`): Node.js + Express + SQLite
+- **Deployment**: Frontend → Vercel, Backend → Glitch (free tier)
 
 ## Quick Start
 
@@ -17,12 +23,12 @@ This app is a **monorepo** with separate frontend and backend. Vercel can deploy
 3. Vercel auto-detects the monorepo structure
 4. Configure build settings:
    - **Framework**: Vite
-   - **Build Command**: `npm run build:member`
-   - **Output Directory**: `member-app/dist`
+   - **Build Command**: `npm run build:frontend`
+   - **Output Directory**: `frontend/dist`
 5. Set **Environment Variables**:
    - Go to **Settings → Environment Variables**
    - Add: `VITE_API_BASE_URL` = `https://your-backend-url/api`
-     - Example: `https://choiriq-backend.onrender.com/api`
+     - Example: `https://mystical-cloud-1234.glitch.me/api`
 6. Click **Deploy**
 
 ### 2. Deploy Backend on Glitch (FREE!)
@@ -73,7 +79,19 @@ Then expose it via a reverse proxy (nginx, ngrok, etc.)
 
 ---
 
-## Get a Free Gemini API Key
+## Feature Overview
+
+The unified frontend intelligently routes users based on their role:
+
+- **Members** (`role: 'member'`): See member dashboard with personal progress tracking
+  - Routes: `/dashboard`, `/session/:id`, `/progress`, `/notes`
+- **Managers/Admins** (`role: 'manager' | 'admin'`): See leader dashboard with choir management
+  - Routes: `/dashboard` (leader view), `/leader` (management panel)
+- **Auth**: `/` (login/register)
+
+Same codebase, different UX per role. No separate deployments needed!
+
+---
 
 Your backend needs `GEMINI_API_KEY` for the AI features (completely free).
 
@@ -145,10 +163,11 @@ Build and test locally before deploying:
 # Terminal 1: Backend
 npm run dev:backend
 
-# Terminal 2: Frontend
-npm run dev:member
+# Terminal 2: Frontend (unified member + leader app)
+npm run dev:frontend
 
 # Visit http://localhost:5173
+# Log in as a member or manager to test both UIs
 ```
 
 Or with Docker:
