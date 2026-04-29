@@ -1,12 +1,12 @@
 # Vercel Deployment Guide for ChoirIQ
 
-This app is a **monorepo** with a unified frontend (both member + leader roles) and a backend. Vercel deploys the frontend; the backend runs on Glitch.
+This app is a **monorepo** with a unified frontend (both member + leader roles) and a backend. Vercel deploys the frontend; the backend runs on Render.
 
 ## Architecture
 
 - **Frontend** (`frontend/`): Unified React app with role-based routing (members see member views, managers/admins see leader views)
 - **Backend** (`backend/`): Node.js + Express + SQLite
-- **Deployment**: Frontend → Vercel, Backend → Glitch (free tier)
+- **Deployment**: Frontend → Vercel, Backend → Render (free tier)
 
 ## Quick Start
 
@@ -43,8 +43,9 @@ The backend uses Node.js + SQLite and **cannot run on Vercel** (serverless funct
 5. Configure the web service:
    - **Name**: `choiriq-backend` (or any name)
    - **Environment**: `Node`
-   - **Build Command**: `npm install --prefix backend`
-   - **Start Command**: `cd backend && node server.js`
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server.js`
    - **Plan**: Free (scroll down to select)
 6. Click **"Create Web Service"**
 7. Once deployed, add environment variables:
@@ -108,7 +109,7 @@ Your backend needs `GEMINI_API_KEY` for the AI features (completely free).
 2. Click **"Get API Key"**
 3. Click **"Create API Key in new project"**
 4. Copy the key
-5. Add to your Glitch `.env`:
+5. Add the same key in your Render environment variables:
    ```
    GEMINI_API_KEY=your_copied_key_here
    ```
