@@ -10,6 +10,8 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
   const sorted = [...sessions].sort((a, b) => (a.order || 0) - (b.order || 0));
   const unlockedCount = Math.min((progressRows.length || 0) + 1, 8);
   const nextSession = sorted[Math.max(0, unlockedCount - 1)];
+  const nextSessionTitle = nextSession?.title || 'Upcoming vocal session';
+  const nextSessionDescription = nextSession?.description || 'Open the next practice block to continue the lesson sequence.';
   const nowHour = new Date().getHours();
   const greeting = nowHour < 12 ? 'Good morning' : nowHour < 18 ? 'Good afternoon' : 'Good evening';
   const skillEntries = Object.entries(user?.skills || {});
@@ -75,14 +77,20 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
             <p style={{ marginTop: '4px', color: 'var(--muted)' }}>Spend 10-15 minutes on this area before your next full run-through.</p>
           </div>
         )}
-        {nextSession && (
+        {nextSession ? (
           <div className="highlightPanel" style={{ background: 'var(--surface)', border: '0.5px solid var(--border2)', borderRadius: 'var(--r-xl)', padding: '24px 28px', marginBottom: '2rem', position: 'relative', overflow: 'hidden' }}>
             <div style={{ fontSize: '10px', fontWeight: 600, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: '10px' }}>▶ Next Session</div>
-            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>{nextSession.title}</h3>
-            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '16px' }}>{nextSession.description}</p>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>{nextSessionTitle}</h3>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '16px' }}>{nextSessionDescription}</p>
             <Link className="ghostButton" params={{ sessionId: nextSession.id }} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--gold)', color: 'var(--ink)', padding: '10px 22px', borderRadius: '8px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }} to="/session/$sessionId">
               Start session →
             </Link>
+          </div>
+        ) : (
+          <div className="highlightPanel" style={{ background: 'var(--surface)', border: '0.5px solid var(--border2)', borderRadius: 'var(--r-xl)', padding: '24px 28px', marginBottom: '2rem', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontSize: '10px', fontWeight: 600, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: '10px' }}>▶ Next Session</div>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>No session is available yet</h3>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '16px' }}>Once the schedule loads, the next practice session will appear here.</p>
           </div>
         )}
         <div className="controlBar">

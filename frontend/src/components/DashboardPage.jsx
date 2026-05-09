@@ -58,6 +58,8 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
   const totalSessions = sorted.length || 8;
   const completedCount = completed.size;
   const nextSession = sorted.find((s) => !completed.has(s.id)) || sorted[0];
+  const nextSessionTitle = nextSession?.title || 'Upcoming vocal session';
+  const nextSessionDescription = nextSession?.description || 'Open the next practice block to continue the lesson sequence.';
   const currentPhase = nextSession?.phase || sorted[0]?.phase || 'Foundation';
   const filteredSessions = sorted
     .filter((session, index) => {
@@ -101,6 +103,17 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
             </Link>
           )}
         </div>
+
+        {nextSession && (
+          <div className="highlightPanel" style={{ background: 'var(--surface)', border: '0.5px solid var(--border2)', borderRadius: 'var(--r-xl)', padding: '24px 28px', marginBottom: '2rem', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontSize: '10px', fontWeight: 600, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: '10px' }}>▶ Next Session</div>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>{nextSessionTitle}</h3>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '16px' }}>{nextSessionDescription}</p>
+            <Link className="ghostButton" params={{ sessionId: nextSession.id }} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--gold)', color: 'var(--ink)', padding: '10px 22px', borderRadius: '8px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }} to="/session/$sessionId">
+              Start session →
+            </Link>
+          </div>
+        )}
 
         <div className="dash-top">
           <div className="stat-card">
@@ -190,19 +203,6 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
             <p style={{ color: 'var(--muted)', fontSize: '13px' }}>No sessions match this filter.</p>
           )}
         </div>
-
-        <Link to="/session/$sessionId" params={{ sessionId: nextSession?.id || sorted[0]?.id }} className="today-card">
-          <div className="today-tag">▶ Next session</div>
-          <div className="today-title">Session {nextSession?.order || 1} · {nextSession?.title || 'Loading...'}</div>
-          <div className="today-desc">
-            {nextSession?.description || 'Open your next lesson to continue building your vocal skills.'}
-          </div>
-          <div>
-            <span className="phase-pill">{currentPhase}</span>
-            <span style={{ fontSize: '11px', color: 'var(--muted)' }}>{nextSession?.durationMin || 75} min · {nextSession?.modules?.length || 6} modules</span>
-          </div>
-          <div className="start-btn">Start session →</div>
-        </Link>
 
         <div className="section-title">AI Vocal Coach</div>
         <div className="ai-panel">
