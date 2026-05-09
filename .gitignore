@@ -9,6 +9,8 @@ backend/.env
 backend/data/choiriq.test.sqlite
 backend/data/choiriq.test.sqlite-shm
 backend/data/choiriq.test.sqlite-wal
+backend/data/*.sqlite-shm
+backend/data/*.sqlite-wal
 node_modules
 
 # Build outputs
