@@ -40,6 +40,7 @@ ChoirIQ-Revised is now implemented as a modular monorepo with:
 - [backend/routes/sessions.js](backend/routes/sessions.js): CRUD sessions + attendance
 - [backend/routes/progress.js](backend/routes/progress.js): completion logging + analytics
 - [backend/routes/choir.js](backend/routes/choir.js): join codes, announcements, notes, member management
+- [backend/routes/admin.js](backend/routes/admin.js): admin-only manager directory endpoints
 - [backend/routes/ai.js](backend/routes/ai.js): secure server-side AI proxy
 
 ### Shared Client
@@ -68,6 +69,7 @@ copy backend\.env.example backend\.env
 ```
 
 Set `GEMINI_API_KEY` in [backend/.env](backend/.env).
+If you want to allow admin self-registration, also set `ADMIN_ACCESS_CODE`.
 
 3. Start backend:
 
@@ -88,6 +90,19 @@ npm run dev:leader
 ```
 
 Member app runs on `http://localhost:5173`, leader app runs on `http://localhost:5174`, and backend runs on `http://localhost:3001`.
+
+## Environment Variables
+
+Backend supports the following env vars:
+
+- `PORT` (default `3001`)
+- `GEMINI_API_KEY` (required for AI chat)
+- `JWT_SECRET` (required in production)
+- `ALLOWED_ORIGINS` (comma-separated list)
+- `DB_FILE` (optional explicit data file path)
+- `ADMIN_ACCESS_CODE` (required only if admin signup should be enabled)
+
+For Render persistence, mount a disk to `/data` (see [RENDER_PERSISTENCE_FIX.md](RENDER_PERSISTENCE_FIX.md)). The backend will prefer `/data/choiriq.sqlite` automatically when available.
 
 ## Testing
 

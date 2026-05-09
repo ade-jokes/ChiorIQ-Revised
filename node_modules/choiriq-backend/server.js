@@ -71,6 +71,7 @@ app.use('/api/sessions', require('./routes/sessions'));
 app.use('/api/progress', require('./routes/progress'));
 app.use('/api/choir', require('./routes/choir'));
 app.use('/api/ai', require('./routes/ai'));
+app.use('/api/admin', require('./routes/admin'));
 
 app.get('/api/health', (_req, res) => {
   res.json({

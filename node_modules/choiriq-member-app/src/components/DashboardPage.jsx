@@ -34,12 +34,14 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
       <section className="heroCard">
         <div className="heroTopRow">
           <div>
-            <h2>{greeting}, {user.name}</h2>
-            <p>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 400, lineHeight: 1.2 }}>
+              {greeting}, <em style={{ fontStyle: 'italic', color: 'var(--gold)' }}>{user.name}</em>
+            </h2>
+            <p style={{ fontSize: '14px', color: 'var(--muted)', marginTop: '6px' }}>
               {choir?.name || 'Your Choir'} · {user.voicePart} · {user.level}
             </p>
           </div>
-          <div className="metaPill">Practice Streak: {user.streak || 0} days</div>
+          <div className="metaPill">🔥 {user.streak || 0} days</div>
         </div>
         <div className="quickActions">
           <button className="ghostButton" onClick={() => navigate({ to: '/progress' })} type="button">View Progress</button>
@@ -51,24 +53,35 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
           )}
         </div>
         <div className="statsGrid">
-          <article><h3>Streak</h3><strong>{user.streak || 0} days</strong></article>
-          <article><h3>Completed</h3><strong>{progressRows.length} / 8 sessions</strong></article>
-          <article><h3>Unlock Status</h3><strong>{unlockedCount} unlocked</strong></article>
+          <article>
+            <h3 style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: '8px' }}>Sessions Done</h3>
+            <strong style={{ fontSize: '28px', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{progressRows.length}</strong>
+            <p style={{ fontSize: '12px', color: 'var(--gold)', marginTop: '4px' }}>of 8 total</p>
+          </article>
+          <article>
+            <h3 style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: '8px' }}>Current Streak</h3>
+            <strong style={{ fontSize: '28px', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{user.streak || 0}</strong>
+            <p style={{ fontSize: '12px', color: 'var(--gold)', marginTop: '4px' }}>weeks consistent</p>
+          </article>
+          <article>
+            <h3 style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.08em', marginBottom: '8px' }}>Skills Unlocked</h3>
+            <strong style={{ fontSize: '28px', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>{Object.keys(user?.skills || {}).length}</strong>
+            <p style={{ fontSize: '12px', color: 'var(--gold)', marginTop: '4px' }}>techniques learned</p>
+          </article>
         </div>
         {focusSkill && (
-          <div className="focusCallout">
-            <strong>Today&apos;s focus:</strong> {focusSkill[0]} ({focusSkill[1]}%)
-            <p>Spend 10-15 minutes on this area before your next full run-through.</p>
+          <div className="focusCallout" style={{ background: 'var(--surface2)', borderRadius: 'var(--r)', padding: '14px 16px', fontSize: '13px', lineHeight: 1.7, marginBottom: '1rem', borderLeft: '2px solid var(--gold)' }}>
+            <strong style={{ color: 'var(--cream)', fontWeight: 500 }}>Today&apos;s focus:</strong> {focusSkill[0]} ({focusSkill[1]}%)
+            <p style={{ marginTop: '4px', color: 'var(--muted)' }}>Spend 10-15 minutes on this area before your next full run-through.</p>
           </div>
         )}
         {nextSession && (
-          <div className="highlightPanel">
-            <div>
-              <h3>Next Session</h3>
-              <p>{nextSession.title}</p>
-            </div>
-            <Link className="ghostButton" params={{ sessionId: nextSession.id }} to="/session/$sessionId">
-              Continue Training
+          <div className="highlightPanel" style={{ background: 'var(--surface)', border: '0.5px solid var(--border2)', borderRadius: 'var(--r-xl)', padding: '24px 28px', marginBottom: '2rem', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ fontSize: '10px', fontWeight: 600, color: 'var(--gold)', textTransform: 'uppercase', letterSpacing: '.12em', marginBottom: '10px' }}>▶ Next Session</div>
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '22px', fontWeight: 700, marginBottom: '8px' }}>{nextSession.title}</h3>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '16px' }}>{nextSession.description}</p>
+            <Link className="ghostButton" params={{ sessionId: nextSession.id }} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'var(--gold)', color: 'var(--ink)', padding: '10px 22px', borderRadius: '8px', fontSize: '13px', fontWeight: 700, textDecoration: 'none' }} to="/session/$sessionId">
+              Start session →
             </Link>
           </div>
         )}
@@ -104,7 +117,10 @@ export default function DashboardPage({ user, sessions, progressRows, choir, ann
       </section>
 
       <section className="sectionCard">
-        <h3>8-Session Curriculum</h3>
+        <h3 style={{ fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          8-Week Journey
+          <span style={{ flex: 1, height: '0.5px', background: 'var(--border)' }} />
+        </h3>
         <div className="sessionTrack">
           {filteredSessions.map((session, index) => {
             const originalIndex = sorted.findIndex((s) => s.id === session.id);

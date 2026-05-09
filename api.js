@@ -122,6 +122,7 @@ export function createApi(options = {}) {
     updateMember: (id, payload) => request(`/choir/member/${id}`, { method: 'PATCH', body: JSON.stringify(payload) }),
     getAnnouncements: () => request('/choir/announcements'),
     createAnnouncement: (payload) => request('/choir/announcements', { method: 'POST', body: JSON.stringify(payload) }),
+    updateAnnouncement: (id, payload) => request(`/choir/announcements/${id}`, { method: 'PATCH', body: JSON.stringify(payload) }),
     createNote: (payload) => request('/choir/notes', { method: 'POST', body: JSON.stringify(payload) }),
     getMyNotes: () => request('/choir/notes/me'),
 
@@ -135,7 +136,9 @@ export function createApi(options = {}) {
     myProgress: () => request('/progress/me'),
     choirProgress: () => request('/progress/choir'),
 
-    aiChat: (messages) => request('/ai/chat', { method: 'POST', body: JSON.stringify({ messages }) })
+    aiChat: (messages) => request('/ai/chat', { method: 'POST', body: JSON.stringify({ messages }) }),
+
+    listManagers: () => request('/admin/managers')
   };
 }
 

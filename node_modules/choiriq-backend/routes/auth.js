@@ -24,7 +24,8 @@ router.post('/register', (req, res) => {
     voicePart,
     level,
     choirName,
-    joinCode
+    joinCode,
+    adminAccessCode
   } = req.body;
 
   if (!name || !email || !password || !role) {
@@ -37,6 +38,18 @@ router.post('/register', (req, res) => {
 
   if (!['admin', 'manager', 'member'].includes(role)) {
     return res.status(400).json({ error: 'role must be admin, manager, or member.' });
+  }
+
+  if (role === 'admin') {
+    const required = process.env.ADMIN_ACCESS_CODE;
+    if (!required) {
+      return res.status(403).json({ error: 'Admin signup is disabled.' });
+    }
+
+    const provided = String(adminAccessCode || '').trim();
+    if (!provided || provided !== String(required).trim()) {
+      return res.status(403).json({ error: 'Invalid admin access code.' });
+    }
   }
 
   let choir;

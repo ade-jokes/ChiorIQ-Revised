@@ -118,6 +118,12 @@ function AppShell() {
     enabled: Boolean(meQuery.data?.user && ['manager', 'admin'].includes(meQuery.data.user.role))
   });
 
+  const managersQuery = useQuery({
+    queryKey: ['admin-managers'],
+    queryFn: () => api.listManagers(),
+    enabled: Boolean(meQuery.data?.user && meQuery.data.user.role === 'admin')
+  });
+
   const completeMutation = useMutation({
     mutationFn: (payload) => api.logProgress(payload),
     onSuccess: () => {
@@ -130,6 +136,16 @@ function AppShell() {
   const postAnnouncementMutation = useMutation({
     mutationFn: (payload) => api.createAnnouncement(payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['announcements'] })
+  });
+
+  const updateAnnouncementMutation = useMutation({
+    mutationFn: ({ id, payload }) => api.updateAnnouncement(id, payload),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['announcements'] })
+  });
+
+  const updateMemberMutation = useMutation({
+    mutationFn: ({ id, payload }) => api.updateMember(id, payload),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['members'] })
   });
 
   const postNoteMutation = useMutation({
@@ -148,6 +164,7 @@ function AppShell() {
     members: membersQuery.data?.members || [],
     choirStats: statsQuery.data,
     joinCode: joinCodeQuery.data?.joinCode,
+    managers: managersQuery.data?.managers || [],
     onLogin: (payload) => loginMutation.mutateAsync(payload),
     onRegister: (payload) => registerMutation.mutateAsync(payload),
     onLogout: () => {
@@ -159,13 +176,15 @@ function AppShell() {
     onCompleteSession: (sessionId, payload) => completeMutation.mutateAsync({ sessionId, ...payload }),
     onAskAi: (messages) => api.aiChat(messages),
     onPostAnnouncement: (payload) => postAnnouncementMutation.mutateAsync(payload),
+    onUpdateAnnouncement: (id, payload) => updateAnnouncementMutation.mutateAsync({ id, payload }),
     onAddNote: (payload) => postNoteMutation.mutateAsync(payload),
+    onUpdateMember: (id, payload) => updateMemberMutation.mutateAsync({ id, payload }),
     loadingAuth: loginMutation.isPending || registerMutation.isPending
   };
 
   return (
     <AppContext.Provider value={appCtx}>
-      <div className="appRoot">
+      <div className={`appRoot${user ? ' authed' : ''}`}>
         <TopNav user={user} onLogout={appCtx.onLogout} />
         <Outlet />
       </div>
@@ -190,6 +209,7 @@ function DashboardRoute() {
       <DashboardPage
         announcements={ctx.announcements}
         choir={ctx.choir}
+        onAskAi={ctx.onAskAi}
         progressRows={ctx.progressRows}
         sessions={ctx.sessions}
         user={ctx.user}
@@ -246,10 +266,15 @@ function LeaderRoute() {
 
   return (
     <LeaderPage
+      user={ctx.user}
       joinCode={ctx.joinCode}
       members={ctx.members}
+      managers={ctx.managers}
+      announcements={ctx.announcements}
       onAddNote={ctx.onAddNote}
       onPostAnnouncement={ctx.onPostAnnouncement}
+      onUpdateAnnouncement={ctx.onUpdateAnnouncement}
+      onUpdateMember={ctx.onUpdateMember}
       stats={ctx.choirStats}
     />
   );

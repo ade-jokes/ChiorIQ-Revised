@@ -13,6 +13,7 @@ choiriq/
 │   │   ├── sessions.js  /api/sessions/*
 │   │   ├── progress.js  /api/progress/*
 │   │   ├── choir.js     /api/choir/*
+│   │   ├── admin.js     /api/admin/*
 │   │   └── ai.js        /api/ai/chat
 │   └── data/         ← Auto-created, stores JSON files
 │
@@ -97,11 +98,17 @@ Open http://localhost:3002
 | GET | /api/choir/members | JWT | List choir members |
 | GET | /api/choir/code | Leader | Get join code |
 | POST | /api/choir/code/refresh | Leader | Generate new join code |
-| POST | /api/choir/announce | Leader | Post announcement |
+| POST | /api/choir/announcements | Leader | Post announcement |
+| PATCH | /api/choir/announcements/:id | Leader/Admin | Edit announcement |
 | GET | /api/choir/announcements | JWT | Read announcements |
 | POST | /api/choir/notes | Leader | Write note for a member |
 | GET | /api/choir/notes/me | Member | Read own notes |
-| PATCH | /api/choir/member/:id | Leader | Update member voice part / level |
+| PATCH | /api/choir/member/:id | Leader/Admin | Update member voice part / level |
+
+### Admin
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| GET | /api/admin/managers | Admin | List all registered managers and choir metadata |
 
 ### Sessions
 | Method | Path | Auth | Description |
@@ -151,4 +158,8 @@ GEMINI_API_KEY=...   # Required for AI chat
 JWT_SECRET=change-me-in-production
 ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3002
 NODE_ENV=development
+ADMIN_ACCESS_CODE=... # Required to enable admin self-registration
+DB_FILE=... # Optional explicit SQLite path
 ```
+
+Note: On Render, add a persistent disk mounted to `/data` so SQLite survives restarts.

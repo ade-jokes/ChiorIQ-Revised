@@ -73,6 +73,28 @@ router.post('/announcements', requireRole('manager', 'admin'), (req, res) => {
   return res.status(201).json({ announcement: created });
 });
 
+router.patch('/announcements/:id', requireRole('manager', 'admin'), (req, res) => {
+  const announcement = db.getCollection('announcements').find((item) => item.id === req.params.id);
+  if (!announcement || announcement.choirId !== req.user.choirId) {
+    return res.status(404).json({ error: 'Announcement not found.' });
+  }
+
+  const allowed = ['title', 'text', 'type'];
+  const patch = {};
+  allowed.forEach((field) => {
+    if (req.body[field] !== undefined) {
+      patch[field] = req.body[field];
+    }
+  });
+
+  if (patch.text !== undefined && !patch.text) {
+    return res.status(400).json({ error: 'text is required.' });
+  }
+
+  const updated = db.updateById('announcements', announcement.id, patch);
+  return res.json({ announcement: updated });
+});
+
 router.get('/announcements', requireAuth, (req, res) => {
   const announcements = db
     .getCollection('announcements')

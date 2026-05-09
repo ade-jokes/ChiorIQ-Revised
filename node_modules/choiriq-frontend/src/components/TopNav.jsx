@@ -7,28 +7,26 @@ export default function TopNav({ user, onLogout }) {
   if (!user) return null;
 
   return (
-    <header className="topnav">
-      <div className="brand">
-        <span className="brandMark">CQ</span>
-        <div>
-          <h1>ChoirIQ</h1>
-          <p>Lesson Platform</p>
-        </div>
-      </div>
-      <nav>
-        <Link className={location === '/dashboard' ? 'active' : ''} to="/dashboard">Dashboard</Link>
-        <Link className={location.startsWith('/session') ? 'active' : ''} to="/session/$sessionId" params={{ sessionId: '1' }}>Lesson</Link>
-        <Link className={location === '/progress' ? 'active' : ''} to="/progress">Progress</Link>
-        <Link className={location === '/notes' ? 'active' : ''} to="/notes">Notes</Link>
+    <nav id="main-nav">
+      <Link className="logo" to="/dashboard">
+        <div className="logo-mark">C</div>
+        ChoirIQ
+      </Link>
+
+      <div className="nav-links">
+        <Link className={`nav-btn${location === '/dashboard' ? ' active' : ''}`} to="/dashboard">Dashboard</Link>
+        <Link className={`nav-btn${location.startsWith('/session') ? ' active' : ''}`} to="/session/$sessionId" params={{ sessionId: '1' }}>Lesson</Link>
+        <Link className={`nav-btn${location === '/progress' ? ' active' : ''}`} to="/progress">Progress</Link>
+        <Link className={`nav-btn${location === '/notes' ? ' active' : ''}`} to="/notes">Notes</Link>
         {(user.role === 'manager' || user.role === 'admin') && (
-          <Link className={location === '/leader' ? 'active' : ''} to="/leader">Leader</Link>
+          <Link className={`nav-btn${location === '/leader' ? ' active' : ''}`} to="/leader">Members</Link>
         )}
-      </nav>
-      <div className="userPill">
-        <span>{user.name}</span>
-        <strong>{user.role}</strong>
-        <button type="button" onClick={onLogout}>Logout</button>
+        <button className="nav-btn" type="button" onClick={onLogout}>Logout</button>
       </div>
-    </header>
+
+      <div className="nav-right">
+        <div className="streak-badge">🔥 {user.streak || 0} days</div>
+      </div>
+    </nav>
   );
 }
