@@ -547,6 +547,17 @@ export function LessonPanel({ session }) {
                 </div>
               )}
             </div>
+
+            <div className="sc-lcard">
+              <h4>30-second setup (do this before every song)</h4>
+              <ol className="sc-ol">
+                <li>Feet hip-width, weight on the whole foot (not toes).</li>
+                <li>Unlock knees, lengthen spine, chin level (no “up-chin”).</li>
+                <li>Silent inhale — feel expansion in <em>sides + back</em> (not shoulders).</li>
+                <li>Exhale on a quiet “ssss” for 8 counts while keeping ribs open.</li>
+              </ol>
+              <p className="sc-note">If the ribs collapse immediately, you’re using throat pressure instead of breath support.</p>
+            </div>
             <div className="sc-lcard">
               <h4>The 4-point self-check</h4>
               <ol className="sc-ol">
@@ -563,6 +574,16 @@ export function LessonPanel({ session }) {
                 <li>"Breathe into your sides and back, not your front"</li>
                 <li>"Hold the ribcage open while you sing"</li>
                 <li>Partner check before every skill block</li>
+              </ul>
+            </div>
+
+            <div className="sc-lcard">
+              <h4>Common posture problems (and quick fixes)</h4>
+              <ul className="sc-ul">
+                <li><strong>Raised shoulders:</strong> exhale first, then inhale low.</li>
+                <li><strong>Locked knees:</strong> gently bounce twice, then stillness.</li>
+                <li><strong>Forward head:</strong> "float the crown up" while tucking the chin a few millimeters.</li>
+                <li><strong>Collapsed ribs:</strong> inhale wide, keep the side ribs expanded as you start the phrase.</li>
               </ul>
             </div>
           </div>
@@ -582,6 +603,17 @@ export function LessonPanel({ session }) {
                 <p><strong>Hum placement check:</strong> One hand on chest, one on forehead. Hum at medium pitch — feel both vibrate. Slide up: more forehead. Slide down: more chest. This is register awareness.</p>
               </div>
             </div>
+
+            <div className="sc-lcard">
+              <h4>What to listen/feel for</h4>
+              <ul className="sc-ul">
+                <li><strong>Easy volume:</strong> sound gets bigger without pushing more air.</li>
+                <li><strong>Forward buzz:</strong> vibration around lips/nose/cheekbones on "mm"/"ng".</li>
+                <li><strong>Open back space:</strong> like a quiet yawn (lifted soft palate), not a forced yawn face.</li>
+                <li><strong>Stable vowel:</strong> don’t spread into a smile; keep vowels tall and consistent.</li>
+              </ul>
+              <p className="sc-note">If your throat tightens, go softer and return to humming first.</p>
+            </div>
             {items.slice(0, 4).map(item => (
               <div className="sc-lcard" key={item.name}>
                 <h5>{item.name}</h5>
@@ -589,6 +621,16 @@ export function LessonPanel({ session }) {
                 <p className="sc-note"><strong>Exercise:</strong> {item.exercise}</p>
               </div>
             ))}
+
+            <div className="sc-lcard">
+              <h4>Common resonance mistakes</h4>
+              <ul className="sc-ul">
+                <li><strong>Pushing breath:</strong> reduce volume and keep ribs open.</li>
+                <li><strong>Spreading vowels:</strong> think “tall vowel” not “wide smile”.</li>
+                <li><strong>Jaw tension:</strong> massage the jaw hinge and re-try on “ng”.</li>
+                <li><strong>Nasal-only tone:</strong> keep the buzz forward, but open the back space so it’s not pinched.</li>
+              </ul>
+            </div>
           </div>
         );
       }
@@ -604,6 +646,17 @@ export function LessonPanel({ session }) {
                 <span className="sc-drill-label">Diction drill</span>
                 <p>Say these words with exaggerated endings: <em>Great · Lord · Amen · Blessed · Kingdom · Hallelujah</em>. Then sing them the same way. A choir heard clearly worships twice as effectively.</p>
               </div>
+            </div>
+
+            <div className="sc-lcard">
+              <h4>How to practice runs (the safe way)</h4>
+              <ol className="sc-ol">
+                <li>Pick a 5-note pattern (up and down) and sing it on <strong>“gee”</strong> at an easy volume.</li>
+                <li>Start slow (clean notes, clean vowels). Only speed up when it stays clean.</li>
+                <li>Keep the vowel consistent—don’t change “gee” into “gih/geh” as you move.</li>
+                <li>Do 3 clean reps, rest 5 seconds, repeat. Clean + rested beats grinding.</li>
+              </ol>
+              <p className="sc-note">If your tongue locks up, reset on a hum, then re-enter the pattern.</p>
             </div>
             {groups.map(g => (
               <div className="sc-lcard" key={g.id}>
@@ -622,6 +675,16 @@ export function LessonPanel({ session }) {
               </ol>
               <p className="sc-note">The contrast between 1 and 3 is always revelatory.</p>
             </div>
+
+            <div className="sc-lcard">
+              <h4>Clarity checklist (for diction + blend)</h4>
+              <ul className="sc-ul">
+                <li><strong>Vowels match:</strong> same shape, same length, same “tallness”.</li>
+                <li><strong>Consonants together:</strong> release final consonants at the same time (especially “t”, “d”, “s”).</li>
+                <li><strong>70% volume:</strong> blend improves when everyone stops “soloing”.</li>
+                <li><strong>Phrase target:</strong> decide where the phrase is going before you sing it.</li>
+              </ul>
+            </div>
           </div>
         );
       }
@@ -637,6 +700,17 @@ export function LessonPanel({ session }) {
                 <span className="sc-drill-label">Interval matching drill</span>
                 <p>Play a note on the piano. Choir sings it back in unison. Leader plays the note a third above — choir finds it without piano first, then checks. 10 repetitions. Wrong answers are expected and useful.</p>
               </div>
+            </div>
+
+            <div className="sc-lcard">
+              <h4>How to self-correct mid-phrase</h4>
+              <ol className="sc-ol">
+                <li><strong>Hear the center:</strong> mentally “aim” at the note before you sing it.</li>
+                <li><strong>Check support:</strong> if you go flat, usually breath drops; keep ribs open and airflow steady.</li>
+                <li><strong>Adjust small:</strong> don’t jump to the pitch—micro-slide until it locks.</li>
+                <li><strong>Rebuild vowel:</strong> if tuning is unstable, simplify to “oo” or “ng”, then reopen the vowel.</li>
+              </ol>
+              <p className="sc-note">If the whole section is flat, the fix is almost always breath + posture, not “try harder”.</p>
             </div>
             {items.map(item => (
               <div className="sc-lcard" key={item.name}>
@@ -696,6 +770,17 @@ export function LessonPanel({ session }) {
           </button>
         ))}
       </div>
+
+      <div className="sc-lcard">
+        <h4>How to use this lesson</h4>
+        <p>Each page is one focused technique block. Don’t rush—move forward only when you can feel the “target sensation” for the page.</p>
+        <ul className="sc-ul">
+          <li><strong>Go in order:</strong> Warm-Up → Posture → Resonance → Vocal → Pitch → Session.</li>
+          <li><strong>Stay easy:</strong> most drills should feel like controlled effort, not strain.</li>
+          <li><strong>Short reps win:</strong> 6–10 clean reps beat 2 long strained reps.</li>
+          <li><strong>Stop rule:</strong> if pain/hoarseness shows up, reduce volume, reset posture, or pause.</li>
+        </ul>
+      </div>
       <div className="sc-feel-bar">
         <span className="sc-feel-label">What you should feel when this page is done</span>
         <p className="sc-feel-text">{page.feel}</p>
@@ -727,6 +812,12 @@ export function ToolsPanel({ onQuizScore }) {
           <div><strong>Drill Timer</strong> — named drill presets with configurable duration and progress ring.</div>
           <div><strong>Theory Quiz</strong> — cumulative literacy score across sessions. Grade feeds into completion.</div>
         </div>
+        <ul className="sc-ul" style={{ marginTop: 12 }}>
+          <li><strong>Pitch Tuner:</strong> start listening, sing on “oo” or “ah”, and adjust <em>small</em> until the note locks.</li>
+          <li><strong>Piano:</strong> play a note, match it unison, then try a 3rd or 5th above before checking.</li>
+          <li><strong>Timer:</strong> pick one drill, stay at easy volume, rest briefly between sets.</li>
+          <li><strong>Quiz:</strong> treat wrong answers as targets—repeat daily until the score stops fluctuating.</li>
+        </ul>
       </div>
       <div className="sc-tool-section"><h5 className="sc-tool-h">Live pitch tuner</h5><PitchChecker/></div>
       <div className="sc-tool-section"><h5 className="sc-tool-h">Drill timer</h5><DrillTimer/></div>
@@ -975,7 +1066,7 @@ export function SessionShell({ session, tabs, activeTab, onTabChange, onBack, se
    DARK CSS  (Conservatory aesthetic — injected once per page)
 ═══════════════════════════════════════════════════════════ */
 export const DARK_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');"
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
 
 
 .sc-root {
@@ -986,12 +1077,15 @@ export const DARK_CSS = `
   --danger:#c94040; --danger-bg:rgba(201,64,64,0.1);
   --text:#e8e4dc; --muted:#7a7472; --muted2:#5a5654;
   --radius:10px; --radius-lg:16px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --header-h: calc(56px + var(--safe-top));
   font-family:'Outfit',sans-serif; font-weight:300;
   background:var(--bg); color:var(--text);
-  min-height:100vh; max-width:800px; margin:0 auto;
-  padding-bottom:60px; letter-spacing:0.01em;
+  min-height:100vh; max-width:960px; margin:0 auto;
+  padding-bottom:calc(60px + var(--safe-bottom)); letter-spacing:0.01em;
 }
-.sc-header { display:flex; align-items:center; justify-content:space-between; padding:14px 20px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:20; backdrop-filter:blur(12px); }
+.sc-header { display:flex; align-items:center; justify-content:space-between; min-height:var(--header-h); padding:calc(14px + var(--safe-top)) 20px 14px; box-sizing:border-box; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:20; backdrop-filter:blur(12px); }
 .sc-back { font-size:13px; color:var(--muted); background:none; border:none; cursor:pointer; font-family:'Outfit',sans-serif; font-weight:400; letter-spacing:0.02em; transition:color .15s; }
 .sc-back:hover { color:var(--text); }
 .sc-header-center { flex:1; display:flex; justify-content:center; }
@@ -1000,7 +1094,7 @@ export const DARK_CSS = `
 .sc-hero { padding:36px 24px 28px; background:linear-gradient(160deg,#13130f 0%,#0e0e0f 60%); border-bottom:1px solid var(--border); }
 .sc-hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(26px,5vw,36px); font-weight:600; line-height:1.15; color:#f0ece4; margin-bottom:8px; }
 .sc-hero-desc { font-size:14px; color:var(--muted); line-height:1.7; max-width:520px; }
-.sc-tabbar { display:flex; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:53px; z-index:19; }
+.sc-tabbar { display:flex; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:var(--header-h); z-index:19; }
 .sc-tab { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:11px 4px; border:none; background:none; cursor:pointer; font-family:'Outfit',sans-serif; color:var(--muted2); border-bottom:2px solid transparent; transition:color .2s,border-color .2s; }
 .sc-tab.active { color:var(--amber); border-bottom-color:var(--amber); }
 .sc-tab-icon { font-size:16px; }
@@ -1016,6 +1110,18 @@ export const DARK_CSS = `
 .sc-ol,.sc-ul { padding-left:18px; font-size:13px; color:var(--muted); line-height:1.9; margin:8px 0 0; }
 .sc-lesson-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 @media(max-width:580px){ .sc-lesson-grid { grid-template-columns:1fr; } }
+
+@media(max-width:420px){
+  .sc-header { padding-left:14px; padding-right:14px; }
+  .sc-hero { padding:28px 16px 20px; }
+  .sc-panel { padding:16px; }
+  .sc-lcard { padding:16px; }
+}
+
+@media(min-width:960px){
+  .sc-panel { padding:24px; }
+  .sc-hero-desc { max-width:680px; }
+}
 .sc-drill-block { background:var(--surface2); border-left:2px solid var(--amber-d); border-radius:0 8px 8px 0; padding:12px 14px; margin-top:12px; }
 .sc-drill-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber-d); display:block; margin-bottom:6px; }
 .sc-lesson-nav { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
