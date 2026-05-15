@@ -1029,7 +1029,10 @@ export function SessionShell({ session, tabs, activeTab, onTabChange, onBack, se
   return (
     <main className="sc-root">
       <header className="sc-header">
-        <button className="sc-back" onClick={onBack} type="button">← Dashboard</button>
+        <button className="sc-back" onClick={onBack} type="button" aria-label="Back to dashboard">
+          <span className="sc-back-icon" aria-hidden="true">←</span>
+          <span className="sc-back-text">Dashboard</span>
+        </button>
         <div className="sc-header-center">
           <span className="sc-phase-tag">{session?.phase ?? 'Session'}</span>
         </div>
@@ -1085,11 +1088,13 @@ export const DARK_CSS = `
   min-height:100vh; max-width:960px; margin:0 auto;
   padding-bottom:calc(60px + var(--safe-bottom)); letter-spacing:0.01em;
 }
-.sc-header { display:flex; align-items:center; justify-content:space-between; min-height:var(--header-h); padding:calc(14px + var(--safe-top)) 20px 14px; box-sizing:border-box; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:20; backdrop-filter:blur(12px); }
-.sc-back { font-size:13px; color:var(--muted); background:none; border:none; cursor:pointer; font-family:'Outfit',sans-serif; font-weight:400; letter-spacing:0.02em; transition:color .15s; }
+.sc-header { display:flex; align-items:center; justify-content:space-between; gap:10px; min-height:var(--header-h); padding:calc(14px + var(--safe-top)) 20px 14px; box-sizing:border-box; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:20; backdrop-filter:blur(12px); }
+.sc-back { display:flex; align-items:center; gap:8px; min-width:0; font-size:13px; color:var(--muted); background:none; border:none; cursor:pointer; font-family:'Outfit',sans-serif; font-weight:400; letter-spacing:0.02em; transition:color .15s; }
+.sc-back-icon { display:inline-flex; }
+.sc-back-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .sc-back:hover { color:var(--text); }
-.sc-header-center { flex:1; display:flex; justify-content:center; }
-.sc-phase-tag { font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--amber); border:1px solid var(--amber-d); border-radius:20px; padding:3px 12px; }
+.sc-header-center { flex:1; min-width:0; display:flex; justify-content:center; }
+.sc-phase-tag { font-size:11px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--amber); border:1px solid var(--amber-d); border-radius:20px; padding:3px 12px; white-space:nowrap; }
 .sc-elapsed { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); }
 .sc-hero { padding:36px 24px 28px; background:linear-gradient(160deg,#13130f 0%,#0e0e0f 60%); border-bottom:1px solid var(--border); }
 .sc-hero-title { font-family:'Cormorant Garamond',serif; font-size:clamp(26px,5vw,36px); font-weight:600; line-height:1.15; color:#f0ece4; margin-bottom:8px; }
@@ -1113,9 +1118,15 @@ export const DARK_CSS = `
 
 @media(max-width:420px){
   .sc-header { padding-left:14px; padding-right:14px; }
+  .sc-back-text { display:none; }
+  .sc-phase-tag { padding-left:10px; padding-right:10px; }
   .sc-hero { padding:28px 16px 20px; }
   .sc-panel { padding:16px; }
   .sc-lcard { padding:16px; }
+}
+
+@media(max-width:360px){
+  .sc-elapsed { display:none; }
 }
 
 @media(min-width:960px){

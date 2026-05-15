@@ -55,7 +55,8 @@ The backend uses Node.js + SQLite and **cannot run on Vercel** (serverless funct
      ```
      PORT=3001
      NODE_ENV=production
-     DB_FILE=/mnt/data/choiriq.sqlite
+       # Optional if your Render disk mount path is /data (the backend auto-detects it)
+       DB_FILE=/data/choiriq.sqlite
      GEMINI_API_KEY=your_google_api_key_here
      ALLOWED_ORIGINS=https://your-vercel-app.vercel.app
      ```
@@ -65,7 +66,7 @@ The backend uses Node.js + SQLite and **cannot run on Vercel** (serverless funct
 
 **Render Free Features**:
 - ✅ Free tier web service (auto-deploys from GitHub)
-- ✅ Persistent disk storage (`/mnt/data/`)
+- ✅ Persistent disk storage (`/data/`)
 - ✅ Automatic HTTPS
 - ✅ Auto-deploys on `git push` to main
 - ✅ No credit card required
@@ -127,7 +128,7 @@ Your backend needs `GEMINI_API_KEY` for the AI features (completely free).
 |----------|----------|---------|
 | `PORT` | ✅ | `3001` |
 | `NODE_ENV` | ✅ | `production` |
-| `DB_FILE` | ✅ | `/mnt/data/choiriq.sqlite` |
+| `DB_FILE` | ✅ | `/data/choiriq.sqlite` |
 | `GEMINI_API_KEY` | ✅ | Get free key at [aistudio.google.com](https://aistudio.google.com/app/apikey) |
 | `ALLOWED_ORIGINS` | ✅ | `https://yourapp.vercel.app` |
 
@@ -152,8 +153,8 @@ Once both frontend and backend are live:
 - Verify `ALLOWED_ORIGINS` on Render includes your Vercel domain
 
 ### Database errors
-- Render persistent storage is at `/mnt/data/`
-- Ensure `DB_FILE=/mnt/data/choiriq.sqlite` is set in Render environment variables
+- Render persistent storage is at `/data/` (or whatever mount path you chose)
+- Ensure `DB_FILE` points to that mount path if you set it explicitly
 
 ### API calls fail  
 - Check Render logs (click **"Logs"** tab in Render dashboard)

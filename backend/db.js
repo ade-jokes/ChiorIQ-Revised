@@ -4,15 +4,16 @@ const Database = require('better-sqlite3');
 
 // Determine database location with persistence priority:
 // 1. Explicit DB_FILE environment variable
-// 2. Render persistent disk (/data) if it exists
+// 2. Render persistent disk (/data or /mnt/data) if it exists
 // 3. Local development (/backend/data)
 // 4. Test environment (in-memory for tests)
 
 const IS_TEST_ENV = process.env.NODE_ENV === 'test';
 
-// Check if Render persistent disk exists
-const RENDER_PERSISTENT_DIR = '/data';
-const hasRenderPersistentDisk = fs.existsSync(RENDER_PERSISTENT_DIR);
+// Check if a persistent disk exists (Render mount path is user-configurable)
+const PERSISTENT_DIR_CANDIDATES = ['/data', '/mnt/data'];
+const persistentDir = PERSISTENT_DIR_CANDIDATES.find((dir) => fs.existsSync(dir));
+const hasRenderPersistentDisk = Boolean(persistentDir);
 
 let DB_FILE;
 
@@ -30,9 +31,9 @@ if (process.env.DB_FILE) {
   }
   DB_FILE = path.join(testDir, 'choiriq.test.sqlite');
 } else if (hasRenderPersistentDisk) {
-  // Production on Render: use persistent /data directory
-  DB_FILE = path.join(RENDER_PERSISTENT_DIR, 'choiriq.sqlite');
-  console.log(`Using Render persistent disk at ${DB_FILE}`); // eslint-disable-line no-console
+  // Production on Render: use persistent directory
+  DB_FILE = path.join(persistentDir, 'choiriq.sqlite');
+  console.log(`Using persistent disk at ${DB_FILE}`); // eslint-disable-line no-console
 } else {
   // Local development: use /backend/data
   const dataDir = path.join(__dirname, 'data');

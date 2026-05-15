@@ -42,7 +42,17 @@ function isLocalUrl(url) {
 
 export function createApi(options = {}) {
   const storage = options.storage || (typeof window !== 'undefined' ? window.localStorage : null);
-  const configuredBaseUrl = options.baseUrl || (typeof window !== 'undefined' && window.__API_BASE_URL__);
+
+  let viteEnvBaseUrl = null;
+  try {
+    viteEnvBaseUrl = import.meta?.env?.VITE_API_BASE_URL;
+  } catch {
+    viteEnvBaseUrl = null;
+  }
+
+  const configuredBaseUrl = options.baseUrl
+    || (typeof window !== 'undefined' && window.__API_BASE_URL__)
+    || viteEnvBaseUrl;
   const normalizedConfiguredBaseUrl = normalizeBaseUrl(configuredBaseUrl);
   const defaultBaseUrl = normalizeBaseUrl(getDefaultBaseUrl()) || DEFAULT_LOCAL_BASE_URL;
   const isLocalHostRuntime = typeof window !== 'undefined' && (window.location?.hostname === 'localhost' || window.location?.hostname === '127.0.0.1');
